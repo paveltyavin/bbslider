@@ -1,14 +1,14 @@
-;(function(window, document, undefined) {
-  "use strict";
-
-  <%= contents %>
-
+;(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(function () {
-      return bbslider;
-    });
-  } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = window.bbslider;
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.bbslider = factory();
   }
-
-})(window, document);
+}(this, function () {
+  // browserify module start
+  <%= contents %>
+  // browserify module finish
+  return bbslider;
+}));

@@ -1,6 +1,4 @@
 var gulp = require('gulp');
-var glob = require('glob');
-var path = require('path');
 var gutil = require('gulp-util');
 var less = require('gulp-less');
 var uglify = require('gulp-uglify');
@@ -10,10 +8,10 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var wrap = require('gulp-wrap');
-var qunit = require('gulp-qunit');
+var qunit = require('node-qunit-phantomjs');
 var babel = require('gulp-babel');
 var livereload = require('gulp-livereload');
+var wrap = require('gulp-wrap');
 
 gulp.task('less', function () {
   gulp.src(['dev/bbslider.less'])
@@ -23,7 +21,7 @@ gulp.task('less', function () {
 
 var b = browserify({
   entries: './dev/bbslider.es6.js',
-  debug: true
+  standalone: 'bbslider'
 }).transform(babelify);
 
 var w = watchify(b);
@@ -36,9 +34,7 @@ var watch_bundle = function () {
       this.emit('end');
     })
     .pipe(source('bbslider-dev.js'))
-    .pipe(wrap({
-      src: './dev/gulpfile-wrap-template.js'
-    }))
+    .pipe(wrap({src: './dev/gulpfile-wrap-template.js'}))
     .pipe(gulp.dest('./dist/'))
     .pipe(livereload())
 };
@@ -50,15 +46,16 @@ w.on('time', function (time) {
 
 
 gulp.task('build:js', function () {
-  var b = browserify({entries: './dev/bbslider.es6.js'});
+  var b = browserify({
+    entries: './dev/bbslider.es6.js',
+    standalone: 'bbslider'
+  });
 
   return b
     .transform(babelify)
     .bundle()
     .pipe(source('bbslider-dev.js'))
-    .pipe(wrap({
-      src: './dev/gulpfile-wrap-template.js'
-    }))
+    .pipe(wrap({src: './dev/gulpfile-wrap-template.js'}))
     .pipe(gulp.dest('dist'))
 
     .pipe(rename('bbslider.min.js'))
@@ -68,10 +65,17 @@ gulp.task('build:js', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['dev/*.js', 'dev/*/*.js'], ['scripts']);
-  gulp.watch(['dev/*.less', 'dev/*.css'], ['less']);
+  livereload.listen({start: true});
+  gulp.watch(['dev/*.less'], ['less']);
+  gulp.watch(['test/test.js'], function () {
+    livereload.reload();
+  });
   watch_bundle();
 });
 
-gulp.task('build', ['less']);
+gulp.task('test', ['build'], function () {
+  qunit('./test/index.html', {verbose: true});
+});
+
+gulp.task('build', ['less', 'build:js']);
 gulp.task('default', ['watch', 'build']);

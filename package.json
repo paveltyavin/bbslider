@@ -8,10 +8,9 @@
     "url": "https://github.com/paveltyavin/bbslider"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "gulp test"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Pavel Tyavin <pavel@tyavin.name>",
   "license": "MIT",
   "bugs": {
@@ -29,16 +28,8 @@
     "gulp-rename": "1.2.0",
     "gulp-uglify": "1.0.2",
     "gulp-wrap": "0.11.0",
-    "jasmine": "2.4.1",
-    "jquery": "2.2.1",
-    "karma": "0.13.22",
-    "karma-browserify": "5.0.2",
-    "karma-chrome-launcher": "0.2.2",
-    "karma-jasmine": "0.3.7",
-    "karma-phantomjs-launcher": "1.0.0",
-    "path": "0.11.14",
-    "phantomjs-prebuilt": "2.1.5",
-    "qunitjs": "1.22.0",
+    "node-qunit-phantomjs": "^1.3.1",
+    "qunitjs": "^1.22.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "watchify": "3.7.0"
