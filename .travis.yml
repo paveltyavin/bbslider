@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "5.x"
+  - "5"
 before script:
   - npm install -g gulp
 script: karma --single-run
