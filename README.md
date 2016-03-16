@@ -1,0 +1,2 @@
+BBSLIDER [![Build Status](https://travis-ci.org/paveltyavin/bbslider.svg?branch=master)](https://travis-ci.org/paveltyavin/bbslider)
+====================================================================================================================================
