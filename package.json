@@ -1,0 +1,39 @@
+{
+  "name": "bbslider",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/bbslider.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paveltyavin/bbslider"
+  },
+  "scripts": {
+    "test": "node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/index.html --verbose"
+  },
+  "keywords": [],
+  "author": "Pavel Tyavin <pavel@tyavin.name>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paveltyavin/bbslider/issues"
+  },
+  "homepage": "https://github.com/paveltyavin/bbslider",
+  "devDependencies": {
+    "babel-polyfill": "^6.7.2",
+    "babelify": "6.0.2",
+    "browserify": "9.0.8",
+    "glob": "5.0.3",
+    "gulp": "3.9.0",
+    "gulp-babel": "5.2.1",
+    "gulp-less": "3.0.5",
+    "gulp-livereload": "3.8.1",
+    "gulp-rename": "1.2.0",
+    "gulp-uglify": "1.0.2",
+    "gulp-wrap": "0.11.0",
+    "node-qunit-phantomjs": "^1.3.1",
+    "qunitjs": "^1.22.0",
+    "simulant": "^0.2.0",
+    "vinyl-buffer": "1.0.0",
+    "vinyl-source-stream": "1.1.0",
+    "watchify": "3.7.0"
+  }
+}

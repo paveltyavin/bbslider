@@ -1,0 +1,44 @@
+.bbslider-bar {
+  height: 50px;
+  width: 500px;
+  display: inline-block;
+  background: red;
+  position: relative;
+  border: 0 !important;
+  margin: 10px;
+  box-sizing: border-box;
+
+  .bbslider-ghost,
+  .bbslider-range {
+    position: absolute;
+    height: 100%;
+    top: 0;
+  }
+
+  .bbslider-ghost {
+    background: blue;
+    cursor: pointer;
+  }
+  .bbslider-range {
+    background: forestgreen;
+    cursor: move;
+    &.pressed {
+      background: green;
+    }
+
+    .bbslider-left-handler,
+    .bbslider-right-handler {
+      position: absolute;
+      width: 10px;
+      background: darkgreen;
+      height: 100%;
+      cursor: ew-resize;
+    }
+    .bbslider-left-handler {
+      left: 0
+    }
+    .bbslider-right-handler {
+      right: 0
+    }
+  }
+}
