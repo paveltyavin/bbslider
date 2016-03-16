@@ -10,6 +10,6 @@ describe('Test1', function () {
 describe('Test2', function () {
   it('should pass', function () {
     var result = test();
-    expect(result).toBe('testStr');
+    expect(result).toBe('testStr2');
   });
 });
