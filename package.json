@@ -1,0 +1,47 @@
+{
+  "name": "bbslider",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/bbslider.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paveltyavin/bbslider"
+  },
+  "keywords": [
+  ],
+  "author": "Pavel Tyavin <pavel@tyavin.name>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paveltyavin/bbslider/issues"
+  },
+  "homepage": "https://github.com/paveltyavin/bbslider",
+  "devDependencies": {
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.8",
+    "glob": "^5.0.3",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-concat": "^2.4.3",
+    "gulp-jshint": "^1.9.0",
+    "gulp-less": "^3.0.5",
+    "gulp-livereload": "^3.8.1",
+    "gulp-minify-css": "^0.3.13",
+    "gulp-qunit": "latest",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.2",
+    "gulp-wrap": "^0.11.0",
+    "jasmine": "^2.4.1",
+    "jquery": "^2.2.1",
+    "karma": "^0.13.22",
+    "karma-browserify": "^5.0.2",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "path": "^0.11.14",
+    "phantomjs-prebuilt": "^2.1.5",
+    "qunitjs": "^1.22.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}
