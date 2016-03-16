@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/paveltyavin/bbslider"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+  },
   "keywords": [
   ],
   "author": "Pavel Tyavin <pavel@tyavin.name>",
