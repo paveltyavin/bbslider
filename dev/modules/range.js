@@ -7,6 +7,7 @@ import  Emitter from './emitter';
 class Range {
   constructor(options) {
     this.bar = options.bar;
+    this.id = options.id;
 
     this.el = document.createElement('div');
     this.el.className = 'bbslider-range';
@@ -24,6 +25,8 @@ class Range {
     this.bar.el.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
     this.bar.el.addEventListener('mouseup', (event)=> this.mouseup(event));
+
+    this.emitter = new Emitter();
   }
 
   mousedown(event) {
@@ -111,13 +114,24 @@ class Range {
       }
       this.pressedPosition += roundDifference;
       this.setValue(newLeft, newRight);
+      this.emitter.emit('range:changing', {
+        id: this.id,
+        val: this.getValue()
+      });
     }
   }
 
   mouseup(event) {
+    if ([this.el, this.left_handler, this.right_handler].indexOf(event.target) === -1) {
+      return
+    }
     this.pressed = false;
     this.pressedPosition = undefined;
     removeClass(this.el, 'pressed');
+    this.emitter.emit('range:change', {
+      id: this.id,
+      val: this.getValue()
+    });
   }
 
   setValue(left, right) {

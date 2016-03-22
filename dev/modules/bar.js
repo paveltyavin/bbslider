@@ -1,6 +1,7 @@
 import Ghost from './ghost'
 import Range from './range'
 import Base from './base'
+import Emitter from './emitter'
 
 class Bar extends Base {
   constructor(options = {}) {
@@ -15,16 +16,58 @@ class Bar extends Base {
     this.el.addEventListener('mouseleave', (event)=> this.mouseleave(event));
     this.el.addEventListener('mouseup', (event)=> this.mouseup(event));
     this.el.addEventListener('mousedown', (event)=> this.mousedown(event));
+
+    this.rangeIdCount = 0;
     this.rangeList = [];
+
+    this.emitter = new Emitter;
   }
 
-  createRange(start, finish) {
-    let range = new Range({bar: this});
+  getRangeId() {
+    // Just return some unique number
+    this.rangeIdCount += 1;
+    return this.rangeIdCount;
+  }
+
+  addRange(value, options) {
+    options = Object.assign({
+      id: this.getRangeId()
+    }, options);
+    options.bar = this;
+    let range = new Range(options);
     this.el.appendChild(range.el);
 
-    range.setValue(start, finish);
+    range.setValue(value[0], value[1]);
     this.rangeList.push(range);
     this.removeGhost();
+
+    range.emitter.addListener('range:changing', (options) => {
+      this.emitter.emit('changing', {
+        rangeId: range.id,
+        val: this.getValue()
+      });
+      this.emitter.emit('range:changing', options);
+    });
+
+    range.emitter.addListener('range:change', (options) =>{
+      this.emitter.emit('change', {
+        rangeId: range.id,
+        val: this.getValue()
+      });
+      this.emitter.emit('range:change', options);
+    });
+
+  }
+
+  removeRange(options) {
+    let range = this.rangeList.find(x => x.id == options.id);
+    if (range) {
+      this.el.removeChild(range.el);
+      this.rangeList = this.rangeList.filter(x => x.id !== options.id);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   removeGhost() {
@@ -39,7 +82,7 @@ class Bar extends Base {
 
   mouseup(event) {
     if (this.ghost) {
-      this.createRange(this.ghost.left, this.ghost.right)
+      this.addRange([this.ghost.left, this.ghost.right])
     }
   }
 
@@ -71,14 +114,15 @@ class Bar extends Base {
 
   setValue(value) {
     for (let range_value of value) {
-      this.createRange(range_value[0], range_value[1]);
+      this.addRange(range_value);
     }
   }
 
   getValue() {
     let result = [];
     for (let range of this.rangeList) {
-      result.push(range.getValue())
+      let value = range.getValue();
+      result.push(value);
     }
     return result
   }

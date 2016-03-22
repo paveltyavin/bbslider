@@ -7,7 +7,7 @@ To run tests use this commands.
     npm test
     
 To start development process, execute `gulp` command, 
-open `./test/index.html` in the browser and make start changing the code.
+open `./test/index.html` in the browser and start changing the code.
 
 # Contributing
 
@@ -15,25 +15,12 @@ Source code, bugtracker and so one are here:
 https://github.com/paveltyavin/bbslider/ 
 
 
-# Conventions
-
-* All mouse events contain only this options:
-    * clientX
-    * clientY 
-    * target
-    
-* Bar items can't use it's child (Range and Ghost) methods, but 
-Range and Ghost can use methods of Bar
- 
-* BBSlider contains only pubic api methods end emits only public api events
-
 ## todo 
 
 * functions
-    * allowRemove
-    * allowSwap
-    * valueFormat
-    * valueParse
+    * allowRemove - removing range by decreasing its width to zero
+    * allowSwap - swap left and right position by dragging beyond the element
+    * valueFormat - format function for the label
 
 * events
     * `.on('change', `
@@ -43,13 +30,11 @@ Range and Ghost can use methods of Bar
     * `.on('range:change', `
     
 * methods
-    * `.val(data)` validation
-    * `.add()`
-    * `.remove()`
+    * ?
     
 * styles
+    
+* gif
 
 * tests
     * ?
-    
-* gif

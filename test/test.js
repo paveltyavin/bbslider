@@ -33,10 +33,153 @@ QUnit.module("BBSlider", function (hooks) {
   });
 
   QUnit.module('Method', function (hooks) {
-    QUnit.test('val()', function (assert) {
-      this.s.val([[0, 10], [20, 30]]);
-      assert.deepEqual([[0, 10], [20, 30]], this.s.val(),
+    QUnit.test('val(data, options)', function (assert) {
+      var s = this.s;
+      s.val([[0, 10], [20, 30]]);
+      assert.deepEqual([[0, 10], [20, 30]], s.val(),
         'val should return the same result');
+      assert.throws(function () {
+        s.val(null);
+      }, "throws an error in case bad data");
+    });
+    QUnit.test('addRange(data, options)', function (assert) {
+      var s = this.s;
+      s.val([[0, 10]]);
+      s.addRange([20, 30]);
+      assert.deepEqual([[0, 10], [20, 30]], this.s.val(),
+        'should add Range');
+
+      assert.throws(function () {
+        s.addRange(null);
+      }, "throws an error in case bad data");
+
+      s.addRange([50, 70], {id: 100});
+
+      assert.throws(function () {
+        s.addRange([80, 90], {id: 100});
+      }, "throws an error in case not unique id");
+      assert.throws(function () {
+        s.addRange([60, 80], {id: 200});
+      }, "throws an error in case of intersection");
+      assert.throws(function () {
+        s.addRange([40, 80], {id: 200});
+      }, "throws an error in case of intersection");
+
+    });
+    QUnit.test('removeRange(options)', function (assert) {
+      var s = this.s;
+      s.addRange([20, 30], {id: 10});
+      assert.throws(function () {
+        s.removeRange(null);
+      }, "throws an error in case bad data");
+      assert.equal(s.removeRange({id: 20}), false,
+        'return false if range wasn`t removed');
+      assert.equal(s.removeRange({id: 10}), true,
+        'return true if range was removed');
+      var value = this.s.val();
+      assert.equal(value.length, 0,
+        'value should be empty');
+    });
+  });
+
+
+  QUnit.module('Events', function (hooks) {
+    QUnit.test('changing', function (assert) {
+      var s = this.s;
+      s.val([[0, 10]]);
+      var handler = s.el.querySelector('.bbslider-right-handler');
+      var callback = function () {
+        assert.ok(true, 'call en event');
+      };
+
+      s.on('changing', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width}); // event emit
+      move(handler, {moveX: this.step_width}); // event emit
+      up(handler);
+
+      s.off('changing', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      up(handler);
+
+      assert.expect(2);
+    });
+
+    QUnit.test('change', function (assert) {
+      var s = this.s;
+      s.val([[0, 10]]);
+      var handler = s.el.querySelector('.bbslider-right-handler');
+      var callback = function () {
+        assert.ok(true, 'call en event');
+      };
+
+      s.on('change', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      move(handler, {moveX: this.step_width});
+      up(handler); // emit
+
+      s.off('change', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      up(handler);
+
+      assert.expect(1);
+    });
+
+    QUnit.test('range:changing', function (assert) {
+      var s = this.s;
+      s.addRange([0, 10], {id: 100});
+      var handler = s.el.querySelector('.bbslider-right-handler');
+      s.addRange([90, 100], {id: 200});
+      var callback = function (value, options) {
+        assert.ok(true, 'call en event');
+      };
+
+      s.on('range:change', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      move(handler, {moveX: this.step_width});
+      up(handler); // emit
+
+      s.off('range:change', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      up(handler);
+
+      assert.expect(1);
+    });
+
+    QUnit.test('range:change', function (assert) {
+      var s = this.s;
+      s.addRange([0, 10], {id: 100});
+      var handler = s.el.querySelector('.bbslider-right-handler');
+      s.addRange([90, 100], {id: 200});
+      var callback = function (value, options) {
+        assert.ok(true, 'call en event');
+      };
+
+      s.on('range:changing', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width}); // emit
+      move(handler, {moveX: this.step_width}); // emit
+      up(handler);
+
+      s.off('range:changing', callback);
+
+      down(handler);
+      move(handler, {moveX: this.step_width});
+      up(handler);
+
+      assert.expect(2);
     });
   });
 
@@ -49,13 +192,13 @@ QUnit.module("BBSlider", function (hooks) {
     });
     hooks.afterEach(function (assert) {
       leave(this.s.el);
-      assert.ok(target.querySelectorAll('.bbslider-ghost').length == 0,
+      assert.ok(this.target.querySelectorAll('.bbslider-ghost').length == 0,
         'element should be removed from the DOM when mouse leaved the bar');
     });
 
     QUnit.test("exists", function (assert) {
       move(this.s.el);
-      var el_list = target.querySelectorAll('.bbslider-ghost');
+      var el_list = this.target.querySelectorAll('.bbslider-ghost');
       assert.ok(el_list.length == 1,
         'Only one element should attach to dom');
     });
@@ -79,9 +222,9 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test("Mousedown and move", function (assert) {
       down(this.ghost_el);
-      move(this.s.el, {startX: this.step_width, endX: this.width});
+      move(this.s.el, {startX: this.step_width, endX: this.width, stepX: 4});
       var rect_1 = this.ghost_el.getBoundingClientRect();
-      move(this.s.el, {startX: this.width, endX: this.width + 1});
+      move(this.s.el, {startX: this.width, endX: this.width + 1, stepX: 4});
       var rect_2 = this.ghost_el.getBoundingClientRect();
       assert.ok(rect_1.width == rect_2.width,
         "element should not cross the limits of bar");
@@ -98,22 +241,29 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test("click", function (assert) {
       move(this.bar_el, {startX: 0});
       up(this.bar_el);
-      assert.ok(this.target.querySelectorAll('.bbslider-range').length == 2,
+      assert.equal(this.target.querySelectorAll('.bbslider-range').length, 2,
         'element should attach to dom');
+    });
+
+    QUnit.test("press", function (assert) {
+      this.s.addRange([70, 80]);
+      down(this.range_el);
+      assert.equal(this.target.querySelectorAll('.pressed').length, 1,
+        'only one range should be pressed');
     });
 
     QUnit.test("move right", function (assert) {
       down(this.range_el);
       move(this.range_el, {moveX: this.step_width});
       var rect = this.range_el.getBoundingClientRect();
-      assert.ok(target.querySelector('.pressed'),
+      assert.ok(this.target.querySelector('.pressed'),
         'after mousedown should contain class pressed');
       assert.ok(rect.width == this.range_rect.width,
         'after dragging range should not increase its width');
       assert.ok(rect.left > this.range_rect.left,
         'after dragging right range should move right ');
       up(this.range_el);
-      assert.ok(target.querySelector('.pressed') == undefined,
+      assert.ok(this.target.querySelector('.pressed') == undefined,
         'after mouseup shouldn`t contain class pressed');
     });
 
@@ -127,7 +277,7 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test("move far right beyond the slider", function (assert) {
       down(this.range_el);
-      move(this.range_el, {moveX: 2 * this.width});
+      move(this.range_el, {moveX: 2 * this.width, stepX: 3});
       var rect = this.range_el.getBoundingClientRect();
       assert.ok(rect.right == this.s.el.getBoundingClientRect().right,
         'element should not cross the limits of bar');
