@@ -64,14 +64,21 @@ gulp.task('build:js', function () {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('gh-pages:copy', function () {
+  gulp.src(['gh-pages/**'], {base: './gh-pages/'})
+    .pipe(gulp.dest('dist'))
+    .pipe(livereload());
+});
+
 gulp.task('watch', function () {
   livereload.listen({start: true});
   gulp.watch(['dev/*.less'], ['less']);
+  gulp.watch(['gh-pages/**'], ['gh-pages:copy']);
   gulp.watch(['test/test.js'], function () {
     livereload.reload();
   });
   watch_bundle();
 });
 
-gulp.task('build', ['less', 'build:js']);
+gulp.task('build', ['gh-pages:copy', 'gh-pages:libs', 'less', 'build:js']);
 gulp.task('default', ['watch', 'build']);
