@@ -2,3 +2,4 @@
 dist/css
 dist/index.html
 .travis
+.idea

@@ -69,10 +69,10 @@ class Ghost {
   setValue(left, right) {
     this.left = left;
     this.right = right;
-    var percentLeft = this.bar.userToUnit(left) * 100;
-    var percentRight = this.bar.userToUnit(right) * 100;
-    this.el.style.left = `${percentLeft}%`;
-    this.el.style.width = `${percentRight - percentLeft}%`;
+    var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
+    var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
+    this.el.style.left = `${pixelLeft}px`;
+    this.el.style.width = `${pixelRight - pixelLeft}px`;
   }
 }
 

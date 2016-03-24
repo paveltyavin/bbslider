@@ -41,9 +41,23 @@ class Bar extends Base {
     this.rangeList.push(range);
     this.removeGhost();
 
+    let rangeId = range.id;
+
+    range.emitter.addListener('range:remove', (options) => {
+      this.removeRange({id: rangeId});
+      this.emitter.emit('range:remove', {
+        rangeId: rangeId,
+        val: this.getValue()
+      });
+      this.emitter.emit('change', {
+        rangeId: rangeId,
+        val: this.getValue()
+      });
+    });
+
     range.emitter.addListener('range:changing', (options) => {
       this.emitter.emit('changing', {
-        rangeId: range.id,
+        rangeId: rangeId,
         val: this.getValue()
       });
       this.emitter.emit('range:changing', options);
@@ -51,10 +65,19 @@ class Bar extends Base {
 
     range.emitter.addListener('range:change', (options) =>{
       this.emitter.emit('change', {
-        rangeId: range.id,
+        rangeId: rangeId,
         val: this.getValue()
       });
       this.emitter.emit('range:change', options);
+    });
+
+    this.emitter.emit('change', {
+      rangeId: rangeId,
+      val: this.getValue()
+    });
+    this.emitter.emit('changing', {
+      rangeId: rangeId,
+      val: this.getValue()
     });
 
   }

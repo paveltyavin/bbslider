@@ -2,14 +2,39 @@ QUnit.test("Common", function (assert) {
   var s = new BBSlider({
     min: 0,
     max: 100,
-    step: 10,
-    allowRemove: true
+    step: 10
   });
   var target = document.getElementById('common');
   target.appendChild(s.el);
   assert.ok(target.querySelectorAll('.bbslider-bar').length == 1, 'Main element should attach to dom');
 
   target.removeChild(s.el);
+});
+
+
+QUnit.module('Options', function (hooks) {
+  QUnit.test('allowRemove', function (assert) {
+    var options = {
+      min: 0,
+      max: 100,
+      step: 5,
+      allowRemove: true
+    };
+    var s = new BBSlider(options);
+    var target = document.getElementById('target');
+    target.appendChild(s.el);
+    var width = s.el.clientWidth;
+    var step_width = parseInt((options.step / (options.max - options.min)) * width);
+
+    s.addRange([20, 40], {id: 100});
+    var handler = s.el.querySelector('.bbslider-left-handler');
+    down(handler);
+    move(handler, {moveX: step_width * 4});
+    up(handler);
+
+    assert.equal(s.val().length, 0);
+    target.removeChild(s.el);
+  });
 });
 
 
@@ -209,7 +234,7 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test("Move", function (assert) {
       move(this.s.el, {moveX: this.step_width});
-      assert.ok(this.ghost_el.getBoundingClientRect().left - this.ghost_rect.left == this.step_width,
+      assert.ok(Math.abs(this.ghost_el.getBoundingClientRect().left - this.ghost_rect.left - this.step_width) <= 1,
         'element should move after the cursor with a step distance');
     });
 
@@ -218,6 +243,7 @@ QUnit.module("BBSlider", function (hooks) {
       move(this.s.el, {startX: this.step_width, moveX: this.step_width});
       assert.ok(this.ghost_el.getBoundingClientRect().width > this.ghost_rect.width,
         "element should increase its width if pressed and mousemoved");
+      up(this.ghost_el);
     });
 
     QUnit.test("Mousedown and move", function (assert) {
@@ -226,7 +252,7 @@ QUnit.module("BBSlider", function (hooks) {
       var rect_1 = this.ghost_el.getBoundingClientRect();
       move(this.s.el, {startX: this.width, endX: this.width + 1, stepX: 4});
       var rect_2 = this.ghost_el.getBoundingClientRect();
-      assert.ok(rect_1.width == rect_2.width,
+      assert.ok(Math.abs(rect_1.width - rect_2.width) <= 1,
         "element should not cross the limits of bar");
     });
   });
@@ -248,17 +274,18 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test("press", function (assert) {
       this.s.addRange([70, 80]);
       down(this.range_el);
-      assert.equal(this.target.querySelectorAll('.pressed').length, 1,
+      assert.equal(this.target.querySelectorAll('.bbslider-pressed').length, 1,
         'only one range should be pressed');
+      up(this.range_el);
     });
 
     QUnit.test("move right", function (assert) {
       down(this.range_el);
       move(this.range_el, {moveX: this.step_width});
       var rect = this.range_el.getBoundingClientRect();
-      assert.ok(this.target.querySelector('.pressed'),
+      assert.ok(this.target.querySelector('.bbslider-pressed'),
         'after mousedown should contain class pressed');
-      assert.ok(rect.width == this.range_rect.width,
+      assert.ok(Math.abs(rect.width - this.range_rect.width) <= 1,
         'after dragging range should not increase its width');
       assert.ok(rect.left > this.range_rect.left,
         'after dragging right range should move right ');
@@ -273,14 +300,16 @@ QUnit.module("BBSlider", function (hooks) {
       var rect = this.range_el.getBoundingClientRect();
       assert.ok(rect.left < this.range_rect.left,
         'after dragging left range should move left ');
+      up(this.range_el);
     });
 
     QUnit.test("move far right beyond the slider", function (assert) {
       down(this.range_el);
       move(this.range_el, {moveX: 2 * this.width, stepX: 3});
       var rect = this.range_el.getBoundingClientRect();
-      assert.ok(rect.right == this.s.el.getBoundingClientRect().right,
+      assert.ok(Math.abs(rect.right - this.s.el.getBoundingClientRect().right) <= 1,
         'element should not cross the limits of bar');
+      up(this.range_el);
     });
 
     QUnit.test("drag left handler", function (assert) {

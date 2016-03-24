@@ -21,23 +21,64 @@
   .bbslider-range {
     background: forestgreen;
     cursor: move;
-    &.pressed {
+    -webkit-user-drag: none;
+    &.bbslider-pressed {
       background: green;
     }
 
     .bbslider-left-handler,
     .bbslider-right-handler {
       position: absolute;
-      width: 10px;
+      width: 8px;
       background: darkgreen;
       height: 100%;
       cursor: ew-resize;
+      -webkit-user-drag: none;
     }
     .bbslider-left-handler {
-      left: 0
+      left: 0;
     }
     .bbslider-right-handler {
-      right: 0
+      right: 0;
+    }
+
+    &.bbslider-is-removing {
+      .bbslider-right-handler,
+      .bbslider-left-handler {
+        width: 4px;
+      }
+      &.bbslider-pressed-right {
+        .bbslider-right-handler {
+          right: -8px;
+        }
+      }
+      &.bbslider-pressed-left {
+        .bbslider-left-handler {
+          left: -8px;
+        }
+      }
+    }
+
+    .bbslider-remove-popup {
+      transition: 0.5s;
+      position: absolute;
+      background: gray;
+      opacity: 0.5;
+      width: 20px;
+      height: 20px;
+      top: -30px;
+      text-align: center;
+    }
+
+    &.bbslider-pressed-left {
+      .bbslider-remove-popup {
+        right: -6px;
+      }
+    }
+    &.bbslider-pressed-right {
+      .bbslider-remove-popup {
+        left: -6px;
+      }
     }
   }
 }

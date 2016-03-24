@@ -21,10 +21,12 @@ class Range {
     this.el.appendChild(this.left_handler);
 
     this.pressed = false;
+    this.isRemoving = false;
 
-    this.bar.el.addEventListener('mousemove', (event)=> this.mousemove(event));
+    document.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
-    this.bar.el.addEventListener('mouseup', (event)=> this.mouseup(event));
+    document.addEventListener('mouseup', (event)=> this.mouseup(event));
+    document.addEventListener('dragend', (event)=> this.mouseup(event));
 
     this.emitter = new Emitter();
   }
@@ -44,9 +46,31 @@ class Range {
     }
 
     if (this.pressed) {
-      addClass(this.el, 'pressed');
+      addClass(this.el, 'bbslider-pressed');
+      addClass(this.el, `bbslider-pressed-${this.pressedMode}`);
       this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
     }
+  }
+
+  renderRemovePopup() {
+    this.isRemoving = true;
+    addClass(this.el, 'bbslider-is-removing');
+
+    this.elRemovePopup = document.createElement('div');
+    this.elRemovePopup.innerHTML = '×';
+    this.elRemovePopup.className = 'bbslider-remove-popup';
+
+    this.el.appendChild(this.elRemovePopup);
+  }
+
+  removeRemovingPopup() {
+    this.isRemoving = false;
+    removeClass(this.el, 'bbslider-is-removing');
+
+    this.el.removeChild(this.elRemovePopup);
+    this.emitter.emit('range:remove', {
+      id: this.id
+    });
   }
 
   mousemove(event) {
@@ -77,10 +101,22 @@ class Range {
         return;
       }
 
-      // not supported yet
-      //if (newRight == newLeft && !this.bar.options.allowRemove){
-      //  return
-      //}
+      if (this.bar.options.allowRemove) {
+        if (newRight == newLeft) {
+          if (!this.isRemoving) {
+            this.renderRemovePopup()
+          }
+        } else {
+          if (this.isRemoving) {
+            this.removeRemovingPopup();
+          }
+        }
+      } else {
+        if (newRight == newLeft) {
+          return;
+        }
+      }
+
 
       if (newLeft < this.bar.options.min) {
         return
@@ -122,12 +158,16 @@ class Range {
   }
 
   mouseup(event) {
+    this.pressed = false;
+    if (this.isRemoving) {
+      this.removeRemovingPopup();
+    }
+    this.pressedPosition = undefined;
+    removeClass(this.el, 'bbslider-pressed');
+    removeClass(this.el, `bbslider-pressed-${this.pressedMode}`);
     if ([this.el, this.left_handler, this.right_handler].indexOf(event.target) === -1) {
       return
     }
-    this.pressed = false;
-    this.pressedPosition = undefined;
-    removeClass(this.el, 'pressed');
     this.emitter.emit('range:change', {
       id: this.id,
       val: this.getValue()
@@ -137,10 +177,10 @@ class Range {
   setValue(left, right) {
     this.left = left;
     this.right = right;
-    var percentLeft = this.bar.userToUnit(left) * 100;
-    var percentRight = this.bar.userToUnit(right) * 100;
-    this.el.style.left = `${percentLeft}%`;
-    this.el.style.width = `${percentRight - percentLeft}%`;
+    var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
+    var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
+    this.el.style.left = `${pixelLeft}px`;
+    this.el.style.width = `${pixelRight - pixelLeft}px`;
   }
 
   getValue() {

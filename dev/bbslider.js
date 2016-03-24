@@ -5,15 +5,34 @@ class BBSlider {
   // all methods should have data validation
 
   constructor(options={}) {
+    this._validateOptions(options);
     this._bar = new Bar(options);
     this.el = this._bar.el;
+  }
+
+  _validateOptions(options) {
+    for (let key of ['min', 'max', 'step']) {
+      let value = options[key];
+      if (value === undefined) {
+        throw(new Error(`${key} option is mandatory`));
+      }
+      if (!Number.isInteger(value)) {
+        throw(new Error(`${key} option should be integer`));
+      }
+    }
+    if (options.max <= options.min) {
+      throw(new Error('max should be greater than min'));
+    }
+    if ((options.max - options.min) % options.step !== 0) {
+      throw(new Error('there should be an integer number of steps between min and max'));
+    }
+
   }
 
   _validateRangeValue(value, options) {
     if (!Array.isArray(value) || value.length != 2) {
       throw Error;
     }
-    return true;
   }
 
   _validateValue(value, options) {
@@ -23,28 +42,24 @@ class BBSlider {
     for (let range_value of value) {
       this._validateRangeValue(range_value);
     }
-    return true;
   }
 
   addRange(value, options) {
-    options = Object.assign({
-      id: undefined
-    }, options);
+    options = Object.assign({}, options);
+    this._validateRangeValue(value, options);
 
-    if (this._validateRangeValue(value, options)) {
-      if (options.id !== undefined && this._bar.rangeList.find(x => x.id === options.id)) {
-        throw( new Error('range with this id already exists'));
-      }
-      if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
+    if (options.id !== undefined && this._bar.rangeList.find(x => x.id === options.id)) {
+      throw( new Error('range with this id already exists'));
+    }
+    if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
+      throw( new Error('intersection'));
+    }
+    for (let range of this._bar.rangeList) {
+      if (value[0] <= range.left && range.right <= value[1]) {
         throw( new Error('intersection'));
       }
-      for (let range of this._bar.rangeList) {
-        if (value[0] <= range.left && range.right <= value[1]) {
-          throw( new Error('intersection'));
-        }
-      }
-      this._bar.addRange(value, options);
     }
+    this._bar.addRange(value, options);
   }
 
   removeRange(options) {
@@ -61,9 +76,8 @@ class BBSlider {
     if (value === undefined) {
       return this._bar.getValue();
     } else {
-      if (this._validateValue(value, options)) {
-        this._bar.setValue(value, options);
-      }
+      this._validateValue(value, options);
+      this._bar.setValue(value, options);
     }
   }
 

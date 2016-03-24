@@ -34,17 +34,39 @@ var BBSlider = (function () {
 
     _classCallCheck(this, BBSlider);
 
+    this._validateOptions(options);
     this._bar = new _modulesBar2['default'](options);
     this.el = this._bar.el;
   }
 
   _createClass(BBSlider, [{
+    key: '_validateOptions',
+    value: function _validateOptions(options) {
+      var _arr = ['min', 'max', 'step'];
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var key = _arr[_i];
+        var value = options[key];
+        if (value === undefined) {
+          throw new Error(key + ' option is mandatory');
+        }
+        if (!Number.isInteger(value)) {
+          throw new Error(key + ' option should be integer');
+        }
+      }
+      if (options.max <= options.min) {
+        throw new Error('max should be greater than min');
+      }
+      if ((options.max - options.min) % options.step !== 0) {
+        throw new Error('there should be an integer number of steps between min and max');
+      }
+    }
+  }, {
     key: '_validateRangeValue',
     value: function _validateRangeValue(value, options) {
       if (!Array.isArray(value) || value.length != 2) {
         throw Error;
       }
-      return true;
     }
   }, {
     key: '_validateValue',
@@ -76,54 +98,49 @@ var BBSlider = (function () {
           }
         }
       }
-
-      return true;
     }
   }, {
     key: 'addRange',
     value: function addRange(value, options) {
-      options = Object.assign({
-        id: undefined
-      }, options);
+      options = Object.assign({}, options);
+      this._validateRangeValue(value, options);
 
-      if (this._validateRangeValue(value, options)) {
-        if (options.id !== undefined && this._bar.rangeList.find(function (x) {
-          return x.id === options.id;
-        })) {
-          throw new Error('range with this id already exists');
-        }
-        if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
-          throw new Error('intersection');
-        }
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = this._bar.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var range = _step2.value;
-
-            if (value[0] <= range.left && range.right <= value[1]) {
-              throw new Error('intersection');
-            }
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-              _iterator2['return']();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-
-        this._bar.addRange(value, options);
+      if (options.id !== undefined && this._bar.rangeList.find(function (x) {
+        return x.id === options.id;
+      })) {
+        throw new Error('range with this id already exists');
       }
+      if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
+        throw new Error('intersection');
+      }
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this._bar.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var range = _step2.value;
+
+          if (value[0] <= range.left && range.right <= value[1]) {
+            throw new Error('intersection');
+          }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      this._bar.addRange(value, options);
     }
   }, {
     key: 'removeRange',
@@ -142,9 +159,8 @@ var BBSlider = (function () {
       if (value === undefined) {
         return this._bar.getValue();
       } else {
-        if (this._validateValue(value, options)) {
-          this._bar.setValue(value, options);
-        }
+        this._validateValue(value, options);
+        this._bar.setValue(value, options);
       }
     }
   }, {
@@ -257,9 +273,23 @@ var Bar = (function (_Base) {
       this.rangeList.push(range);
       this.removeGhost();
 
+      var rangeId = range.id;
+
+      range.emitter.addListener('range:remove', function (options) {
+        _this2.removeRange({ id: rangeId });
+        _this2.emitter.emit('range:remove', {
+          rangeId: rangeId,
+          val: _this2.getValue()
+        });
+        _this2.emitter.emit('change', {
+          rangeId: rangeId,
+          val: _this2.getValue()
+        });
+      });
+
       range.emitter.addListener('range:changing', function (options) {
         _this2.emitter.emit('changing', {
-          rangeId: range.id,
+          rangeId: rangeId,
           val: _this2.getValue()
         });
         _this2.emitter.emit('range:changing', options);
@@ -267,10 +297,19 @@ var Bar = (function (_Base) {
 
       range.emitter.addListener('range:change', function (options) {
         _this2.emitter.emit('change', {
-          rangeId: range.id,
+          rangeId: rangeId,
           val: _this2.getValue()
         });
         _this2.emitter.emit('range:change', options);
+      });
+
+      this.emitter.emit('change', {
+        rangeId: rangeId,
+        val: this.getValue()
+      });
+      this.emitter.emit('changing', {
+        rangeId: rangeId,
+        val: this.getValue()
       });
     }
   }, {
@@ -673,10 +712,10 @@ var Ghost = (function () {
     value: function setValue(left, right) {
       this.left = left;
       this.right = right;
-      var percentLeft = this.bar.userToUnit(left) * 100;
-      var percentRight = this.bar.userToUnit(right) * 100;
-      this.el.style.left = percentLeft + '%';
-      this.el.style.width = percentRight - percentLeft + '%';
+      var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
+      var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
+      this.el.style.left = pixelLeft + 'px';
+      this.el.style.width = pixelRight - pixelLeft + 'px';
     }
   }]);
 
@@ -726,14 +765,18 @@ var Range = (function () {
     this.el.appendChild(this.left_handler);
 
     this.pressed = false;
+    this.isRemoving = false;
 
-    this.bar.el.addEventListener('mousemove', function (event) {
+    document.addEventListener('mousemove', function (event) {
       return _this.mousemove(event);
     });
     this.bar.el.addEventListener('mousedown', function (event) {
       return _this.mousedown(event);
     });
-    this.bar.el.addEventListener('mouseup', function (event) {
+    document.addEventListener('mouseup', function (event) {
+      return _this.mouseup(event);
+    });
+    document.addEventListener('dragend', function (event) {
       return _this.mouseup(event);
     });
 
@@ -757,9 +800,33 @@ var Range = (function () {
       }
 
       if (this.pressed) {
-        (0, _utils.addClass)(this.el, 'pressed');
+        (0, _utils.addClass)(this.el, 'bbslider-pressed');
+        (0, _utils.addClass)(this.el, 'bbslider-pressed-' + this.pressedMode);
         this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
       }
+    }
+  }, {
+    key: 'renderRemovePopup',
+    value: function renderRemovePopup() {
+      this.isRemoving = true;
+      (0, _utils.addClass)(this.el, 'bbslider-is-removing');
+
+      this.elRemovePopup = document.createElement('div');
+      this.elRemovePopup.innerHTML = '×';
+      this.elRemovePopup.className = 'bbslider-remove-popup';
+
+      this.el.appendChild(this.elRemovePopup);
+    }
+  }, {
+    key: 'removeRemovingPopup',
+    value: function removeRemovingPopup() {
+      this.isRemoving = false;
+      (0, _utils.removeClass)(this.el, 'bbslider-is-removing');
+
+      this.el.removeChild(this.elRemovePopup);
+      this.emitter.emit('range:remove', {
+        id: this.id
+      });
     }
   }, {
     key: 'mousemove',
@@ -791,10 +858,21 @@ var Range = (function () {
           return;
         }
 
-        // not supported yet
-        //if (newRight == newLeft && !this.bar.options.allowRemove){
-        //  return
-        //}
+        if (this.bar.options.allowRemove) {
+          if (newRight == newLeft) {
+            if (!this.isRemoving) {
+              this.renderRemovePopup();
+            }
+          } else {
+            if (this.isRemoving) {
+              this.removeRemovingPopup();
+            }
+          }
+        } else {
+          if (newRight == newLeft) {
+            return;
+          }
+        }
 
         if (newLeft < this.bar.options.min) {
           return;
@@ -858,12 +936,16 @@ var Range = (function () {
   }, {
     key: 'mouseup',
     value: function mouseup(event) {
+      this.pressed = false;
+      if (this.isRemoving) {
+        this.removeRemovingPopup();
+      }
+      this.pressedPosition = undefined;
+      (0, _utils.removeClass)(this.el, 'bbslider-pressed');
+      (0, _utils.removeClass)(this.el, 'bbslider-pressed-' + this.pressedMode);
       if ([this.el, this.left_handler, this.right_handler].indexOf(event.target) === -1) {
         return;
       }
-      this.pressed = false;
-      this.pressedPosition = undefined;
-      (0, _utils.removeClass)(this.el, 'pressed');
       this.emitter.emit('range:change', {
         id: this.id,
         val: this.getValue()
@@ -874,10 +956,10 @@ var Range = (function () {
     value: function setValue(left, right) {
       this.left = left;
       this.right = right;
-      var percentLeft = this.bar.userToUnit(left) * 100;
-      var percentRight = this.bar.userToUnit(right) * 100;
-      this.el.style.left = percentLeft + '%';
-      this.el.style.width = percentRight - percentLeft + '%';
+      var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
+      var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
+      this.el.style.left = pixelLeft + 'px';
+      this.el.style.width = pixelRight - pixelLeft + 'px';
     }
   }, {
     key: 'getValue',
