@@ -20,21 +20,49 @@
 .bbslider-bar .bbslider-range {
   background: forestgreen;
   cursor: move;
+  -webkit-user-drag: none;
 }
-.bbslider-bar .bbslider-range.pressed {
+.bbslider-bar .bbslider-range.bbslider-pressed {
   background: green;
 }
 .bbslider-bar .bbslider-range .bbslider-left-handler,
 .bbslider-bar .bbslider-range .bbslider-right-handler {
   position: absolute;
-  width: 10px;
+  width: 8px;
   background: darkgreen;
   height: 100%;
   cursor: ew-resize;
+  -webkit-user-drag: none;
 }
 .bbslider-bar .bbslider-range .bbslider-left-handler {
   left: 0;
 }
 .bbslider-bar .bbslider-range .bbslider-right-handler {
   right: 0;
+}
+.bbslider-bar .bbslider-range.bbslider-is-removing .bbslider-right-handler,
+.bbslider-bar .bbslider-range.bbslider-is-removing .bbslider-left-handler {
+  width: 4px;
+}
+.bbslider-bar .bbslider-range.bbslider-is-removing.bbslider-pressed-right .bbslider-right-handler {
+  right: -8px;
+}
+.bbslider-bar .bbslider-range.bbslider-is-removing.bbslider-pressed-left .bbslider-left-handler {
+  left: -8px;
+}
+.bbslider-bar .bbslider-range .bbslider-remove-popup {
+  transition: 0.5s;
+  position: absolute;
+  background: gray;
+  opacity: 0.5;
+  width: 20px;
+  height: 20px;
+  top: -30px;
+  text-align: center;
+}
+.bbslider-bar .bbslider-range.bbslider-pressed-left .bbslider-remove-popup {
+  right: -6px;
+}
+.bbslider-bar .bbslider-range.bbslider-pressed-right .bbslider-remove-popup {
+  left: -6px;
 }
