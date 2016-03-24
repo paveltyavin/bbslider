@@ -8,7 +8,8 @@
     "url": "https://github.com/paveltyavin/bbslider"
   },
   "scripts": {
-    "test": "node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/index.html --verbose"
+    "test": "node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/index.html --verbose",
+    "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [],
   "author": "Pavel Tyavin <pavel@tyavin.name>",
