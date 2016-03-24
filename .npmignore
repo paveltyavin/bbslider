@@ -1,3 +1,4 @@
-gh-pages
+!dist/bbslider.min.js
+dist/css
 dist/index.html
-dist/css/
+.travis

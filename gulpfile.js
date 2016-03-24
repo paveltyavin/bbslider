@@ -80,5 +80,5 @@ gulp.task('watch', function () {
   watch_bundle();
 });
 
-gulp.task('build', ['gh-pages:copy', 'gh-pages:libs', 'less', 'build:js']);
+gulp.task('build', ['gh-pages:copy', 'less', 'build:js']);
 gulp.task('default', ['watch', 'build']);
