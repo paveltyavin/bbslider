@@ -25,25 +25,47 @@
         </a></p>
 
 
-        <ul>
+        <ul class="links">
             <li><a href="https://github.com/paveltyavin/bbslider/zipball/master">Download <strong>ZIP File</strong></a>
             </li>
             <li><a href="https://github.com/paveltyavin/bbslider/tarball/master">Download <strong>TAR Ball</strong></a>
             </li>
             <li><a href="https://github.com/paveltyavin/bbslider">View On <strong>GitHub</strong></a></li>
         </ul>
+
+        <ul class="nav">
+            <li>
+                <a href="#overview">Overview</a>
+            </li>
+            <li>
+                <a href="#events">Events</a>
+            </li>
+            <li>
+                <a href="#methods">Methods</a>
+            </li>
+            <li>
+                <a href="#options">Options</a>
+            </li>
+        </ul>
     </header>
     <section>
         <h1>
-            <a id="bbslider" class="anchor" href="#bbslider" aria-hidden="true">
+            <a id="overview" class="anchor" href="#overview" aria-hidden="true">
                 <span aria-hidden="true" class="octicon octicon-link"></span>
             </a>
             BBSlider
         </h1>
 
-        <div id="el1"></div>
+        <div id="el"></div>
+        <p></p>
         <p>
-            Attach slider to an element
+            <b>BBSlider</b> is a slider to make multiple ranges. Try to click on the bar above.
+        </p>
+        <p>
+            Slider doesn't have any dependencies and can be used as AMD module, CommonJS, or a standalone &ltscript&gt.
+        </p>
+        <p>
+            Usage is simple as this:
         </p>
         <pre>
 var slider = new BBSlider({
@@ -51,77 +73,83 @@ var slider = new BBSlider({
     max: 100,
     step: 10
 });
-document.getElementById('el1').appendChild(slider_1.el);</pre>
+document.getElementById('el').appendChild(slider.el);</pre>
+
+        <p>
+            You can download slider via npm
+        </p>
+<pre>
+npm install bbslider
+</pre>
 
 
-        <h2>Events</h2>
+        <h2 id="events">Events</h2>
         <h3>change, changing</h3>
-        <div id="el2"></div>
+        <div id="el_events_change"></div>
         <p>
             Code below calculates total length.
         </p>
         <p>
-            This number updates while changing: <span id="result2">40</span>.
+            This number updates while changing: <span id="result_events_changing">40</span>.
         </p>
         <p>
-            This number updates after change: <span id="result3">40</span>.
+            This number updates after change: <span id="result_events_change">40</span>.
         </p>
 
         <pre>
-function getTotalLength(data){
+function getTotalLength(data) {
     var result = 0;
     for (var i = 0; i < data.val.length; i++) {
-      result += (data.val[i][1] - data.val[i][0]);
+        result += (data.val[i][1] - data.val[i][0]);
     }
     return result;
 }
 
-var result2el = document.getElementById('result2');
-var result3el = document.getElementById('result3');
+var result1 = document.getElementById('result1');
+var result2 = document.getElementById('result2');
 
 slider.on('changing', function (data) {
-    result2el.innerHTML = getTotalLength(data).toString();
+    result1.innerHTML = getTotalLength(data).toString();
 });
-
 slider.on('change', function (data) {
-    result3el.innerHTML = getTotalLength(data).toString();
+    result2.innerHTML = getTotalLength(data).toString();
 });</pre>
 
         <h3>range:change, range:changing</h3>
-        <div id="el3"></div>
+        <div id="el_events_range_change"></div>
         <p>
-            First range length: <span id="result4">20</span>.
+            First range length: <span id="result_events_range_changing">20</span>.
         </p>
         <p>
-            First range length: <span id="result5">20</span>.
+            First range length: <span id="result_events_range_change">20</span>.
         </p>
         <p>
-            Range id that was changed: <span id="result6"></span>.
+            Range id that was changed: <span id="result_events_range_id"></span>.
         </p>
 
         <pre>
-slider_3.on('range:changing', function (data) {
+slider.on('range:changing', function (data) {
     if (data.id == 1) {
-      result4el.innerHTML = (data.val[1] - data.val[0]).toString();
+        result1.innerHTML = (data.val[1] - data.val[0]).toString();
     }
 });
 
-slider_3.on('range:change', function (data) {
+slider.on('range:change', function (data) {
     if (data.id == 1) {
-      result5el.innerHTML = (data.val[1] - data.val[0]).toString();
+        result2.innerHTML = (data.val[1] - data.val[0]).toString();
     }
-    result6el.innerHTML = data.id.toString();
+    result3.innerHTML = data.id.toString();
 });</pre>
 
-        <h2>Methods</h2>
+
+        <h2 id="methods">Methods</h2>
         <h3>.val(value)</h3>
-        <div id="el4"></div>
+        <div id="el_methods_val"></div>
         <pre>
 slider.val([[40, 60], [80, 100]]);</pre>
 
 
-
-        <h2>Options</h2>
+        <h2 id="options">Options</h2>
         <h3>AllowRemove</h3>
         <pre>
 var slider_options_allowRemove = new BBSlider({

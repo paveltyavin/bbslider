@@ -1,70 +1,83 @@
+function getTotalLength(data) {
+  var result = 0;
+  for (var i = 0; i < data.val.length; i++) {
+    result += (data.val[i][1] - data.val[i][0]);
+  }
+  return result;
+}
+
 document.addEventListener("DOMContentLoaded", function (event) {
-  var slider_1 = new BBSlider({
+
+
+  //Overview
+
+  var slider = new BBSlider({
     min: 0,
     max: 100,
     step: 10
   });
-  document.getElementById('el1').appendChild(slider_1.el);
+  document.getElementById('el').appendChild(slider.el);
 
-  var slider_2 = new BBSlider({
+
+  // Events
+
+  var slider_events_change = new BBSlider({
     min: 0,
     max: 100,
     step: 10
   });
-  document.getElementById('el2').appendChild(slider_2.el);
-  slider_2.addRange([20, 60], {id: 1});
-
-  slider_2.on('changing', function (data) {
-    var result = 0;
-    for (var i = 0; i < data.val.length; i++) {
-      result += (data.val[i][1] - data.val[i][0]);
-    }
-    document.getElementById('result2').innerHTML = result.toString();
+  document.getElementById('el_events_change').appendChild(slider_events_change.el);
+  slider_events_change.addRange([20, 60], {id: 1});
+  var result_events_changing = document.getElementById('result_events_changing');
+  var result_events_change = document.getElementById('result_events_change');
+  slider_events_change.on('changing', function (data) {
+    result_events_changing.innerHTML = getTotalLength(data).toString();
   });
-  slider_2.on('change', function (data) {
-    var result = 0;
-    for (var i = 0; i < data.val.length; i++) {
-      result += (data.val[i][1] - data.val[i][0]);
-    }
-    document.getElementById('result3').innerHTML = result.toString();
+  slider_events_change.on('change', function (data) {
+    result_events_change.innerHTML = getTotalLength(data).toString();
   });
 
 
-  var slider_3 = new BBSlider({
+  var slider_events_range_change = new BBSlider({
     min: 0,
     max: 100,
     step: 10
   });
-  document.getElementById('el3').appendChild(slider_3.el);
-  slider_3.addRange([20, 60], {id: 1});
-  slider_3.addRange([90, 100], {id: 2});
+  document.getElementById('el_events_range_change').appendChild(slider_events_range_change.el);
+  slider_events_range_change.addRange([20, 60], {id: 1});
+  slider_events_range_change.addRange([90, 100], {id: 2});
 
-  var result4el = document.getElementById('result4');
-  var result5el = document.getElementById('result5');
-  var result6el = document.getElementById('result6');
+  var result_events_range_changing = document.getElementById('result_events_range_changing');
+  var result_events_range_change = document.getElementById('result_events_range_change');
+  var result_events_range_id = document.getElementById('result_events_range_id');
 
-  slider_3.on('range:changing', function (data) {
+  slider_events_range_change.on('range:changing', function (data) {
     if (data.id == 1) {
-      result4el.innerHTML = (data.val[1] - data.val[0]).toString();
+      result_events_range_changing.innerHTML = (data.val[1] - data.val[0]).toString();
     }
   });
 
-  slider_3.on('range:change', function (data) {
+  slider_events_range_change.on('range:change', function (data) {
     if (data.id == 1) {
-      result5el.innerHTML = (data.val[1] - data.val[0]).toString();
+      result_events_range_change.innerHTML = (data.val[1] - data.val[0]).toString();
     }
-    result6el.innerHTML = data.id.toString();
+    result_events_range_id.innerHTML = data.id.toString();
   });
 
 
-  var slider_4 = new BBSlider({
+  // Methods
+
+
+  var slider_methods_val = new BBSlider({
     min: 0,
     max: 100,
     step: 10
   });
-  document.getElementById('el4').appendChild(slider_4.el);
-  slider_4.val([[40, 60], [80, 100]]);
+  document.getElementById('el_methods_val').appendChild(slider_methods_val.el);
+  slider_methods_val.val([[40, 60], [80, 100]]);
 
+
+  // Options
 
   var slider_options_allowRemove = new BBSlider({
     min: 0,

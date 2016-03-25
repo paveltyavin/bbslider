@@ -794,9 +794,9 @@ var Range = (function () {
     document.addEventListener('mouseup', function (event) {
       return _this.mouseup(event);
     });
-    document.addEventListener('dragend', function (event) {
-      return _this.mouseup(event);
-    });
+    this.el.ondragstart = function () {
+      return false;
+    };
 
     this.emitter = new _emitter2['default']();
   }
@@ -842,9 +842,6 @@ var Range = (function () {
       (0, _utils.removeClass)(this.el, 'bbslider-is-removing');
 
       this.el.removeChild(this.elRemovePopup);
-      this.emitter.emit('range:remove', {
-        id: this.id
-      });
     }
   }, {
     key: 'mousemove',
@@ -957,6 +954,9 @@ var Range = (function () {
       this.pressed = false;
       if (this.isRemoving) {
         this.removeRemovingPopup();
+        this.emitter.emit('range:remove', {
+          id: this.id
+        });
       }
       this.pressedPosition = undefined;
       (0, _utils.removeClass)(this.el, 'bbslider-pressed');
