@@ -26,7 +26,9 @@ class Range {
     document.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
     document.addEventListener('mouseup', (event)=> this.mouseup(event));
-    document.addEventListener('dragend', (event)=> this.mouseup(event));
+    this.el.ondragstart = function () {
+      return false;
+    };
 
     this.emitter = new Emitter();
   }
@@ -68,9 +70,6 @@ class Range {
     removeClass(this.el, 'bbslider-is-removing');
 
     this.el.removeChild(this.elRemovePopup);
-    this.emitter.emit('range:remove', {
-      id: this.id
-    });
   }
 
   mousemove(event) {
@@ -161,6 +160,9 @@ class Range {
     this.pressed = false;
     if (this.isRemoving) {
       this.removeRemovingPopup();
+      this.emitter.emit('range:remove', {
+        id: this.id
+      });
     }
     this.pressedPosition = undefined;
     removeClass(this.el, 'bbslider-pressed');

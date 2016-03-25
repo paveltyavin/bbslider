@@ -30,9 +30,14 @@ QUnit.module('Options', function (hooks) {
     var handler = s.el.querySelector('.bbslider-left-handler');
     down(handler);
     move(handler, {moveX: step_width * 4});
-    up(handler);
+    move(handler, {moveX: -step_width});
+    assert.equal(s.val().length, 1,
+      'decreasing width to zero and then increasing again without mouseup should not remove the range');
 
-    assert.equal(s.val().length, 0);
+    move(handler, {moveX: step_width});
+    up(handler);
+    assert.equal(s.val().length, 0,
+      'decreasing width to zero and then mouseup should remove the range');
     target.removeChild(s.el);
   });
 });
