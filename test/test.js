@@ -40,6 +40,33 @@ QUnit.module('Options', function (hooks) {
       'decreasing width to zero and then mouseup should remove the range');
     target.removeChild(s.el);
   });
+
+
+  QUnit.test('maxRanges', function (assert) {
+    var options = {
+      min: 0,
+      max: 100,
+      step: 5,
+      maxRanges: 3
+    };
+    var s = new BBSlider(options);
+    var target = document.getElementById('target');
+    target.appendChild(s.el);
+
+    s.addRange([20, 40], {id: 100});
+    s.addRange([50, 60], {id: 200});
+    s.addRange([70, 75], {id: 300});
+    assert.throws(function () {
+      s.addRange([80, 90], {id: 300});
+    }, "there should be no more ranges than maxRanges");
+
+    move(s._bar.el);
+    assert.equal(s.el.querySelectorAll('.bbslider-ghost').length, 0,
+      'after number of ranges is maxRanges there should be no ghost element');
+
+    assert.ok(true);
+    target.removeChild(s.el);
+  });
 });
 
 

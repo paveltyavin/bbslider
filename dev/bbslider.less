@@ -1,3 +1,5 @@
+@blue: #128dc3;
+
 .bbslider-slider{
   display: block;
 }
@@ -6,7 +8,7 @@
   height: 50px;
   width: 100%;
   display: block;
-  background: red;
+  background: lighten(@blue, 48%);
   position: relative;
   border: 0 !important;
   box-sizing: border-box;
@@ -19,22 +21,23 @@
   }
 
   .bbslider-ghost {
-    background: blue;
+    color: white;
+    background: rgba(0,0,0,0.25);
     cursor: pointer;
   }
   .bbslider-range {
-    background: forestgreen;
+    background: lighten(@blue, 23%);
     cursor: move;
     -webkit-user-drag: none;
     &.bbslider-pressed {
-      background: green;
+      background: lighten(@blue, 18%);
     }
 
     .bbslider-left-handler,
     .bbslider-right-handler {
       position: absolute;
       width: 8px;
-      background: darkgreen;
+      background: lighten(@blue, 10%);
       height: 100%;
       cursor: ew-resize;
       -webkit-user-drag: none;

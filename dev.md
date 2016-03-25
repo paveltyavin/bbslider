@@ -18,16 +18,14 @@ https://github.com/paveltyavin/bbslider/
 ## todo 
 
 * functions
-    * allowRemove - removing range by decreasing its width to zero
     * allowSwap - swap left and right position by dragging beyond the element
     * valueFormat - format function for the label
+    * marks
+    * maxRanges
+    * readonly
 
 * events
-    * `.on('change', `
-    * `.on('changing', `
     * `.on('range:click', `
-    * `.on('range:remove', `
-    * `.on('range:change', `
     
 * methods
     * ?
@@ -35,6 +33,3 @@ https://github.com/paveltyavin/bbslider/
 * styles
     
 * gif
-
-* tests
-    * ?

@@ -63,6 +63,12 @@ var BBSlider = (function () {
       if ((options.max - options.min) % options.step !== 0) {
         throw new Error('there should be an integer number of steps between min and max');
       }
+
+      if (options.maxRanges !== undefined) {
+        if (!Number.isInteger(options.maxRanges)) {
+          throw new Error('maxRanges should be integer');
+        }
+      }
     }
   }, {
     key: '_validateRangeValue',
@@ -229,7 +235,8 @@ var Bar = (function (_Base) {
 
     _get(Object.getPrototypeOf(Bar.prototype), 'constructor', this).call(this);
     this.options = Object.assign({
-      allowRemove: false
+      allowRemove: false,
+      maxRanges: Infinity
     }, options);
 
     this.el = document.createElement('div');
@@ -265,6 +272,9 @@ var Bar = (function (_Base) {
     value: function addRange(value, options) {
       var _this2 = this;
 
+      if (this.rangeList.length >= this.options.maxRanges) {
+        return false;
+      }
       options = Object.assign({
         id: this.getRangeId()
       }, options);
@@ -314,6 +324,8 @@ var Bar = (function (_Base) {
         rangeId: rangeId,
         val: this.getValue()
       });
+
+      return range;
     }
   }, {
     key: 'removeRange',
@@ -389,18 +401,30 @@ var Bar = (function (_Base) {
   }, {
     key: 'mousemove',
     value: function mousemove(event) {
-      var cursor = this.getCursor(event);
-      var insideRange = this.isInsideRange(cursor);
-      var rangePressed = this.rangeList.filter(function (x) {
-        return x.pressed;
-      }).length > 0;
-
-      if (!rangePressed && !insideRange && !this.ghost) {
-        this.ghost = new _ghost2['default']({ bar: this });
-        this.el.appendChild(this.ghost.el);
-        var left = this.roundUserValue(cursor);
-        this.ghost.setValue(left, left + this.options.step);
+      if (this.ghost) {
+        return;
       }
+      if (this.options.readOnly) {
+        return;
+      }
+      if (this.rangeList.length >= this.options.maxRanges) {
+        return;
+      }
+      if (this.rangeList.filter(function (x) {
+        return x.pressed;
+      }).length > 0) {
+        return;
+      }
+
+      var cursor = this.getCursor(event);
+      if (this.isInsideRange(cursor)) {
+        return;
+      }
+
+      this.ghost = new _ghost2['default']({ bar: this });
+      this.el.appendChild(this.ghost.el);
+      var left = this.roundUserValue(cursor);
+      this.ghost.setValue(left, left + this.options.step);
     }
   }, {
     key: 'setValue',

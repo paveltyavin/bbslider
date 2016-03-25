@@ -30,6 +30,12 @@ class BBSlider {
       throw(new Error('there should be an integer number of steps between min and max'));
     }
 
+    if(options.maxRanges !== undefined ){
+      if (!Number.isInteger(options.maxRanges)) {
+        throw(new Error('maxRanges should be integer'));
+      }
+    }
+
   }
 
   _validateRangeValue(value, options) {

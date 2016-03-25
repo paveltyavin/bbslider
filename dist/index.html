@@ -59,7 +59,7 @@
         <div id="el"></div>
         <p></p>
         <p>
-            <b>BBSlider</b> is a slider to make multiple ranges. Try to click on the bar above.
+            <b>BBSlider</b> is a slider for multiple ranges. Try to click on the bar above.
         </p>
         <p>
             Slider doesn't have any dependencies and can be used as AMD module, CommonJS, or a standalone &ltscript&gt.
@@ -150,9 +150,9 @@ slider.val([[40, 60], [80, 100]]);</pre>
 
 
         <h2 id="options">Options</h2>
-        <h3>AllowRemove</h3>
+        <h3>allowRemove</h3>
         <pre>
-var slider_options_allowRemove = new BBSlider({
+var slider = new BBSlider({
     min: 0,
     max: 100,
     step: 10,
@@ -162,6 +162,22 @@ var slider_options_allowRemove = new BBSlider({
             To remove a range, just decrease its width to zero by dragging the handlers.
         </p>
         <div id="slider_options_allowRemove"></div>
+
+
+        <h3>maxRanges</h3>
+        <pre>
+var slider = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 10,
+    maxRanges: 3
+});</pre>
+        <p>
+            Sets maximum of ranges in the slider.
+        </p>
+        <div id="slider_options_maxRanges"></div>
+
+
     </section>
 
 

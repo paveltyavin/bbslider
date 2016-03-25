@@ -7,7 +7,8 @@ class Bar extends Base {
   constructor(options = {}) {
     super();
     this.options = Object.assign({
-      allowRemove: false
+      allowRemove: false,
+      maxRanges: Infinity
     }, options);
 
     this.el = document.createElement('div');
@@ -30,6 +31,9 @@ class Bar extends Base {
   }
 
   addRange(value, options) {
+    if (this.rangeList.length >= this.options.maxRanges) {
+      return false;
+    }
     options = Object.assign({
       id: this.getRangeId()
     }, options);
@@ -80,6 +84,8 @@ class Bar extends Base {
       val: this.getValue()
     });
 
+    return range;
+
   }
 
   removeRange(options) {
@@ -123,16 +129,28 @@ class Bar extends Base {
   }
 
   mousemove(event) {
-    let cursor = this.getCursor(event);
-    let insideRange = this.isInsideRange(cursor);
-    let rangePressed = this.rangeList.filter(x => x.pressed).length > 0;
-
-    if (!rangePressed && !insideRange && !this.ghost) {
-      this.ghost = new Ghost({bar: this});
-      this.el.appendChild(this.ghost.el);
-      let left = this.roundUserValue(cursor);
-      this.ghost.setValue(left, left + this.options.step);
+    if (this.ghost) {
+      return
     }
+    if (this.options.readOnly) {
+      return
+    }
+    if (this.rangeList.length >= this.options.maxRanges) {
+      return
+    }
+    if (this.rangeList.filter(x => x.pressed).length > 0) {
+      return
+    }
+
+    let cursor = this.getCursor(event);
+    if (this.isInsideRange(cursor)) {
+      return
+    }
+
+    this.ghost = new Ghost({bar: this});
+    this.el.appendChild(this.ghost.el);
+    let left = this.roundUserValue(cursor);
+    this.ghost.setValue(left, left + this.options.step);
   }
 
   setValue(value) {

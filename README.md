@@ -1,12 +1,14 @@
-BBSLIDER
-========
+# BBSLIDER
 
 [![Build Status](https://travis-ci.org/paveltyavin/bbslider.svg?branch=master)]
 (https://travis-ci.org/paveltyavin/bbslider)
 
-Slider for timetable on more.
-
-[gif]
+Slider for multiple ranges.
+ 
+The idea comes from [Elessar](https://github.com/quarterto/Elessar)
+ project. Thank you, [Matt](https://github.com/quarterto/)!
+ 
+Main documentation is [here](http://paveltyavin.github.io/bbslider/).
 
 ## Install && Usage
 
@@ -31,9 +33,6 @@ var slider = new BBSlider;
 var yourElement = document.getElementById('your-element');
 yourElement.appendChild(slider.el);
 ```
-
-
-## Changelog
 
 
 ## Licence
