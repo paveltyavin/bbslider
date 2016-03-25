@@ -1,7 +1,10 @@
+.bbslider-slider {
+  display: block;
+}
 .bbslider-bar {
   height: 50px;
   width: 100%;
-  display: inline-block;
+  display: block;
   background: red;
   position: relative;
   border: 0 !important;
@@ -51,6 +54,7 @@
   left: -8px;
 }
 .bbslider-bar .bbslider-range .bbslider-remove-popup {
+  color: white;
   transition: 0.5s;
   position: absolute;
   background: gray;
