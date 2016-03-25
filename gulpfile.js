@@ -64,12 +64,6 @@ gulp.task('build:js', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('gh-pages:copy', function () {
-  gulp.src(['gh-pages/**'], {base: './gh-pages/'})
-    .pipe(gulp.dest('dist'))
-    .pipe(livereload());
-});
-
 gulp.task('watch', function () {
   livereload.listen({start: true});
   gulp.watch(['dev/*.less'], ['less']);
@@ -80,5 +74,5 @@ gulp.task('watch', function () {
   watch_bundle();
 });
 
-gulp.task('build', ['gh-pages:copy', 'less', 'build:js']);
+gulp.task('build', ['less', 'build:js']);
 gulp.task('default', ['watch', 'build']);
