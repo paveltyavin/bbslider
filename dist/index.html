@@ -5,17 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Bbslider by paveltyavin</title>
 
-    <link rel="stylesheet" href="files/base.css">
-    <link rel="stylesheet" href="files/main.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="bbslider.css">
-    <link rel="stylesheet" href="files/default.min.css">
-    <script src="files/highlight.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
     <meta name="viewport" content="width=device-width">
 </head>
 <body>
 <div class="wrapper">
     <header>
-        <h1>BBSlider</h1>
+        <h1>Bbslider</h1>
         <p></p>
 
         <p class="view"><a href="https://github.com/paveltyavin/bbslider">View the Project on GitHub
@@ -36,89 +36,28 @@
             <a id="bbslider" class="anchor" href="#bbslider" aria-hidden="true">
                 <span aria-hidden="true" class="octicon octicon-link"></span>
             </a>
-            BBSlider
+            BBslider
         </h1>
-
         <div id="el1"></div>
-        <p>
-            Attach slider to an element
-        </p>
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                var slider_1 = new BBSlider({
+                    min: 0,
+                    max: 100,
+                    step: 10
+                });
+                document.getElementById('el1').appendChild(slider_1.el);
+            });
+        </script>
         <pre>
-var slider = new BBSlider({
+var slider_1 = new BBSlider({
     min: 0,
     max: 100,
     step: 10
 });
-document.getElementById('el1').appendChild(slider_1.el);</pre>
-
-
-        <h2>Events</h2>
-        <h3>change, changing</h3>
-        <div id="el2"></div>
-        <p>
-            Code below calculates total length.
-        </p>
-        <p>
-            This number updates while changing: <span id="result2">40</span>.
-        </p>
-        <p>
-            This number updates after change: <span id="result3">40</span>.
-        </p>
-
-        <pre>
-function getTotalLength(data){
-    var result = 0;
-    for (var i = 0; i < data.val.length; i++) {
-      result += (data.val[i][1] - data.val[i][0]);
-    }
-    return result;
-}
-
-var result2el = document.getElementById('result2');
-var result3el = document.getElementById('result3');
-
-slider.on('changing', function (data) {
-    result2el.innerHTML = getTotalLength(data).toString();
-});
-
-slider.on('change', function (data) {
-    result3el.innerHTML = getTotalLength(data).toString();
-});</pre>
-
-        <h3>range:change, range:changing</h3>
-        <div id="el3"></div>
-        <p>
-            First range length: <span id="result4">20</span>.
-        </p>
-        <p>
-            First range length: <span id="result5">20</span>.
-        </p>
-        <p>
-            Range id that was changed: <span id="result6"></span>.
-        </p>
-
-        <pre>
-slider_3.on('range:changing', function (data) {
-    if (data.id == 1) {
-      result4el.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-});
-
-slider_3.on('range:change', function (data) {
-    if (data.id == 1) {
-      result5el.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-    result6el.innerHTML = data.id.toString();
-});</pre>
-
-        <h2>Methods</h2>
-        <h3>.val(value)</h3>
-        <div id="el4"></div>
-        <pre>
-slider.val([[40, 60], [80, 100]]);</pre>
+document.getElementById('el1').appendChild(slider_1.el);
+        </pre>
     </section>
-
-
     <footer>
         <p>This project is maintained by <a href="https://github.com/paveltyavin">paveltyavin</a></p>
         <p>
@@ -147,7 +86,6 @@ slider.val([[40, 60], [80, 100]]);</pre>
     }
 </script>
 <script src="bbslider-dev.js"></script>
-<script src="files/main.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var node_list = document.querySelectorAll('pre');
