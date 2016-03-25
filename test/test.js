@@ -46,7 +46,7 @@ QUnit.module("BBSlider", function (hooks) {
       step: 10
     };
     this.s = new BBSlider(options);
-    this.bar_el = this.s.el;
+    this.bar_el = this.s.el.querySelector('.bbslider-bar');
     this.target = document.getElementById('target');
     this.target.appendChild(this.s.el);
     this.width = this.s.el.clientWidth;
@@ -211,18 +211,18 @@ QUnit.module("BBSlider", function (hooks) {
 
   QUnit.module("Ghost", function (hooks) {
     hooks.beforeEach(function (assert) {
-      move(this.s.el);
+      move(this.bar_el);
       this.ghost_el = this.target.querySelector('.bbslider-ghost');
       this.ghost_rect = this.ghost_el.getBoundingClientRect();
     });
     hooks.afterEach(function (assert) {
-      leave(this.s.el);
+      leave(this.bar_el);
       assert.ok(this.target.querySelectorAll('.bbslider-ghost').length == 0,
         'element should be removed from the DOM when mouse leaved the bar');
     });
 
     QUnit.test("exists", function (assert) {
-      move(this.s.el);
+      move(this.bar_el);
       var el_list = this.target.querySelectorAll('.bbslider-ghost');
       assert.ok(el_list.length == 1,
         'Only one element should attach to dom');
@@ -233,14 +233,14 @@ QUnit.module("BBSlider", function (hooks) {
     });
 
     QUnit.test("Move", function (assert) {
-      move(this.s.el, {moveX: this.step_width});
+      move(this.bar_el, {moveX: this.step_width});
       assert.ok(Math.abs(this.ghost_el.getBoundingClientRect().left - this.ghost_rect.left - this.step_width) <= 1,
         'element should move after the cursor with a step distance');
     });
 
     QUnit.test("Mousedown and move", function (assert) {
       down(this.ghost_el);
-      move(this.s.el, {startX: this.step_width, moveX: this.step_width});
+      move(this.bar_el, {startX: this.step_width, moveX: this.step_width});
       assert.ok(this.ghost_el.getBoundingClientRect().width > this.ghost_rect.width,
         "element should increase its width if pressed and mousemoved");
       up(this.ghost_el);
@@ -248,9 +248,9 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test("Mousedown and move", function (assert) {
       down(this.ghost_el);
-      move(this.s.el, {startX: this.step_width, endX: this.width, stepX: 4});
+      move(this.bar_el, {startX: this.step_width, endX: this.width, stepX: 4});
       var rect_1 = this.ghost_el.getBoundingClientRect();
-      move(this.s.el, {startX: this.width, endX: this.width + 1, stepX: 4});
+      move(this.bar_el, {startX: this.width, endX: this.width + 1, stepX: 4});
       var rect_2 = this.ghost_el.getBoundingClientRect();
       assert.ok(Math.abs(rect_1.width - rect_2.width) <= 1,
         "element should not cross the limits of bar");

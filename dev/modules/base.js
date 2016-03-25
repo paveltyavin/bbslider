@@ -1,6 +1,21 @@
+//http://stackoverflow.com/a/850995/752397
+function isInDOMTree(node) {
+  return !!(findUltimateAncestor(node).body);
+}
+function findUltimateAncestor(node) {
+  var ancestor = node;
+  while (ancestor.parentNode) {
+    ancestor = ancestor.parentNode;
+  }
+  return ancestor;
+}
+
 class Base {
   // This class contains methods to calculate different measurements for Bar class
   pixelToUnit(value) {
+    if (!isInDOMTree(this.el)){
+      throw new Error('element is not in dom!');
+    }
     let rect = this.el.getBoundingClientRect();
     let width = rect.width;
     if (width == 0) {

@@ -118,6 +118,22 @@ slider_3.on('range:change', function (data) {
         <div id="el4"></div>
         <pre>
 slider.val([[40, 60], [80, 100]]);</pre>
+
+
+
+        <h2>Options</h2>
+        <h3>AllowRemove</h3>
+        <pre>
+var slider_options_allowRemove = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 10,
+    allowRemove: true
+});</pre>
+        <p>
+            To remove a range, just decrease its width to zero by dragging the handlers.
+        </p>
+        <div id="slider_options_allowRemove"></div>
     </section>
 
 

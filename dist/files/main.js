@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     max: 100,
     step: 10
   });
-  slider_2.addRange([20, 60], {id: 1});
   document.getElementById('el2').appendChild(slider_2.el);
+  slider_2.addRange([20, 60], {id: 1});
 
   slider_2.on('changing', function (data) {
     var result = 0;
@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     max: 100,
     step: 10
   });
+  document.getElementById('el3').appendChild(slider_3.el);
   slider_3.addRange([20, 60], {id: 1});
   slider_3.addRange([90, 100], {id: 2});
-  document.getElementById('el3').appendChild(slider_3.el);
 
   var result4el = document.getElementById('result4');
   var result5el = document.getElementById('result5');
@@ -64,5 +64,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   document.getElementById('el4').appendChild(slider_4.el);
   slider_4.val([[40, 60], [80, 100]]);
+
+
+  var slider_options_allowRemove = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 10,
+    allowRemove: true
+  });
+  document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);
+  slider_options_allowRemove.val([[40, 60], [80, 100]]);
 
 });

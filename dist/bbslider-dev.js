@@ -36,7 +36,10 @@ var BBSlider = (function () {
 
     this._validateOptions(options);
     this._bar = new _modulesBar2['default'](options);
-    this.el = this._bar.el;
+
+    this.el = document.createElement('div');
+    this.el.className = 'bbslider-slider';
+    this.el.appendChild(this._bar.el);
   }
 
   _createClass(BBSlider, [{
@@ -468,6 +471,7 @@ exports['default'] = Bar;
 module.exports = exports['default'];
 
 },{"./base":3,"./emitter":4,"./ghost":5,"./range":6}],3:[function(require,module,exports){
+//http://stackoverflow.com/a/850995/752397
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -477,6 +481,17 @@ Object.defineProperty(exports, '__esModule', {
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function isInDOMTree(node) {
+  return !!findUltimateAncestor(node).body;
+}
+function findUltimateAncestor(node) {
+  var ancestor = node;
+  while (ancestor.parentNode) {
+    ancestor = ancestor.parentNode;
+  }
+  return ancestor;
+}
 
 var Base = (function () {
   function Base() {
@@ -488,6 +503,9 @@ var Base = (function () {
 
     // This class contains methods to calculate different measurements for Bar class
     value: function pixelToUnit(value) {
+      if (!isInDOMTree(this.el)) {
+        throw new Error('element is not in dom!');
+      }
       var rect = this.el.getBoundingClientRect();
       var width = rect.width;
       if (width == 0) {

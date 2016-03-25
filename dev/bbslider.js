@@ -7,7 +7,10 @@ class BBSlider {
   constructor(options={}) {
     this._validateOptions(options);
     this._bar = new Bar(options);
-    this.el = this._bar.el;
+
+    this.el = document.createElement('div');
+    this.el.className = 'bbslider-slider';
+    this.el.appendChild(this._bar.el);
   }
 
   _validateOptions(options) {
