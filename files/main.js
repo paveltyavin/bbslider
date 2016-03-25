@@ -88,4 +88,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
   document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);
   slider_options_allowRemove.val([[40, 60], [80, 100]]);
 
+
+  var slider_options_maxRanges = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 10,
+    maxRanges: 3
+  });
+  document.getElementById('slider_options_maxRanges').appendChild(slider_options_maxRanges.el);
+  slider_options_maxRanges.val([[0, 10], [20, 40]]);
+
 });
