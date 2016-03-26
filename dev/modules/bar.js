@@ -91,6 +91,7 @@ class Bar extends Base {
   removeRange(options) {
     let range = this.rangeList.find(x => x.id == options.id);
     if (range) {
+      range.removeEvents();
       this.el.removeChild(range.el);
       this.rangeList = this.rangeList.filter(x => x.id !== options.id);
       return true;
@@ -101,6 +102,7 @@ class Bar extends Base {
 
   removeGhost() {
     if (this.ghost) {
+      this.ghost.removeEvents();
       this.el.removeChild(this.ghost.el);
       delete this.ghost;
     }

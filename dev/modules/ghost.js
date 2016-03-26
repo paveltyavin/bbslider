@@ -9,9 +9,21 @@ class Ghost {
     this.el.className = 'bbslider-ghost';
 
     this.pressed = false;
-    this.bar.el.addEventListener('mousemove', (event)=> this.mousemove(event));
-    this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
-    this.bar.el.addEventListener('mouseup', (event)=> this.mouseup(event));
+
+    this._mousemove = (event)=> this.mousemove(event);
+    this._mousedown = (event)=> this.mousedown(event);
+    this._mouseup = (event)=> this.mouseup(event);
+
+    this.bar.el.addEventListener('mousemove', this._mousemove);
+    this.bar.el.addEventListener('mousedown', this._mousedown);
+    this.bar.el.addEventListener('mouseup', this._mouseup);
+  }
+
+
+  removeEvents() {
+    this.bar.el.removeEventListener('mousemove', this._mousemove);
+    this.bar.el.removeEventListener('mousedown', this._mousedown);
+    this.bar.el.removeEventListener('mouseup', this._mouseup);
   }
 
   mousedown(event) {

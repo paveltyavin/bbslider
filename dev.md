@@ -20,9 +20,8 @@ https://github.com/paveltyavin/bbslider/
 * functions
     * allowSwap - swap left and right position by dragging beyond the element
     * valueFormat - format function for the label
-    * marks
-    * maxRanges
-    * readonly
+    * marks - write aome labels on the bar's background.
+    * readOnly
 
 * events
     * `.on('range:click', `

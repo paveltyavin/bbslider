@@ -23,14 +23,22 @@ class Range {
     this.pressed = false;
     this.isRemoving = false;
 
-    document.addEventListener('mousemove', (event)=> this.mousemove(event));
+    this._mousemove = (event)=> this.mousemove(event);
+    this._mouseup = (event)=> this.mouseup(event);
+
+    document.addEventListener('mousemove', this._mousemove);
     this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
-    document.addEventListener('mouseup', (event)=> this.mouseup(event));
+    document.addEventListener('mouseup', this._mouseup);
     this.el.ondragstart = function () {
       return false;
     };
 
     this.emitter = new Emitter();
+  }
+
+  removeEvents() {
+    document.removeEventListener('mousemove', this._mousemove);
+    document.removeEventListener('mouseup', this._mouseup);
   }
 
   mousedown(event) {

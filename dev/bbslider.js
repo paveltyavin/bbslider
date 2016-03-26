@@ -1,8 +1,7 @@
 import Bar from './modules/bar'
 
 class BBSlider {
-  // this class handles public api for the whole project.
-  // all methods should have data validation
+  // This class handles all public api.
 
   constructor(options={}) {
     this._validateOptions(options);
@@ -34,6 +33,10 @@ class BBSlider {
       if (!Number.isInteger(options.maxRanges)) {
         throw(new Error('maxRanges should be integer'));
       }
+    }
+
+    if ([true, false, undefined].indexOf(options.readOnly) === -1) {
+      throw(new Error('readOnly option should be true, false or undefined'));
     }
 
   }
@@ -68,7 +71,7 @@ class BBSlider {
         throw( new Error('intersection'));
       }
     }
-    this._bar.addRange(value, options);
+    return this._bar.addRange(value, options);
   }
 
   removeRange(options) {

@@ -26,8 +26,7 @@ var _modulesBar = require('./modules/bar');
 var _modulesBar2 = _interopRequireDefault(_modulesBar);
 
 var BBSlider = (function () {
-  // this class handles public api for the whole project.
-  // all methods should have data validation
+  // This class handles all public api.
 
   function BBSlider() {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -68,6 +67,10 @@ var BBSlider = (function () {
         if (!Number.isInteger(options.maxRanges)) {
           throw new Error('maxRanges should be integer');
         }
+      }
+
+      if ([true, false, undefined].indexOf(options.readOnly) === -1) {
+        throw new Error('readOnly option should be true, false or undefined');
       }
     }
   }, {
@@ -149,7 +152,7 @@ var BBSlider = (function () {
         }
       }
 
-      this._bar.addRange(value, options);
+      return this._bar.addRange(value, options);
     }
   }, {
     key: 'removeRange',
@@ -334,6 +337,7 @@ var Bar = (function (_Base) {
         return x.id == options.id;
       });
       if (range) {
+        range.removeEvents();
         this.el.removeChild(range.el);
         this.rangeList = this.rangeList.filter(function (x) {
           return x.id !== options.id;
@@ -347,6 +351,7 @@ var Bar = (function (_Base) {
     key: 'removeGhost',
     value: function removeGhost() {
       if (this.ghost) {
+        this.ghost.removeEvents();
         this.el.removeChild(this.ghost.el);
         delete this.ghost;
       }
@@ -680,18 +685,30 @@ var Ghost = (function () {
     this.el.className = 'bbslider-ghost';
 
     this.pressed = false;
-    this.bar.el.addEventListener('mousemove', function (event) {
+
+    this._mousemove = function (event) {
       return _this.mousemove(event);
-    });
-    this.bar.el.addEventListener('mousedown', function (event) {
+    };
+    this._mousedown = function (event) {
       return _this.mousedown(event);
-    });
-    this.bar.el.addEventListener('mouseup', function (event) {
+    };
+    this._mouseup = function (event) {
       return _this.mouseup(event);
-    });
+    };
+
+    this.bar.el.addEventListener('mousemove', this._mousemove);
+    this.bar.el.addEventListener('mousedown', this._mousedown);
+    this.bar.el.addEventListener('mouseup', this._mouseup);
   }
 
   _createClass(Ghost, [{
+    key: 'removeEvents',
+    value: function removeEvents() {
+      this.bar.el.removeEventListener('mousemove', this._mousemove);
+      this.bar.el.removeEventListener('mousedown', this._mousedown);
+      this.bar.el.removeEventListener('mouseup', this._mouseup);
+    }
+  }, {
     key: 'mousedown',
     value: function mousedown(event) {
       if (this.el == event.target) {
@@ -809,15 +826,18 @@ var Range = (function () {
     this.pressed = false;
     this.isRemoving = false;
 
-    document.addEventListener('mousemove', function (event) {
+    this._mousemove = function (event) {
       return _this.mousemove(event);
-    });
+    };
+    this._mouseup = function (event) {
+      return _this.mouseup(event);
+    };
+
+    document.addEventListener('mousemove', this._mousemove);
     this.bar.el.addEventListener('mousedown', function (event) {
       return _this.mousedown(event);
     });
-    document.addEventListener('mouseup', function (event) {
-      return _this.mouseup(event);
-    });
+    document.addEventListener('mouseup', this._mouseup);
     this.el.ondragstart = function () {
       return false;
     };
@@ -826,6 +846,12 @@ var Range = (function () {
   }
 
   _createClass(Range, [{
+    key: 'removeEvents',
+    value: function removeEvents() {
+      document.removeEventListener('mousemove', this._mousemove);
+      document.removeEventListener('mouseup', this._mouseup);
+    }
+  }, {
     key: 'mousedown',
     value: function mousedown(event) {
       if (event.target == this.el) {

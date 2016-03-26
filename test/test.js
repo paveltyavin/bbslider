@@ -6,7 +6,7 @@ QUnit.test("Common", function (assert) {
   });
   var target = document.getElementById('common');
   target.appendChild(s.el);
-  assert.ok(target.querySelectorAll('.bbslider-bar').length == 1, 'Main element should attach to dom');
+  assert.equal(target.querySelectorAll('.bbslider-bar').length, 1, 'Main element should attach to dom');
 
   target.removeChild(s.el);
 });
@@ -63,8 +63,33 @@ QUnit.module('Options', function (hooks) {
     move(s._bar.el);
     assert.equal(s.el.querySelectorAll('.bbslider-ghost').length, 0,
       'after number of ranges is maxRanges there should be no ghost element');
+    target.removeChild(s.el);
+  });
 
-    assert.ok(true);
+  QUnit.test('readOnly', function (assert) {
+    var options = {
+      min: 0,
+      max: 100,
+      step: 5,
+      readOnly: true
+    };
+    var s = new BBSlider(options);
+    var target = document.getElementById('target');
+    target.appendChild(s.el);
+
+    var width = s.el.clientWidth;
+    var step_width = parseInt((options.step / (options.max - options.min)) * width);
+
+    var range_1 = s.addRange([20, 40], {id: 100});
+
+    var handler = range_1.el.querySelectorAll('.bbslider-left-handler')[0];
+    down(handler);
+    move(handler, {moveX: -step_width});
+    up(handler);
+
+    assert.deepEqual(range_1.getValue(), [20, 40],
+      'range value should not change');
+
     target.removeChild(s.el);
   });
 });
@@ -249,15 +274,22 @@ QUnit.module("BBSlider", function (hooks) {
     });
     hooks.afterEach(function (assert) {
       leave(this.bar_el);
-      assert.ok(this.target.querySelectorAll('.bbslider-ghost').length == 0,
+      assert.equal(this.target.querySelectorAll('.bbslider-ghost').length, 0,
         'element should be removed from the DOM when mouse leaved the bar');
     });
 
     QUnit.test("exists", function (assert) {
       move(this.bar_el);
       var el_list = this.target.querySelectorAll('.bbslider-ghost');
-      assert.ok(el_list.length == 1,
+      assert.equal(el_list.length, 1,
         'Only one element should attach to dom');
+    });
+    QUnit.test("benchmark ghost create", function (assert) {
+      for (var i = 0; i < 100; i++) {
+        move(this.bar_el);
+        leave(this.bar_el);
+      }
+      assert.ok(true);
     });
 
     QUnit.test("width", function (assert) {
@@ -296,6 +328,15 @@ QUnit.module("BBSlider", function (hooks) {
       this.range_rect = this.range_el.getBoundingClientRect();
     });
 
+
+    QUnit.test("benchmark range create", function (assert) {
+      for (var i = 0; i < 100; i++) {
+        this.s.addRange([90, 100], {id: 200});
+        this.s.removeRange({id: 200});
+      }
+      assert.ok(true);
+    });
+
     QUnit.test("click", function (assert) {
       move(this.bar_el, {startX: 0});
       up(this.bar_el);
@@ -322,7 +363,7 @@ QUnit.module("BBSlider", function (hooks) {
       assert.ok(rect.left > this.range_rect.left,
         'after dragging right range should move right ');
       up(this.range_el);
-      assert.ok(this.target.querySelector('.pressed') == undefined,
+      assert.equal(this.target.querySelector('.pressed'), undefined,
         'after mouseup shouldn`t contain class pressed');
     });
 
