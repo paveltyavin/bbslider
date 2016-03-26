@@ -226,6 +226,8 @@ var _emitter = require('./emitter');
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
+var _utils = require('./utils');
+
 var Bar = (function (_Base) {
   _inherits(Bar, _Base);
 
@@ -244,6 +246,9 @@ var Bar = (function (_Base) {
 
     this.el = document.createElement('div');
     this.el.className = 'bbslider-bar';
+    if (this.options.readOnly === true) {
+      (0, _utils.addClass)(this.el, 'bbslider-readonly');
+    }
     this.el.addEventListener('mousemove', function (event) {
       return _this.mousemove(event);
     });
@@ -256,6 +261,9 @@ var Bar = (function (_Base) {
     this.el.addEventListener('mousedown', function (event) {
       return _this.mousedown(event);
     });
+    this.el.ondragstart = function () {
+      return false;
+    };
 
     this.rangeIdCount = 0;
     this.rangeList = [];
@@ -499,7 +507,7 @@ var Bar = (function (_Base) {
 exports['default'] = Bar;
 module.exports = exports['default'];
 
-},{"./base":3,"./emitter":4,"./ghost":5,"./range":6}],3:[function(require,module,exports){
+},{"./base":3,"./emitter":4,"./ghost":5,"./range":6,"./utils":7}],3:[function(require,module,exports){
 //http://stackoverflow.com/a/850995/752397
 'use strict';
 
@@ -856,6 +864,9 @@ var Range = (function () {
   }, {
     key: 'mousedown',
     value: function mousedown(event) {
+      if (this.bar.options.readOnly) {
+        return;
+      }
       if (event.target == this.el) {
         this.pressed = true;
         this.pressedMode = 'this';
