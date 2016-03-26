@@ -34,6 +34,9 @@ var yourElement = document.getElementById('your-element');
 yourElement.appendChild(slider.el);
 ```
 
+## Documentation
+
+See this [page](http://paveltyavin.github.io/bbslider/).
 
 ## Licence
 [MIT](licence.md)

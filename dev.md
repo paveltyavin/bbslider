@@ -23,7 +23,6 @@ https://github.com/paveltyavin/bbslider/
     * allowSwap - swap left and right position by dragging beyond the element
     * valueFormat - format function for the label
     * marks - write aome labels on the bar's background.
-    * readOnly
 
 * events
     * `range:click`
@@ -35,9 +34,9 @@ https://github.com/paveltyavin/bbslider/
     * .rangeValue(rangeId, value)
     
 * tests
-    readOnly: no ghost, can't drag.
+    * ?
     
 * styles
-    readOnly . no cursor
+    * ?
     
 * gif

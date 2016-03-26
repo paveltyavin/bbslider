@@ -2,6 +2,9 @@ import Ghost from './ghost'
 import Range from './range'
 import Base from './base'
 import Emitter from './emitter'
+import {
+  addClass
+} from './utils'
 
 class Bar extends Base {
   constructor(options = {}) {
@@ -13,10 +16,16 @@ class Bar extends Base {
 
     this.el = document.createElement('div');
     this.el.className = 'bbslider-bar';
+    if (this.options.readOnly === true) {
+      addClass(this.el, 'bbslider-readonly')
+    }
     this.el.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.el.addEventListener('mouseleave', (event)=> this.mouseleave(event));
     this.el.addEventListener('mouseup', (event)=> this.mouseup(event));
     this.el.addEventListener('mousedown', (event)=> this.mousedown(event));
+    this.el.ondragstart = function () {
+      return false;
+    };
 
     this.rangeIdCount = 0;
     this.rangeList = [];

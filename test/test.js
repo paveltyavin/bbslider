@@ -82,13 +82,15 @@ QUnit.module('Options', function (hooks) {
 
     var range_1 = s.addRange([20, 40], {id: 100});
 
-    var handler = range_1.el.querySelectorAll('.bbslider-left-handler')[0];
+    var handler = range_1.el.querySelector('.bbslider-left-handler');
     down(handler);
     move(handler, {moveX: -step_width});
     up(handler);
 
     assert.deepEqual(range_1.getValue(), [20, 40],
       'range value should not change');
+    assert.equal(target.querySelectorAll('.bbslider-pressed').length, 0,
+      'range should not be pressed');
 
     target.removeChild(s.el);
   });

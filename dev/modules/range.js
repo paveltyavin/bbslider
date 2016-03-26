@@ -44,6 +44,9 @@ class Range {
   }
 
   mousedown(event) {
+    if (this.bar.options.readOnly) {
+      return;
+    }
     if (event.target == this.el) {
       this.pressed = true;
       this.pressedMode = 'this';
