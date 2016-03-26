@@ -65,18 +65,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
 
-  // Methods
-
-
-  var slider_methods_val = new BBSlider({
-    min: 0,
-    max: 100,
-    step: 10
-  });
-  document.getElementById('el_methods_val').appendChild(slider_methods_val.el);
-  slider_methods_val.val([[40, 60], [80, 100]]);
-
-
   // Options
 
   var slider_options_allowRemove = new BBSlider({
@@ -97,5 +85,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   document.getElementById('slider_options_maxRanges').appendChild(slider_options_maxRanges.el);
   slider_options_maxRanges.val([[0, 10], [20, 40]]);
+
+
+  var slider_options_readOnly = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 10,
+    readOnly: true
+  });
+  document.getElementById('slider_options_readOnly').appendChild(slider_options_readOnly.el);
+  slider_options_readOnly.val([[0, 10], [20, 40]]);
 
 });
