@@ -832,11 +832,12 @@ var Range = (function () {
     this._mouseup = function (event) {
       return _this.mouseup(event);
     };
+    this._mousedown = function (event) {
+      return _this.mousedown(event);
+    };
 
     document.addEventListener('mousemove', this._mousemove);
-    this.bar.el.addEventListener('mousedown', function (event) {
-      return _this.mousedown(event);
-    });
+    this.bar.el.addEventListener('mousedown', this._mousedown);
     document.addEventListener('mouseup', this._mouseup);
     this.el.ondragstart = function () {
       return false;
@@ -848,6 +849,7 @@ var Range = (function () {
   _createClass(Range, [{
     key: 'removeEvents',
     value: function removeEvents() {
+      this.bar.el.removeEventListener('mousedown', this._mousedown);
       document.removeEventListener('mousemove', this._mousemove);
       document.removeEventListener('mouseup', this._mouseup);
     }

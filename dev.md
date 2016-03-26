@@ -9,6 +9,8 @@ To run tests use this commands.
 To start development process, execute `gulp` command, 
 open `./test/index.html` in the browser and start changing the code.
 
+To preview the results you can use the test page or documentation page `./dist/index.html`.
+
 # Contributing
 
 Source code, bugtracker and so one are here: 
@@ -24,11 +26,18 @@ https://github.com/paveltyavin/bbslider/
     * readOnly
 
 * events
-    * `.on('range:click', `
+    * `range:click`
+    * `range:remove`
     
 * methods
-    * ?
+    * range method .val
+    * .rangeValue(rangeId)
+    * .rangeValue(rangeId, value)
+    
+* tests
+    readOnly: no ghost, can't drag.
     
 * styles
+    readOnly . no cursor
     
 * gif

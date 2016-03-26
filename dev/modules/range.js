@@ -25,9 +25,10 @@ class Range {
 
     this._mousemove = (event)=> this.mousemove(event);
     this._mouseup = (event)=> this.mouseup(event);
+    this._mousedown = (event)=> this.mousedown(event);
 
     document.addEventListener('mousemove', this._mousemove);
-    this.bar.el.addEventListener('mousedown', (event)=> this.mousedown(event));
+    this.bar.el.addEventListener('mousedown', this._mousedown);
     document.addEventListener('mouseup', this._mouseup);
     this.el.ondragstart = function () {
       return false;
@@ -37,6 +38,7 @@ class Range {
   }
 
   removeEvents() {
+    this.bar.el.removeEventListener('mousedown', this._mousedown);
     document.removeEventListener('mousemove', this._mousemove);
     document.removeEventListener('mouseup', this._mouseup);
   }

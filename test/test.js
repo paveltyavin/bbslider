@@ -378,7 +378,7 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test("move far right beyond the slider", function (assert) {
       down(this.range_el);
-      move(this.range_el, {moveX: 2 * this.width, stepX: 3});
+      move(this.range_el, {moveX: 2 * this.width, stepX: this.step_width / 2});
       var rect = this.range_el.getBoundingClientRect();
       assert.ok(Math.abs(rect.right - this.s.el.getBoundingClientRect().right) <= 1,
         'element should not cross the limits of bar');
