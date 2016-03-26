@@ -74,7 +74,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     allowRemove: true
   });
   document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);
-  slider_options_allowRemove.val([[40, 60], [80, 100]]);
+  slider_options_allowRemove.addRange([40, 60]);
+  slider_options_allowRemove.addRange([80, 100]);
 
 
   var slider_options_maxRanges = new BBSlider({
@@ -84,7 +85,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     maxRanges: 3
   });
   document.getElementById('slider_options_maxRanges').appendChild(slider_options_maxRanges.el);
-  slider_options_maxRanges.val([[0, 10], [20, 40]]);
+  slider_options_maxRanges.addRange([0, 10]);
+  slider_options_maxRanges.addRange([20, 40]);
 
 
   var slider_options_readOnly = new BBSlider({
@@ -94,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     readOnly: true
   });
   document.getElementById('slider_options_readOnly').appendChild(slider_options_readOnly.el);
-  slider_options_readOnly.val([[0, 10], [20, 40]]);
+  slider_options_readOnly.addRange([0, 10]);
+  slider_options_readOnly.addRange([20, 40]);
 
 });

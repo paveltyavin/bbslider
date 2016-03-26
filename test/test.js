@@ -119,16 +119,14 @@ QUnit.module("BBSlider", function (hooks) {
   QUnit.module('Method', function (hooks) {
     QUnit.test('val(data, options)', function (assert) {
       var s = this.s;
-      s.val([[0, 10], [20, 30]]);
+      s.addRange([0, 10]);
+      s.addRange([20, 30]);
       assert.deepEqual([[0, 10], [20, 30]], s.val(),
         'val should return the same result');
-      assert.throws(function () {
-        s.val(null);
-      }, "throws an error in case bad data");
     });
     QUnit.test('addRange(data, options)', function (assert) {
       var s = this.s;
-      s.val([[0, 10]]);
+      s.addRange([0, 10]);
       s.addRange([20, 30]);
       assert.deepEqual([[0, 10], [20, 30]], this.s.val(),
         'should add Range');
@@ -170,7 +168,7 @@ QUnit.module("BBSlider", function (hooks) {
   QUnit.module('Events', function (hooks) {
     QUnit.test('changing', function (assert) {
       var s = this.s;
-      s.val([[0, 10]]);
+      s.addRange(([0, 10]));
       var handler = s.el.querySelector('.bbslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
@@ -194,7 +192,7 @@ QUnit.module("BBSlider", function (hooks) {
 
     QUnit.test('change', function (assert) {
       var s = this.s;
-      s.val([[0, 10]]);
+      s.addRange(([0, 10]));
       var handler = s.el.querySelector('.bbslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
@@ -325,7 +323,7 @@ QUnit.module("BBSlider", function (hooks) {
 
   QUnit.module("Range", function (hooks) {
     hooks.beforeEach(function (assert) {
-      this.s.val([[40, 50]]);
+      this.s.addRange(([40, 50]));
       this.range_el = this.target.querySelector('.bbslider-range');
       this.range_rect = this.range_el.getBoundingClientRect();
     });

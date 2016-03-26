@@ -86,19 +86,14 @@ npm install bbslider
         <h2 id="methods">Methods</h2>
         <h3>.val()</h3>
         <pre>
-slider.val([[40, 60], [80, 100]]); // sets a value</pre>
-
-        <h3>.val(value)</h3>
-        <pre>
 slider.val(); // => [[40, 60], [80, 100]]</pre>
-
         <h3>.rangeValue(rangeId)</h3>
         <p>
             returns a value of range specified by <code>rangeId</code>. If range doesn't exists returns
             <code>false</code>.
         </p>
         <pre>
-slider.rangeValue(1); // => [40, 60]. </pre>
+slider.rangeValue(1); // => [40, 60] </pre>
         <h3>.rangeValue(rangeId, value)</h3>
         <p>
             sets a value of range specified by <code>rangeId</code>. Returns <code>true</code> if range exists,
@@ -136,13 +131,6 @@ slider.rangeValue(1, [10, 20]);</pre>
         <div id="slider_options_maxRanges"></div>
 
         <h3>readOnly</h3>
-        <pre>
-var slider = new BBSlider({
-    min: 0,
-    max: 100,
-    step: 10,
-    readOnly: true
-});</pre>
         <p>
             If readonly option is set to <code>true</code>, slider <em>can't</em> be changed with the UI,
             but <em>can</em> be changed with the api.
@@ -156,14 +144,20 @@ var slider = new BBSlider({
             and can be unsubscripted with a <code>.off</code> method.
         </p>
         <h3>change, changing</h3>
+        <pre>//Callback argument
+{
+    val: Array // slider value
+    rangeId: integer // range id that was changed
+}</pre>
         <div id="el_events_change"></div>
-        <p>
-            This number updates while changing: <span id="result_events_changing">40</span>.
-        </p>
-        <p>
-            This number updates after change: <span id="result_events_change">40</span>.
-        </p>
-
+        <ul>
+            <li>
+                Total length while changing: <span id="result_events_changing">40</span>.
+            </li>
+            <li>
+                Total length after change: <span id="result_events_change">40</span>.
+            </li>
+        </ul>
         <pre>
 function getTotalLength(data) {
     var result = 0;
@@ -184,6 +178,11 @@ slider.on('change', function (data) {
 });</pre>
 
         <h3>range:change, range:changing</h3>
+<pre>//Callback argument
+{
+    val: Array // range value
+    id: integer // range id
+}</pre>
         <div id="el_events_range_change"></div>
         <ul>
             <li>
@@ -209,6 +208,15 @@ slider.on('range:change', function (data) {
     }
     result3.innerHTML = data.id.toString();
 });</pre>
+
+        <h3>range:remove</h3>
+        Emits when the range was removed by UI or by api.
+
+
+<pre>//Callback argument
+{
+    id: integer // range id
+}</pre>
 
 
     </section>

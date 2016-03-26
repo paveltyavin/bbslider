@@ -84,13 +84,8 @@ class BBSlider {
     return this._bar.removeRange(options);
   }
 
-  val(value, options) {
-    if (value === undefined) {
-      return this._bar.getValue();
-    } else {
-      this._validateValue(value, options);
-      this._bar.setValue(value, options);
-    }
+  val() {
+    return this._bar.getValue();
   }
 
   on(subject, cb) {

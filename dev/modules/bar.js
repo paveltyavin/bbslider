@@ -164,12 +164,6 @@ class Bar extends Base {
     this.ghost.setValue(left, left + this.options.step);
   }
 
-  setValue(value) {
-    for (let range_value of value) {
-      this.addRange(range_value);
-    }
-  }
-
   getValue() {
     let result = [];
     for (let range of this.rangeList) {

@@ -71,3 +71,8 @@
 .bbslider-bar .bbslider-range.bbslider-pressed-right .bbslider-remove-popup {
   left: -6px;
 }
+.bbslider-bar.bbslider-readonly .bbslider-left-handler,
+.bbslider-bar.bbslider-readonly .bbslider-right-handler,
+.bbslider-bar.bbslider-readonly .bbslider-range {
+  cursor: default;
+}
