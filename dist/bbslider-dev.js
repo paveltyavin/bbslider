@@ -166,9 +166,67 @@ var BBSlider = (function () {
       return this._bar.removeRange(options);
     }
   }, {
+    key: 'rangeValue',
+    value: function rangeValue(rangeId, value) {
+      if (!Number.isInteger(rangeId)) {
+        throw 'rangeId should be integer';
+      }
+      var range = this._bar.rangeList.find(function (x) {
+        return x.id === rangeId;
+      });
+      if (!range) {
+        return false;
+      }
+      if (value === undefined) {
+        return range.getValue();
+      } else {
+        return range.setValue(value);
+      }
+    }
+  }, {
     key: 'val',
     value: function val() {
       return this._bar.getValue();
+    }
+  }, {
+    key: 'data',
+    value: function data() {
+      var rangeList = [];
+      var totalLength = 0;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this._bar.rangeList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var range = _step3.value;
+
+          var value = range.getValue();
+          totalLength += value[1] - value[0];
+          rangeList.push({
+            id: range.id,
+            val: value
+          });
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+            _iterator3['return']();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      return {
+        totalLength: totalLength,
+        rangeList: rangeList
+      };
     }
   }, {
     key: 'on',
@@ -288,7 +346,7 @@ var Bar = (function (_Base) {
       var range = new _range2['default'](options);
       this.el.appendChild(range.el);
 
-      range.setValue(value[0], value[1]);
+      range.setValue(value);
       this.rangeList.push(range);
       this.removeGhost();
 
@@ -320,6 +378,10 @@ var Bar = (function (_Base) {
           val: _this2.getValue()
         });
         _this2.emitter.emit('range:change', options);
+      });
+
+      range.emitter.addListener('range:click', function (options) {
+        _this2.emitter.emit('range:click', options);
       });
 
       this.emitter.emit('change', {
@@ -432,7 +494,7 @@ var Bar = (function (_Base) {
       this.ghost = new _ghost2['default']({ bar: this });
       this.el.appendChild(this.ghost.el);
       var left = this.roundUserValue(cursor);
-      this.ghost.setValue(left, left + this.options.step);
+      this.ghost.setValue([left, left + this.options.step]);
     }
   }, {
     key: 'getValue',
@@ -738,14 +800,14 @@ var Ghost = (function () {
           this.bar.removeGhost();
         }
       } else {
-        this.setValue(left, right);
+        this.setValue([left, right]);
       }
     }
   }, {
     key: 'setValue',
-    value: function setValue(left, right) {
-      this.left = left;
-      this.right = right;
+    value: function setValue(value) {
+      this.left = value[0];
+      this.right = value[1];
       var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';
@@ -851,6 +913,9 @@ var Range = (function () {
         (0, _utils.addClass)(this.el, 'bbslider-pressed');
         (0, _utils.addClass)(this.el, 'bbslider-pressed-' + this.pressedMode);
         this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
+        this.emitter.emit('range:click', {
+          id: this.id
+        });
       }
     }
   }, {
@@ -971,7 +1036,7 @@ var Range = (function () {
           return;
         }
         this.pressedPosition += roundDifference;
-        this.setValue(newLeft, newRight);
+        this.setValue([newLeft, newRight]);
         this.emitter.emit('range:changing', {
           id: this.id,
           val: this.getValue()
@@ -1001,9 +1066,9 @@ var Range = (function () {
     }
   }, {
     key: 'setValue',
-    value: function setValue(left, right) {
-      this.left = left;
-      this.right = right;
+    value: function setValue(value) {
+      this.left = value[0];
+      this.right = value[1];
       var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';

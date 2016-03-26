@@ -64,6 +64,9 @@ class Range {
       addClass(this.el, 'bbslider-pressed');
       addClass(this.el, `bbslider-pressed-${this.pressedMode}`);
       this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
+      this.emitter.emit('range:click', {
+        id: this.id
+      });
     }
   }
 
@@ -161,7 +164,7 @@ class Range {
         return
       }
       this.pressedPosition += roundDifference;
-      this.setValue(newLeft, newRight);
+      this.setValue([newLeft, newRight]);
       this.emitter.emit('range:changing', {
         id: this.id,
         val: this.getValue()
@@ -189,9 +192,9 @@ class Range {
     });
   }
 
-  setValue(left, right) {
-    this.left = left;
-    this.right = right;
+  setValue(value) {
+    this.left = value[0];
+    this.right = value[1];
     var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;

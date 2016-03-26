@@ -75,12 +75,12 @@ class Ghost {
         this.bar.removeGhost();
       }
     } else {
-      this.setValue(left, right);
+      this.setValue([left, right]);
     }
   }
-  setValue(left, right) {
-    this.left = left;
-    this.right = right;
+  setValue(value) {
+    this.left = value[0];
+    this.right = value[1];
     var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;

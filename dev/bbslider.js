@@ -84,8 +84,41 @@ class BBSlider {
     return this._bar.removeRange(options);
   }
 
+  rangeValue(rangeId, value) {
+    if (!Number.isInteger(rangeId)) {
+      throw('rangeId should be integer');
+    }
+    let range = this._bar.rangeList.find(x => x.id === rangeId);
+    if (!range) {
+      return false;
+    }
+    if (value === undefined) {
+      return range.getValue();
+    } else {
+      return range.setValue(value);
+    }
+  }
+
+
   val() {
     return this._bar.getValue();
+  }
+
+  data() {
+    let rangeList = [];
+    let totalLength = 0;
+    for (let range of this._bar.rangeList) {
+      let value = range.getValue();
+      totalLength += value[1] - value[0];
+      rangeList.push({
+        id: range.id,
+        val: value
+      })
+    }
+    return {
+      totalLength: totalLength,
+      rangeList: rangeList
+    }
   }
 
   on(subject, cb) {

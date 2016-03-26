@@ -19,19 +19,16 @@ https://github.com/paveltyavin/bbslider/
 
 ## todo 
 
-* functions
+* options
     * allowSwap - swap left and right position by dragging beyond the element
     * valueFormat - format function for the label
     * marks - write aome labels on the bar's background.
-
-* events
-    * `range:click`
-    * `range:remove`
     
 * methods
-    * range method .val
-    * .rangeValue(rangeId)
-    * .rangeValue(rangeId, value)
+    * ?
+    
+* events
+    * ?
     
 * tests
     * ?

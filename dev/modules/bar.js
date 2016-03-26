@@ -50,7 +50,7 @@ class Bar extends Base {
     let range = new Range(options);
     this.el.appendChild(range.el);
 
-    range.setValue(value[0], value[1]);
+    range.setValue(value);
     this.rangeList.push(range);
     this.removeGhost();
 
@@ -82,6 +82,10 @@ class Bar extends Base {
         val: this.getValue()
       });
       this.emitter.emit('range:change', options);
+    });
+
+    range.emitter.addListener('range:click', (options) =>{
+      this.emitter.emit('range:click', options);
     });
 
     this.emitter.emit('change', {
@@ -161,7 +165,7 @@ class Bar extends Base {
     this.ghost = new Ghost({bar: this});
     this.el.appendChild(this.ghost.el);
     let left = this.roundUserValue(cursor);
-    this.ghost.setValue(left, left + this.options.step);
+    this.ghost.setValue([left, left + this.options.step]);
   }
 
   getValue() {

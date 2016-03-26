@@ -117,7 +117,7 @@ QUnit.module("BBSlider", function (hooks) {
   });
 
   QUnit.module('Method', function (hooks) {
-    QUnit.test('val(data, options)', function (assert) {
+    QUnit.test('val()', function (assert) {
       var s = this.s;
       s.addRange([0, 10]);
       s.addRange([20, 30]);
@@ -161,6 +161,33 @@ QUnit.module("BBSlider", function (hooks) {
       var value = this.s.val();
       assert.equal(value.length, 0,
         'value should be empty');
+    });
+
+    QUnit.test('rangeValue', function (assert) {
+      var s = this.s;
+      s.addRange([20, 30], {id: 10});
+      assert.deepEqual([20, 30], s.rangeValue(10));
+      s.rangeValue(10, [40, 50]);
+      assert.deepEqual([[40, 50]], s.val());
+    });
+
+    QUnit.test('data', function (assert) {
+      var s = this.s;
+      s.addRange([20, 30], {id: 10});
+      s.addRange([40, 60], {id: 20});
+      assert.deepEqual(s.data(), {
+        totalLength: 30,
+        rangeList: [
+          {
+            id: 10,
+            val: [20, 30]
+          },
+          {
+            id: 20,
+            val: [40, 60]
+          }
+        ]
+      });
     });
   });
 
@@ -259,6 +286,30 @@ QUnit.module("BBSlider", function (hooks) {
 
       down(handler);
       move(handler, {moveX: this.step_width});
+      up(handler);
+
+      assert.expect(2);
+    });
+
+    QUnit.test('range:click', function (assert) {
+      var s = this.s;
+      s.addRange([0, 10], {id: 100});
+      var handler = s.el.querySelector('.bbslider-right-handler');
+      s.addRange([90, 100], {id: 200});
+      var callback = function (value, options) {
+        assert.ok(true, 'call en event');
+      };
+
+      s.on('range:click', callback);
+
+      down(handler); //emit
+      up(handler);
+      down(handler); //emit
+      up(handler);
+
+      s.off('range:click', callback);
+
+      down(handler);
       up(handler);
 
       assert.expect(2);
