@@ -10,6 +10,14 @@
   border: 0 !important;
   box-sizing: border-box;
 }
+.bbslider-bar .bbslider-label {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  line-height: 50px;
+  display: inline;
+  color: #ffffff;
+}
 .bbslider-bar .bbslider-ghost,
 .bbslider-bar .bbslider-range {
   position: absolute;
@@ -17,7 +25,7 @@
   top: 0;
 }
 .bbslider-bar .bbslider-ghost {
-  color: white;
+  color: #ffffff;
   background: rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
@@ -55,7 +63,7 @@
   left: -8px;
 }
 .bbslider-bar .bbslider-range .bbslider-remove-popup {
-  color: white;
+  color: #ffffff;
   transition: 0.5s;
   position: absolute;
   background: gray;
