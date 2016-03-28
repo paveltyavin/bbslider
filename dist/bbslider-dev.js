@@ -294,7 +294,13 @@ var Bar = (function (_Base) {
     _get(Object.getPrototypeOf(Bar.prototype), 'constructor', this).call(this);
     this.options = Object.assign({
       allowRemove: false,
-      maxRanges: Infinity
+      maxRanges: Infinity,
+      ghostLabel: function ghostLabel(value) {
+        return '+';
+      },
+      rangeLabel: function rangeLabel(value) {
+        return value[0].toString() + '-' + value[1].toString();
+      }
     }, options);
 
     this.el = document.createElement('div');
@@ -721,6 +727,10 @@ var Ghost = (function () {
     this.el = document.createElement('div');
     this.el.className = 'bbslider-ghost';
 
+    this.label = document.createElement('div');
+    this.label.className = 'bbslider-label';
+    this.el.appendChild(this.label);
+
     this.pressed = false;
 
     this._mousemove = function (event) {
@@ -748,7 +758,7 @@ var Ghost = (function () {
   }, {
     key: 'mousedown',
     value: function mousedown(event) {
-      if (this.el == event.target) {
+      if ([this.el, this.label].indexOf(event.target) !== -1) {
         this.pressed = true;
       }
     }
@@ -812,6 +822,7 @@ var Ghost = (function () {
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';
       this.el.style.width = pixelRight - pixelLeft + 'px';
+      this.label.innerHTML = this.bar.options.ghostLabel(value);
     }
   }]);
 
@@ -851,6 +862,10 @@ var Range = (function () {
 
     this.el = document.createElement('div');
     this.el.className = 'bbslider-range';
+
+    this.label = document.createElement('div');
+    this.label.className = 'bbslider-label';
+    this.el.appendChild(this.label);
 
     this.right_handler = document.createElement('div');
     this.right_handler.className = 'bbslider-right-handler';
@@ -896,7 +911,7 @@ var Range = (function () {
       if (this.bar.options.readOnly) {
         return;
       }
-      if (event.target == this.el) {
+      if ([this.el, this.label].indexOf(event.target) !== -1) {
         this.pressed = true;
         this.pressedMode = 'this';
       }
@@ -1056,7 +1071,7 @@ var Range = (function () {
       this.pressedPosition = undefined;
       (0, _utils.removeClass)(this.el, 'bbslider-pressed');
       (0, _utils.removeClass)(this.el, 'bbslider-pressed-' + this.pressedMode);
-      if ([this.el, this.left_handler, this.right_handler].indexOf(event.target) === -1) {
+      if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
         return;
       }
       this.emitter.emit('range:change', {
@@ -1073,11 +1088,20 @@ var Range = (function () {
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';
       this.el.style.width = pixelRight - pixelLeft + 'px';
+      this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
     }
   }, {
     key: 'getValue',
     value: function getValue() {
       return [this.left, this.right];
+    }
+  }, {
+    key: 'data',
+    value: function data() {
+      return {
+        id: this.id,
+        val: this.getValue()
+      };
     }
   }]);
 

@@ -21,7 +21,7 @@ https://github.com/paveltyavin/bbslider/
 
 * options
     * allowSwap - swap left and right position by dragging beyond the element
-    * valueFormat - format function for the label
+    * label - format value function
     * marks - write aome labels on the bar's background.
     
 * methods

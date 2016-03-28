@@ -8,6 +8,10 @@ class Ghost {
     this.el = document.createElement('div');
     this.el.className = 'bbslider-ghost';
 
+    this.label = document.createElement('div');
+    this.label.className = 'bbslider-label';
+    this.el.appendChild(this.label);
+
     this.pressed = false;
 
     this._mousemove = (event)=> this.mousemove(event);
@@ -27,7 +31,7 @@ class Ghost {
   }
 
   mousedown(event) {
-    if (this.el == event.target) {
+    if ([this.el, this.label].indexOf(event.target) !== -1) {
       this.pressed = true
     }
   }
@@ -85,6 +89,7 @@ class Ghost {
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;
     this.el.style.width = `${pixelRight - pixelLeft}px`;
+    this.label.innerHTML = this.bar.options.ghostLabel(value);
   }
 }
 

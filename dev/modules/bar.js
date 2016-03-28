@@ -11,7 +11,13 @@ class Bar extends Base {
     super();
     this.options = Object.assign({
       allowRemove: false,
-      maxRanges: Infinity
+      maxRanges: Infinity,
+      ghostLabel: (value) => {
+        return '+';
+      },
+      rangeLabel: (value) => {
+        return value[0].toString() + '-' + value[1].toString();
+      }
     }, options);
 
     this.el = document.createElement('div');

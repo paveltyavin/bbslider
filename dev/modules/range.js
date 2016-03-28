@@ -12,6 +12,10 @@ class Range {
     this.el = document.createElement('div');
     this.el.className = 'bbslider-range';
 
+    this.label = document.createElement('div');
+    this.label.className = 'bbslider-label';
+    this.el.appendChild(this.label);
+
     this.right_handler = document.createElement('div');
     this.right_handler.className = 'bbslider-right-handler';
     this.el.appendChild(this.right_handler);
@@ -47,7 +51,7 @@ class Range {
     if (this.bar.options.readOnly) {
       return;
     }
-    if (event.target == this.el) {
+    if ([this.el, this.label].indexOf(event.target) !== -1) {
       this.pressed = true;
       this.pressedMode = 'this';
     }
@@ -183,7 +187,7 @@ class Range {
     this.pressedPosition = undefined;
     removeClass(this.el, 'bbslider-pressed');
     removeClass(this.el, `bbslider-pressed-${this.pressedMode}`);
-    if ([this.el, this.left_handler, this.right_handler].indexOf(event.target) === -1) {
+    if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
       return
     }
     this.emitter.emit('range:change', {
@@ -199,10 +203,18 @@ class Range {
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;
     this.el.style.width = `${pixelRight - pixelLeft}px`;
+    this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
   }
 
   getValue() {
     return [this.left, this.right];
+  }
+
+  data() {
+    return {
+      id: this.id,
+      val: this.getValue()
+    }
   }
 }
 

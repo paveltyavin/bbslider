@@ -94,6 +94,26 @@ QUnit.module('Options', function (hooks) {
 
     target.removeChild(s.el);
   });
+
+  QUnit.test('rangeLabel', function (assert) {
+    var options = {
+      min: 0,
+      max: 100,
+      step: 5,
+      rangeLabel: function (value) {
+        return value[0] + '::' + value[1]
+      }
+    };
+    var s = new BBSlider(options);
+    s.addRange([20, 30]);
+    var target = document.getElementById('target');
+    target.appendChild(s.el);
+    var label = target.querySelector('.bbslider-label');
+    assert.equal(label.innerText, '20::30',
+      'text in range label should consider the rangeLabel function');
+
+    target.removeChild(s.el);
+  });
 });
 
 
@@ -335,6 +355,13 @@ QUnit.module("BBSlider", function (hooks) {
       assert.equal(el_list.length, 1,
         'Only one element should attach to dom');
     });
+
+    QUnit.test("has label", function (assert) {
+      move(this.bar_el);
+      var el_list = this.target.querySelectorAll('.bbslider-ghost .bbslider-label');
+      assert.equal(el_list.length, 1,
+        'Only one element should attach to dom');
+    });
     QUnit.test("benchmark ghost create", function (assert) {
       for (var i = 0; i < 100; i++) {
         move(this.bar_el);
@@ -372,6 +399,7 @@ QUnit.module("BBSlider", function (hooks) {
     });
   });
 
+
   QUnit.module("Range", function (hooks) {
     hooks.beforeEach(function (assert) {
       this.s.addRange(([40, 50]));
@@ -393,6 +421,8 @@ QUnit.module("BBSlider", function (hooks) {
       up(this.bar_el);
       assert.equal(this.target.querySelectorAll('.bbslider-range').length, 2,
         'element should attach to dom');
+      assert.equal(this.target.querySelectorAll('.bbslider-range .bbslider-label').length, 2,
+        'label should attach to dom');
     });
 
     QUnit.test("press", function (assert) {
