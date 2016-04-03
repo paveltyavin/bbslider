@@ -143,6 +143,15 @@ QUnit.module("BBSlider", function (hooks) {
   });
 
   QUnit.module('Method', function (hooks) {
+    QUnit.test('removeAllRanges', function (assert) {
+      var s = this.s;
+      s.addRange([0, 10]);
+      s.addRange([20, 30]);
+      s.removeAllRanges();
+      assert.deepEqual([], s.val(),
+        'val should be empty');
+    });
+
     QUnit.test('val()', function (assert) {
       var s = this.s;
       s.addRange([0, 10]);

@@ -91,6 +91,12 @@ class BBSlider {
     return this._bar.removeRange(options);
   }
 
+  removeAllRanges() {
+    for (let range of this._bar.rangeList) {
+      this._bar.removeRange({id: range.id});
+    }
+  }
+
   rangeValue(rangeId, value) {
     if (!Number.isInteger(rangeId)) {
       throw('rangeId should be integer');
