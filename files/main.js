@@ -100,4 +100,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_readOnly.addRange([0, 10]);
   slider_options_readOnly.addRange([20, 40]);
 
+
+  // Methods
+
+  var slider_methods_removeAllRanges = new BBSlider({
+    min: 0,
+    max: 100,
+    step: 4
+  });
+  document.getElementById('slider_methods_removeAllRanges').appendChild(slider_methods_removeAllRanges.el);
+  slider_methods_removeAllRanges.addRange([40, 60]);
+  slider_methods_removeAllRanges.addRange([80, 100]);
+  document.getElementById('button_methods_removeAllRanges').addEventListener('click', function (event) {
+    event.preventDefault();
+    slider_methods_removeAllRanges.removeAllRanges();
+  })
+
 });
