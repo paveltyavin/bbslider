@@ -201,6 +201,13 @@ class Bar extends Base {
       return null
     }
 
+    if (left < this.options.min) {
+      return null
+    }
+    if (this.options.max < right) {
+      return null
+    }
+
     return [left, right]
   }
 

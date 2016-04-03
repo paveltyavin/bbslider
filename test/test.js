@@ -16,27 +16,31 @@ QUnit.module('Options', function (hooks) {
   QUnit.test('allowRemove', function (assert) {
     var options = {
       min: 0,
-      max: 100,
-      step: 2,
+      max: 96,
+      step: 3,
+      minWidth: 12,
       allowRemove: true
     };
     var s = new BBSlider(options);
     var target = document.getElementById('target');
     target.appendChild(s.el);
     var width = s.el.clientWidth;
-    var step_width = (options.step / (options.max - options.min)) * width;
+    var range_width = Math.floor(options.minWidth / (options.max - options.min) * width) + 1;
 
-    s.addRange([20, 40], {id: 100});
+    var left = 0;
+    var right = options.minWidth;
+
+    s.addRange([left, right], {id: 100});
     var handler = s.el.querySelector('.bbslider-left-handler');
     down(handler);
-    move(handler, {moveX: step_width * 10});
-    move(handler, {moveX: -step_width});
+    move(handler, {moveX: range_width / 2});
+    move(handler, {moveX: -range_width / 2});
     up(handler);
     assert.equal(s.val().length, 1,
       'decreasing width to zero and then increasing again without mouseup should not remove the range');
 
     down(handler);
-    move(handler, {moveX: step_width});
+    move(handler, {moveX: range_width / 2});
     up(handler);
     assert.equal(s.val().length, 0,
       'decreasing width to zero and then mouseup should remove the range');

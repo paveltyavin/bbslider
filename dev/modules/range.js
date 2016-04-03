@@ -76,19 +76,20 @@ class Range {
 
   renderRemovePopup() {
     this.isRemoving = true;
-    addClass(this.el, 'bbslider-is-removing');
 
     this.elRemovePopup = document.createElement('div');
-    this.elRemovePopup.innerHTML = '×';
     this.elRemovePopup.className = 'bbslider-remove-popup';
 
+    this.elRemoveLabel = document.createElement('div');
+    this.elRemoveLabel.className = 'bbslider-remove-label';
+    this.elRemoveLabel.innerHTML = '×';
+
+    this.elRemovePopup.appendChild(this.elRemoveLabel);
     this.el.appendChild(this.elRemovePopup);
   }
 
   removeRemovingPopup() {
     this.isRemoving = false;
-    removeClass(this.el, 'bbslider-is-removing');
-
     this.el.removeChild(this.elRemovePopup);
   }
 
@@ -117,27 +118,14 @@ class Range {
       }
 
 
-      if (this.bar.options.allowRemove) {
-        if (newRight - newLeft < this.bar.options.minWidth) {
-          if (!this.isRemoving) {
-            this.renderRemovePopup()
-          }
-        } else {
-          if (this.isRemoving) {
-            this.removeRemovingPopup();
-          }
-        }
-      } else {
-        if (newRight - newLeft < this.bar.options.minWidth) {
-          return;
-        }
-      }
-
-
       if (newLeft < this.bar.options.min) {
         return
       }
       if (newRight > this.bar.options.max) {
+        return
+      }
+
+      if (newRight < newLeft) {
         return
       }
 
@@ -165,6 +153,29 @@ class Range {
         return
       }
       this.pressedPosition += roundDifference;
+
+      if (this.bar.options.allowRemove) {
+        if (newRight - newLeft < this.bar.options.minWidth) {
+          if (!this.isRemoving) {
+            this.renderRemovePopup()
+          }
+        } else {
+          if (this.isRemoving) {
+            this.removeRemovingPopup();
+          }
+        }
+      } else {
+        if (newRight - newLeft < this.bar.options.minWidth) {
+          return;
+        }
+      }
+
+      if (newRight == newLeft) {
+        addClass(this.el, 'bbslider-zero-width');
+      } else {
+        removeClass(this.el, 'bbslider-zero-width');
+      }
+
       this.setValue([newLeft, newRight]);
       this.emitter.emit('range:changing', {
         id: this.id,
@@ -200,7 +211,11 @@ class Range {
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;
     this.el.style.width = `${pixelRight - pixelLeft}px`;
-    this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
+    if (this.right - this.left < this.bar.options.minWidth) {
+      this.label.innerHTML = '';
+    } else {
+      this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
+    }
   }
 
   getValue() {

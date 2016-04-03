@@ -49,28 +49,41 @@ class Ghost {
       return
     }
 
+    let center = (this.left + this.right) / 2;
     cursor = this.bar.roundUserValue(cursor);
 
-    let newGhostValue = this.bar.getNewGhostValue(cursor);
+    let h = this.bar.options.minWidth / (this.bar.options.step);
+    let dLeft = Math.floor(h / 2) * this.bar.options.step;
+    let dRight = Math.floor((h + 1) / 2) * this.bar.options.step;
 
-    if (newGhostValue == null) {
-      if (!this.pressed) {
-        this.bar.removeGhost();
-      }
-      return
-    }
-
-    let center = (this.left + this.right) / 2;
-
-    let [newLeft, newRight] = newGhostValue;
+    let [newLeft, newRight] = [this.left, this.right];
 
     if (this.pressed) {
       if (cursor < center) {
-        newRight = this.right;
+        newLeft = cursor - dLeft;
       }
       if (cursor > center) {
-        newLeft = this.left;
+        newRight = cursor + dRight;
       }
+    } else {
+      [newLeft, newRight] = [cursor - dLeft, cursor + dRight];
+    }
+
+    if (newRight > this.bar.options.max) {
+      newRight = this.bar.options.max;
+      if (!this.pressed) {
+        newLeft = newRight - this.bar.options.minWidth;
+      }
+    }
+    if (newLeft < this.bar.options.min) {
+      newLeft = this.bar.options.min;
+      if (!this.pressed) {
+        newRight = newLeft + this.bar.options.minWidth;
+      }
+    }
+
+    if (this.bar.getInsideRange(newLeft) || this.bar.getInsideRange(newRight)) {
+      return
     }
 
     if (this.bar.isOverRange(newLeft, newRight)) {

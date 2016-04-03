@@ -558,6 +558,13 @@ var Bar = (function (_Base) {
         return null;
       }
 
+      if (left < this.options.min) {
+        return null;
+      }
+      if (this.options.max < right) {
+        return null;
+      }
+
       return [left, right];
     }
   }, {
@@ -792,8 +799,6 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -867,31 +872,43 @@ var Ghost = (function () {
         return;
       }
 
+      var center = (this.left + this.right) / 2;
       cursor = this.bar.roundUserValue(cursor);
 
-      var newGhostValue = this.bar.getNewGhostValue(cursor);
+      var h = this.bar.options.minWidth / this.bar.options.step;
+      var dLeft = Math.floor(h / 2) * this.bar.options.step;
+      var dRight = Math.floor((h + 1) / 2) * this.bar.options.step;
 
-      if (newGhostValue == null) {
-        if (!this.pressed) {
-          this.bar.removeGhost();
-        }
-        return;
-      }
-
-      var center = (this.left + this.right) / 2;
-
-      var _newGhostValue = _slicedToArray(newGhostValue, 2);
-
-      var newLeft = _newGhostValue[0];
-      var newRight = _newGhostValue[1];
+      var newLeft = this.left;
+      var newRight = this.right;
 
       if (this.pressed) {
         if (cursor < center) {
-          newRight = this.right;
+          newLeft = cursor - dLeft;
         }
         if (cursor > center) {
-          newLeft = this.left;
+          newRight = cursor + dRight;
         }
+      } else {
+        newLeft = cursor - dLeft;
+        newRight = cursor + dRight;
+      }
+
+      if (newRight > this.bar.options.max) {
+        newRight = this.bar.options.max;
+        if (!this.pressed) {
+          newLeft = newRight - this.bar.options.minWidth;
+        }
+      }
+      if (newLeft < this.bar.options.min) {
+        newLeft = this.bar.options.min;
+        if (!this.pressed) {
+          newRight = newLeft + this.bar.options.minWidth;
+        }
+      }
+
+      if (this.bar.getInsideRange(newLeft) || this.bar.getInsideRange(newRight)) {
+        return;
       }
 
       if (this.bar.isOverRange(newLeft, newRight)) {
@@ -1024,20 +1041,21 @@ var Range = (function () {
     key: 'renderRemovePopup',
     value: function renderRemovePopup() {
       this.isRemoving = true;
-      (0, _utils.addClass)(this.el, 'bbslider-is-removing');
 
       this.elRemovePopup = document.createElement('div');
-      this.elRemovePopup.innerHTML = '×';
       this.elRemovePopup.className = 'bbslider-remove-popup';
 
+      this.elRemoveLabel = document.createElement('div');
+      this.elRemoveLabel.className = 'bbslider-remove-label';
+      this.elRemoveLabel.innerHTML = '×';
+
+      this.elRemovePopup.appendChild(this.elRemoveLabel);
       this.el.appendChild(this.elRemovePopup);
     }
   }, {
     key: 'removeRemovingPopup',
     value: function removeRemovingPopup() {
       this.isRemoving = false;
-      (0, _utils.removeClass)(this.el, 'bbslider-is-removing');
-
       this.el.removeChild(this.elRemovePopup);
     }
   }, {
@@ -1066,26 +1084,14 @@ var Range = (function () {
           newLeft += roundDifference;
         }
 
-        if (this.bar.options.allowRemove) {
-          if (newRight - newLeft < this.bar.options.minWidth) {
-            if (!this.isRemoving) {
-              this.renderRemovePopup();
-            }
-          } else {
-            if (this.isRemoving) {
-              this.removeRemovingPopup();
-            }
-          }
-        } else {
-          if (newRight - newLeft < this.bar.options.minWidth) {
-            return;
-          }
-        }
-
         if (newLeft < this.bar.options.min) {
           return;
         }
         if (newRight > this.bar.options.max) {
+          return;
+        }
+
+        if (newRight < newLeft) {
           return;
         }
 
@@ -1134,6 +1140,29 @@ var Range = (function () {
           return;
         }
         this.pressedPosition += roundDifference;
+
+        if (this.bar.options.allowRemove) {
+          if (newRight - newLeft < this.bar.options.minWidth) {
+            if (!this.isRemoving) {
+              this.renderRemovePopup();
+            }
+          } else {
+            if (this.isRemoving) {
+              this.removeRemovingPopup();
+            }
+          }
+        } else {
+          if (newRight - newLeft < this.bar.options.minWidth) {
+            return;
+          }
+        }
+
+        if (newRight == newLeft) {
+          (0, _utils.addClass)(this.el, 'bbslider-zero-width');
+        } else {
+          (0, _utils.removeClass)(this.el, 'bbslider-zero-width');
+        }
+
         this.setValue([newLeft, newRight]);
         this.emitter.emit('range:changing', {
           id: this.id,
@@ -1171,7 +1200,11 @@ var Range = (function () {
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';
       this.el.style.width = pixelRight - pixelLeft + 'px';
-      this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
+      if (this.right - this.left < this.bar.options.minWidth) {
+        this.label.innerHTML = '';
+      } else {
+        this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
+      }
     }
   }, {
     key: 'getValue',

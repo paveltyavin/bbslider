@@ -22,7 +22,6 @@ https://github.com/paveltyavin/bbslider/
 * options
     * allowSwap - swap left and right position by dragging beyond the element
     * marks - write some labels on the bar's background.
-    * minWidth
     
 * methods
     * ?
