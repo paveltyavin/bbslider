@@ -116,12 +116,9 @@ class Range {
         newLeft += roundDifference;
       }
 
-      if (newRight < newLeft) {
-        return;
-      }
 
       if (this.bar.options.allowRemove) {
-        if (newRight == newLeft) {
+        if (newRight - newLeft < this.bar.options.minWidth) {
           if (!this.isRemoving) {
             this.renderRemovePopup()
           }
@@ -131,7 +128,7 @@ class Range {
           }
         }
       } else {
-        if (newRight == newLeft) {
+        if (newRight - newLeft < this.bar.options.minWidth) {
           return;
         }
       }

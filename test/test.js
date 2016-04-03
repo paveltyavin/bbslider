@@ -17,23 +17,25 @@ QUnit.module('Options', function (hooks) {
     var options = {
       min: 0,
       max: 100,
-      step: 5,
+      step: 2,
       allowRemove: true
     };
     var s = new BBSlider(options);
     var target = document.getElementById('target');
     target.appendChild(s.el);
     var width = s.el.clientWidth;
-    var step_width = parseInt((options.step / (options.max - options.min)) * width);
+    var step_width = (options.step / (options.max - options.min)) * width;
 
     s.addRange([20, 40], {id: 100});
     var handler = s.el.querySelector('.bbslider-left-handler');
     down(handler);
-    move(handler, {moveX: step_width * 4});
+    move(handler, {moveX: step_width * 10});
     move(handler, {moveX: -step_width});
+    up(handler);
     assert.equal(s.val().length, 1,
       'decreasing width to zero and then increasing again without mouseup should not remove the range');
 
+    down(handler);
     move(handler, {moveX: step_width});
     up(handler);
     assert.equal(s.val().length, 0,
@@ -122,7 +124,7 @@ QUnit.module("BBSlider", function (hooks) {
     var options = {
       min: 0,
       max: 100,
-      step: 10
+      step: 2
     };
     this.s = new BBSlider(options);
     this.bar_el = this.s.el.querySelector('.bbslider-bar');

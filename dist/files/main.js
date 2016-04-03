@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var slider = new BBSlider({
     min: 0,
     max: 100,
-    step: 10
+    step: 2,
+    minWidth: 14
   });
   document.getElementById('el').appendChild(slider.el);
 
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var slider_options_allowRemove = new BBSlider({
     min: 0,
     max: 100,
-    step: 10,
+    step: 4,
     allowRemove: true
   });
   document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);

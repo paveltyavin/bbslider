@@ -29,6 +29,13 @@ class BBSlider {
       throw(new Error('there should be an integer number of steps between min and max'));
     }
 
+    if (options.minWidth === undefined) {
+      options.minWidth = options.step;
+    }
+    if (options.minWidth % options.step !== 0) {
+      throw(new Error('there should be an integer number of steps in minWidth'));
+    }
+
     if(options.maxRanges !== undefined ){
       if (!Number.isInteger(options.maxRanges)) {
         throw(new Error('maxRanges should be integer'));
@@ -63,7 +70,7 @@ class BBSlider {
     if (options.id !== undefined && this._bar.rangeList.find(x => x.id === options.id)) {
       throw( new Error('range with this id already exists'));
     }
-    if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
+    if (this._bar.getInsideRange(value[0]) || this._bar.getInsideRange(value[1])) {
       throw( new Error('intersection'));
     }
     for (let range of this._bar.rangeList) {

@@ -42,45 +42,42 @@ class Ghost {
   mousemove(event) {
     let cursor = this.bar.getCursor(event);
 
-    if (this.bar.isInsideRange(cursor) && !this.pressed) {
-      this.bar.removeGhost();
-    }
-
-    cursor = this.bar.roundUserValue(cursor);
-    let left = this.left;
-    let right = this.right;
-
-    if (this.pressed) {
-      if (cursor <= left) {
-        left = cursor;
-       } else {
-        right = cursor + this.bar.options.step;
-      }
-    } else {
-      [left, right] = [cursor, cursor + this.bar.options.step];
-    }
-
-    if (this.bar.options.max < right) {
-      right = this.bar.options.max;
-      if (right - left < this.bar.options.step) {
-        left = this.bar.options.max - this.bar.options.step;
-      }
-    }
-
-    if (this.bar.options.min > left) {
-      left = this.bar.options.min;
-      if (right - left < this.bar.options.step) {
-        right = this.bar.options.min + this.bar.options.step;
-      }
-    }
-
-    if (this.bar.isInsideRange(left) || this.bar.isInsideRange(right)) {
+    if (this.bar.getInsideRange(cursor)) {
       if (!this.pressed) {
         this.bar.removeGhost();
       }
-    } else {
-      this.setValue([left, right]);
+      return
     }
+
+    cursor = this.bar.roundUserValue(cursor);
+
+    let newGhostValue = this.bar.getNewGhostValue(cursor);
+
+    if (newGhostValue == null) {
+      if (!this.pressed) {
+        this.bar.removeGhost();
+      }
+      return
+    }
+
+    let center = (this.left + this.right) / 2;
+
+    let [newLeft, newRight] = newGhostValue;
+
+    if (this.pressed) {
+      if (cursor < center) {
+        newRight = this.right;
+      }
+      if (cursor > center) {
+        newLeft = this.left;
+      }
+    }
+
+    if (this.bar.isOverRange(newLeft, newRight)) {
+      return
+    }
+
+    this.setValue([newLeft, newRight]);
   }
   setValue(value) {
     this.left = value[0];

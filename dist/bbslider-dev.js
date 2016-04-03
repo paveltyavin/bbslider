@@ -63,6 +63,13 @@ var BBSlider = (function () {
         throw new Error('there should be an integer number of steps between min and max');
       }
 
+      if (options.minWidth === undefined) {
+        options.minWidth = options.step;
+      }
+      if (options.minWidth % options.step !== 0) {
+        throw new Error('there should be an integer number of steps in minWidth');
+      }
+
       if (options.maxRanges !== undefined) {
         if (!Number.isInteger(options.maxRanges)) {
           throw new Error('maxRanges should be integer');
@@ -122,7 +129,7 @@ var BBSlider = (function () {
       })) {
         throw new Error('range with this id already exists');
       }
-      if (this._bar.isInsideRange(value[0]) || this._bar.isInsideRange(value[1])) {
+      if (this._bar.getInsideRange(value[0]) || this._bar.getInsideRange(value[1])) {
         throw new Error('intersection');
       }
       var _iteratorNormalCompletion2 = true;
@@ -443,8 +450,8 @@ var Bar = (function (_Base) {
       this.removeGhost();
     }
   }, {
-    key: 'isInsideRange',
-    value: function isInsideRange(cursor) {
+    key: 'getInsideRange',
+    value: function getInsideRange(cursor) {
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -454,7 +461,7 @@ var Bar = (function (_Base) {
           var range = _step.value;
 
           if (range.left < cursor && cursor < range.right) {
-            return true;
+            return range;
           }
         }
       } catch (err) {
@@ -475,6 +482,85 @@ var Bar = (function (_Base) {
       return false;
     }
   }, {
+    key: 'isOverRange',
+    value: function isOverRange(left, right) {
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var range = _step2.value;
+
+          if (left <= range.left && range.right <= right) {
+            return true;
+          }
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'getNewGhostValue',
+    value: function getNewGhostValue(cursor) {
+      if (this.getInsideRange(cursor)) {
+        return null;
+      }
+
+      cursor = this.roundUserValue(cursor);
+      var h = this.options.minWidth / this.options.step;
+      var dLeft = Math.floor(h / 2) * this.options.step;
+      var dRight = Math.floor((h + 1) / 2) * this.options.step;
+
+      var left = cursor - dLeft;
+      var right = cursor + dRight;
+
+      if (this.options.max < right) {
+        right = this.options.max;
+        if (right - left < this.options.minWidth) {
+          left = this.options.max - this.options.minWidth;
+        }
+      }
+
+      if (left < this.options.min) {
+        left = this.options.min;
+        if (right - left < this.options.minWidth) {
+          right = this.options.min + this.options.minWidth;
+        }
+      }
+
+      var rangeLeft = this.getInsideRange(left);
+      if (rangeLeft) {
+        left = rangeLeft.getValue()[1];
+        right = left + this.options.minWidth;
+      }
+
+      var rangeRight = this.getInsideRange(right);
+      if (rangeRight) {
+        right = rangeRight.getValue()[0];
+        left = right - this.options.minWidth;
+      }
+
+      if (this.getInsideRange(left) || this.getInsideRange(right)) {
+        return null;
+      }
+
+      return [left, right];
+    }
+  }, {
     key: 'mousemove',
     value: function mousemove(event) {
       if (this.ghost) {
@@ -493,41 +579,41 @@ var Bar = (function (_Base) {
       }
 
       var cursor = this.getCursor(event);
-      if (this.isInsideRange(cursor)) {
+      var newGhostValue = this.getNewGhostValue(cursor);
+      if (newGhostValue == null) {
         return;
       }
 
       this.ghost = new _ghost2['default']({ bar: this });
       this.el.appendChild(this.ghost.el);
-      var left = this.roundUserValue(cursor);
-      this.ghost.setValue([left, left + this.options.step]);
+      this.ghost.setValue(newGhostValue);
     }
   }, {
     key: 'getValue',
     value: function getValue() {
       var result = [];
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
 
       try {
-        for (var _iterator2 = this.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var range = _step2.value;
+        for (var _iterator3 = this.rangeList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var range = _step3.value;
 
           var value = range.getValue();
           result.push(value);
         }
       } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-            _iterator2['return']();
+          if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+            _iterator3['return']();
           }
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          if (_didIteratorError3) {
+            throw _iteratorError3;
           }
         }
       }
@@ -706,6 +792,8 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -772,46 +860,45 @@ var Ghost = (function () {
     value: function mousemove(event) {
       var cursor = this.bar.getCursor(event);
 
-      if (this.bar.isInsideRange(cursor) && !this.pressed) {
-        this.bar.removeGhost();
-      }
-
-      cursor = this.bar.roundUserValue(cursor);
-      var left = this.left;
-      var right = this.right;
-
-      if (this.pressed) {
-        if (cursor <= left) {
-          left = cursor;
-        } else {
-          right = cursor + this.bar.options.step;
-        }
-      } else {
-        left = cursor;
-        right = cursor + this.bar.options.step;
-      }
-
-      if (this.bar.options.max < right) {
-        right = this.bar.options.max;
-        if (right - left < this.bar.options.step) {
-          left = this.bar.options.max - this.bar.options.step;
-        }
-      }
-
-      if (this.bar.options.min > left) {
-        left = this.bar.options.min;
-        if (right - left < this.bar.options.step) {
-          right = this.bar.options.min + this.bar.options.step;
-        }
-      }
-
-      if (this.bar.isInsideRange(left) || this.bar.isInsideRange(right)) {
+      if (this.bar.getInsideRange(cursor)) {
         if (!this.pressed) {
           this.bar.removeGhost();
         }
-      } else {
-        this.setValue([left, right]);
+        return;
       }
+
+      cursor = this.bar.roundUserValue(cursor);
+
+      var newGhostValue = this.bar.getNewGhostValue(cursor);
+
+      if (newGhostValue == null) {
+        if (!this.pressed) {
+          this.bar.removeGhost();
+        }
+        return;
+      }
+
+      var center = (this.left + this.right) / 2;
+
+      var _newGhostValue = _slicedToArray(newGhostValue, 2);
+
+      var newLeft = _newGhostValue[0];
+      var newRight = _newGhostValue[1];
+
+      if (this.pressed) {
+        if (cursor < center) {
+          newRight = this.right;
+        }
+        if (cursor > center) {
+          newLeft = this.left;
+        }
+      }
+
+      if (this.bar.isOverRange(newLeft, newRight)) {
+        return;
+      }
+
+      this.setValue([newLeft, newRight]);
     }
   }, {
     key: 'setValue',
@@ -979,12 +1066,8 @@ var Range = (function () {
           newLeft += roundDifference;
         }
 
-        if (newRight < newLeft) {
-          return;
-        }
-
         if (this.bar.options.allowRemove) {
-          if (newRight == newLeft) {
+          if (newRight - newLeft < this.bar.options.minWidth) {
             if (!this.isRemoving) {
               this.renderRemovePopup();
             }
@@ -994,7 +1077,7 @@ var Range = (function () {
             }
           }
         } else {
-          if (newRight == newLeft) {
+          if (newRight - newLeft < this.bar.options.minWidth) {
             return;
           }
         }

@@ -140,13 +140,68 @@ class Bar extends Base {
     this.removeGhost();
   }
 
-  isInsideRange(cursor) {
+  getInsideRange(cursor) {
     for (let range of this.rangeList) {
       if (range.left < cursor && cursor < range.right) {
+        return range
+      }
+    }
+    return false;
+  }
+
+  isOverRange(left, right) {
+    for (let range of this.rangeList) {
+      if (left <= range.left && range.right <= right) {
         return true
       }
     }
     return false;
+  }
+
+  getNewGhostValue(cursor) {
+    if (this.getInsideRange(cursor)) {
+      return null
+    }
+
+    cursor = this.roundUserValue(cursor);
+    let h = this.options.minWidth / (this.options.step);
+    let dLeft = Math.floor(h / 2) * this.options.step;
+    let dRight = Math.floor((h + 1) / 2) * this.options.step;
+
+    let left = cursor - dLeft;
+    let right = cursor + dRight;
+
+    if (this.options.max < right) {
+      right = this.options.max;
+      if (right - left < this.options.minWidth) {
+        left = this.options.max - this.options.minWidth;
+      }
+    }
+
+    if (left < this.options.min) {
+      left = this.options.min;
+      if (right - left < this.options.minWidth) {
+        right = this.options.min + this.options.minWidth;
+      }
+    }
+
+    let rangeLeft = this.getInsideRange(left);
+    if (rangeLeft) {
+      left = rangeLeft.getValue()[1];
+      right = left + this.options.minWidth;
+    }
+
+    let rangeRight = this.getInsideRange(right);
+    if (rangeRight) {
+      right = rangeRight.getValue()[0];
+      left = right - this.options.minWidth;
+    }
+
+    if (this.getInsideRange(left) || this.getInsideRange(right)) {
+      return null
+    }
+
+    return [left, right]
   }
 
   mousemove(event) {
@@ -164,14 +219,14 @@ class Bar extends Base {
     }
 
     let cursor = this.getCursor(event);
-    if (this.isInsideRange(cursor)) {
+    let newGhostValue = this.getNewGhostValue(cursor);
+    if (newGhostValue == null) {
       return
     }
 
     this.ghost = new Ghost({bar: this});
     this.el.appendChild(this.ghost.el);
-    let left = this.roundUserValue(cursor);
-    this.ghost.setValue([left, left + this.options.step]);
+    this.ghost.setValue(newGhostValue);
   }
 
   getValue() {
