@@ -52,32 +52,29 @@
 .bbslider-bar .bbslider-range .bbslider-right-handler {
   right: 0;
 }
-.bbslider-bar .bbslider-range.bbslider-is-removing .bbslider-right-handler,
-.bbslider-bar .bbslider-range.bbslider-is-removing .bbslider-left-handler {
-  width: 4px;
-}
-.bbslider-bar .bbslider-range.bbslider-is-removing.bbslider-pressed-right .bbslider-right-handler {
+.bbslider-bar .bbslider-range.bbslider-zero-width.bbslider-pressed-right .bbslider-right-handler {
   right: -8px;
 }
-.bbslider-bar .bbslider-range.bbslider-is-removing.bbslider-pressed-left .bbslider-left-handler {
+.bbslider-bar .bbslider-range.bbslider-zero-width.bbslider-pressed-left .bbslider-left-handler {
   left: -8px;
 }
+.bbslider-bar .bbslider-range.bbslider-zero-width .bbslider-remove-popup {
+  left: -12px;
+}
 .bbslider-bar .bbslider-range .bbslider-remove-popup {
-  color: #ffffff;
   transition: 0.5s;
   position: absolute;
-  background: gray;
-  opacity: 0.5;
-  width: 20px;
-  height: 20px;
   top: -30px;
   text-align: center;
+  width: 100%;
 }
-.bbslider-bar .bbslider-range.bbslider-pressed-left .bbslider-remove-popup {
-  right: -6px;
-}
-.bbslider-bar .bbslider-range.bbslider-pressed-right .bbslider-remove-popup {
-  left: -6px;
+.bbslider-bar .bbslider-range .bbslider-remove-popup .bbslider-remove-label {
+  width: 20px;
+  height: 20px;
+  background: gray;
+  color: #ffffff;
+  opacity: 0.5;
+  display: inline-block;
 }
 .bbslider-bar.bbslider-readonly .bbslider-left-handler,
 .bbslider-bar.bbslider-readonly .bbslider-right-handler,
