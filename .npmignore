@@ -4,6 +4,7 @@ dist/index.html
 
 test/
 dev/
+!dev/bbslider.less
 
 .travis
 .idea
