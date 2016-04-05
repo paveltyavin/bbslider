@@ -1,5 +1,11 @@
 !dist/bbslider.min.js
 dist/files
 dist/index.html
+
+test/
+dev/
+
 .travis
 .idea
+umd-template.js
+gulpfile.js
