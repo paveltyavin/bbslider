@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   //Overview
 
-  var slider = new BBSlider({
+  var slider = new multirangeslider({
     min: 0,
     max: 100,
     step: 2,
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // Events
 
-  var slider_events_change = new BBSlider({
+  var slider_events_change = new multirangeslider({
     min: 0,
     max: 100,
     step: 10
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
 
-  var slider_events_range_change = new BBSlider({
+  var slider_events_range_change = new multirangeslider({
     min: 0,
     max: 100,
     step: 10
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // Options
 
-  var slider_options_allowRemove = new BBSlider({
+  var slider_options_allowRemove = new multirangeslider({
     min: 0,
     max: 100,
     step: 4,
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_allowRemove.addRange([80, 100]);
 
 
-  var slider_options_maxRanges = new BBSlider({
+  var slider_options_maxRanges = new multirangeslider({
     min: 0,
     max: 100,
     step: 10,
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_maxRanges.addRange([20, 40]);
 
 
-  var slider_options_readOnly = new BBSlider({
+  var slider_options_readOnly = new multirangeslider({
     min: 0,
     max: 100,
     step: 10,
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // Methods
 
-  var slider_methods_removeAllRanges = new BBSlider({
+  var slider_methods_removeAllRanges = new multirangeslider({
     min: 0,
     max: 100,
     step: 4
