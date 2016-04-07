@@ -1,11 +1,11 @@
 {
-  "name": "bbslider",
+  "name": "multirangeslider",
   "version": "0.2.1",
   "description": "",
-  "main": "lib/bbslider.js",
+  "main": "dist/multirangeslider.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/paveltyavin/bbslider"
+    "url": "https://github.com/paveltyavin/multirangeslider"
   },
   "scripts": {
     "test": "node ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs test/index.html --verbose",
@@ -15,9 +15,9 @@
   "author": "Pavel Tyavin <pavel@tyavin.name>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/paveltyavin/bbslider/issues"
+    "url": "https://github.com/paveltyavin/multirangeslider/issues"
   },
-  "homepage": "https://github.com/paveltyavin/bbslider",
+  "homepage": "https://github.com/paveltyavin/multirangeslider",
   "devDependencies": {
     "babel-polyfill": "^6.7.2",
     "babelify": "6.0.2",

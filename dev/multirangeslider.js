@@ -1,6 +1,6 @@
 import Bar from './modules/bar'
 
-class BBSlider {
+class multirangeslider {
   // This class handles all public api.
 
   constructor(options={}) {
@@ -8,7 +8,7 @@ class BBSlider {
     this._bar = new Bar(options);
 
     this.el = document.createElement('div');
-    this.el.className = 'bbslider-slider';
+    this.el.className = 'multirangeslider-slider';
     this.el.appendChild(this._bar.el);
   }
 
@@ -142,4 +142,4 @@ class BBSlider {
   }
 }
 
-export default BBSlider;
+export default multirangeslider;

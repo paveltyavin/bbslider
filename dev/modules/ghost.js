@@ -6,10 +6,10 @@ class Ghost {
     this.bar = options.bar;
 
     this.el = document.createElement('div');
-    this.el.className = 'bbslider-ghost';
+    this.el.className = 'multirangeslider-ghost';
 
     this.label = document.createElement('div');
-    this.label.className = 'bbslider-label';
+    this.label.className = 'multirangeslider-label';
     this.el.appendChild(this.label);
 
     this.pressed = false;

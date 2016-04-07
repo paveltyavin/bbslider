@@ -10,18 +10,18 @@ class Range {
     this.id = options.id;
 
     this.el = document.createElement('div');
-    this.el.className = 'bbslider-range';
+    this.el.className = 'multirangeslider-range';
 
     this.label = document.createElement('div');
-    this.label.className = 'bbslider-label';
+    this.label.className = 'multirangeslider-label';
     this.el.appendChild(this.label);
 
     this.right_handler = document.createElement('div');
-    this.right_handler.className = 'bbslider-right-handler';
+    this.right_handler.className = 'multirangeslider-right-handler';
     this.el.appendChild(this.right_handler);
 
     this.left_handler = document.createElement('div');
-    this.left_handler.className = 'bbslider-left-handler';
+    this.left_handler.className = 'multirangeslider-left-handler';
     this.el.appendChild(this.left_handler);
 
     this.pressed = false;
@@ -65,8 +65,8 @@ class Range {
     }
 
     if (this.pressed) {
-      addClass(this.el, 'bbslider-pressed');
-      addClass(this.el, `bbslider-pressed-${this.pressedMode}`);
+      addClass(this.el, 'multirangeslider-pressed');
+      addClass(this.el, `multirangeslider-pressed-${this.pressedMode}`);
       this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
       this.emitter.emit('range:click', {
         id: this.id
@@ -78,10 +78,10 @@ class Range {
     this.isRemoving = true;
 
     this.elRemovePopup = document.createElement('div');
-    this.elRemovePopup.className = 'bbslider-remove-popup';
+    this.elRemovePopup.className = 'multirangeslider-remove-popup';
 
     this.elRemoveLabel = document.createElement('div');
-    this.elRemoveLabel.className = 'bbslider-remove-label';
+    this.elRemoveLabel.className = 'multirangeslider-remove-label';
     this.elRemoveLabel.innerHTML = '×';
 
     this.elRemovePopup.appendChild(this.elRemoveLabel);
@@ -171,9 +171,9 @@ class Range {
       }
 
       if (newRight == newLeft) {
-        addClass(this.el, 'bbslider-zero-width');
+        addClass(this.el, 'multirangeslider-zero-width');
       } else {
-        removeClass(this.el, 'bbslider-zero-width');
+        removeClass(this.el, 'multirangeslider-zero-width');
       }
 
       this.setValue([newLeft, newRight]);
@@ -193,8 +193,8 @@ class Range {
       });
     }
     this.pressedPosition = undefined;
-    removeClass(this.el, 'bbslider-pressed');
-    removeClass(this.el, `bbslider-pressed-${this.pressedMode}`);
+    removeClass(this.el, 'multirangeslider-pressed');
+    removeClass(this.el, `multirangeslider-pressed-${this.pressedMode}`);
     if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
       return
     }

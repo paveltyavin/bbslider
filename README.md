@@ -1,42 +1,42 @@
-# BBSLIDER
+# multirangeslider
 
-[![Build Status](https://travis-ci.org/paveltyavin/bbslider.svg?branch=master)]
-(https://travis-ci.org/paveltyavin/bbslider)
+[![Build Status](https://travis-ci.org/paveltyavin/multirangeslider.svg?branch=master)]
+(https://travis-ci.org/paveltyavin/multirangeslider)
 
 Slider for multiple ranges.
  
 The idea comes from [Elessar](https://github.com/quarterto/Elessar)
  project. Thank you, [Matt](https://github.com/quarterto/)!
  
-Main documentation is [here](http://paveltyavin.github.io/bbslider/).
+Main documentation is [here](http://paveltyavin.github.io/multirangeslider/).
 
 ## Install && Usage
 
-    npm install bbslider
+    npm install multirangeslider
     
 
-BBSlider exports as a CommonJS (Node) module, an AMD module, or a browser global:
+multirangeslider exports as a CommonJS (Node) module, an AMD module, or a browser global:
 ```javascript
-var BBSlider = require('bbslider');
+var multirangeslider = require('multirangeslider');
 ```
 ```javascript
-require(['bbslider'], function(BBSlider) { ... });
+require(['multirangeslider'], function(multirangeslider) { ... });
 ```
 ```html
-<script src="path/to/bbslider.js"></script>
+<script src="path/to/multirangeslider.js"></script>
 ```
 
-Create an instance with `var slider = new BBSlider` then add `slider.el` to the DOM somewhere.
+Create an instance with `var slider = new multirangeslider` then add `slider.el` to the DOM somewhere.
 
 ```javascript
-var slider = new BBSlider;
+var slider = new multirangeslider;
 var yourElement = document.getElementById('your-element');
 yourElement.appendChild(slider.el);
 ```
 
 ## Documentation
 
-See this [page](http://paveltyavin.github.io/bbslider/).
+See this [page](http://paveltyavin.github.io/multirangeslider/).
 
 ## Licence
 [MIT](licence.md)

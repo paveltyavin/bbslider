@@ -1,12 +1,12 @@
 QUnit.test("Common", function (assert) {
-  var s = new BBSlider({
+  var s = new multirangeslider({
     min: 0,
     max: 100,
     step: 10
   });
   var target = document.getElementById('common');
   target.appendChild(s.el);
-  assert.equal(target.querySelectorAll('.bbslider-bar').length, 1, 'Main element should attach to dom');
+  assert.equal(target.querySelectorAll('.multirangeslider-bar').length, 1, 'Main element should attach to dom');
 
   target.removeChild(s.el);
 });
@@ -21,7 +21,7 @@ QUnit.module('Options', function (hooks) {
       minWidth: 12,
       allowRemove: true
     };
-    var s = new BBSlider(options);
+    var s = new multirangeslider(options);
     var target = document.getElementById('target');
     target.appendChild(s.el);
     var width = s.el.clientWidth;
@@ -31,7 +31,7 @@ QUnit.module('Options', function (hooks) {
     var right = options.minWidth;
 
     s.addRange([left, right], {id: 100});
-    var handler = s.el.querySelector('.bbslider-left-handler');
+    var handler = s.el.querySelector('.multirangeslider-left-handler');
     down(handler);
     move(handler, {moveX: range_width / 2});
     move(handler, {moveX: -range_width / 2});
@@ -55,7 +55,7 @@ QUnit.module('Options', function (hooks) {
       step: 5,
       maxRanges: 3
     };
-    var s = new BBSlider(options);
+    var s = new multirangeslider(options);
     var target = document.getElementById('target');
     target.appendChild(s.el);
 
@@ -67,7 +67,7 @@ QUnit.module('Options', function (hooks) {
     }, "there should be no more ranges than maxRanges");
 
     move(s._bar.el);
-    assert.equal(s.el.querySelectorAll('.bbslider-ghost').length, 0,
+    assert.equal(s.el.querySelectorAll('.multirangeslider-ghost').length, 0,
       'after number of ranges is maxRanges there should be no ghost element');
     target.removeChild(s.el);
   });
@@ -79,7 +79,7 @@ QUnit.module('Options', function (hooks) {
       step: 5,
       readOnly: true
     };
-    var s = new BBSlider(options);
+    var s = new multirangeslider(options);
     var target = document.getElementById('target');
     target.appendChild(s.el);
 
@@ -88,14 +88,14 @@ QUnit.module('Options', function (hooks) {
 
     var range_1 = s.addRange([20, 40], {id: 100});
 
-    var handler = range_1.el.querySelector('.bbslider-left-handler');
+    var handler = range_1.el.querySelector('.multirangeslider-left-handler');
     down(handler);
     move(handler, {moveX: -step_width});
     up(handler);
 
     assert.deepEqual(range_1.getValue(), [20, 40],
       'range value should not change');
-    assert.equal(target.querySelectorAll('.bbslider-pressed').length, 0,
+    assert.equal(target.querySelectorAll('.multirangeslider-pressed').length, 0,
       'range should not be pressed');
 
     target.removeChild(s.el);
@@ -110,11 +110,11 @@ QUnit.module('Options', function (hooks) {
         return value[0] + '::' + value[1]
       }
     };
-    var s = new BBSlider(options);
+    var s = new multirangeslider(options);
     s.addRange([20, 30]);
     var target = document.getElementById('target');
     target.appendChild(s.el);
-    var label = target.querySelector('.bbslider-label');
+    var label = target.querySelector('.multirangeslider-label');
     assert.equal(label.innerText, '20::30',
       'text in range label should consider the rangeLabel function');
 
@@ -123,15 +123,15 @@ QUnit.module('Options', function (hooks) {
 });
 
 
-QUnit.module("BBSlider", function (hooks) {
+QUnit.module("multirangeslider", function (hooks) {
   hooks.beforeEach(function (assert) {
     var options = {
       min: 0,
       max: 100,
       step: 2
     };
-    this.s = new BBSlider(options);
-    this.bar_el = this.s.el.querySelector('.bbslider-bar');
+    this.s = new multirangeslider(options);
+    this.bar_el = this.s.el.querySelector('.multirangeslider-bar');
     this.target = document.getElementById('target');
     this.target.appendChild(this.s.el);
     this.width = this.s.el.clientWidth;
@@ -231,7 +231,7 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test('changing', function (assert) {
       var s = this.s;
       s.addRange(([0, 10]));
-      var handler = s.el.querySelector('.bbslider-right-handler');
+      var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
       };
@@ -255,7 +255,7 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test('change', function (assert) {
       var s = this.s;
       s.addRange(([0, 10]));
-      var handler = s.el.querySelector('.bbslider-right-handler');
+      var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
       };
@@ -279,7 +279,7 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test('range:changing', function (assert) {
       var s = this.s;
       s.addRange([0, 10], {id: 100});
-      var handler = s.el.querySelector('.bbslider-right-handler');
+      var handler = s.el.querySelector('.multirangeslider-right-handler');
       s.addRange([90, 100], {id: 200});
       var callback = function (value, options) {
         assert.ok(true, 'call en event');
@@ -304,7 +304,7 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test('range:change', function (assert) {
       var s = this.s;
       s.addRange([0, 10], {id: 100});
-      var handler = s.el.querySelector('.bbslider-right-handler');
+      var handler = s.el.querySelector('.multirangeslider-right-handler');
       s.addRange([90, 100], {id: 200});
       var callback = function (value, options) {
         assert.ok(true, 'call en event');
@@ -329,7 +329,7 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test('range:click', function (assert) {
       var s = this.s;
       s.addRange([0, 10], {id: 100});
-      var handler = s.el.querySelector('.bbslider-right-handler');
+      var handler = s.el.querySelector('.multirangeslider-right-handler');
       s.addRange([90, 100], {id: 200});
       var callback = function (value, options) {
         assert.ok(true, 'call en event');
@@ -355,25 +355,25 @@ QUnit.module("BBSlider", function (hooks) {
   QUnit.module("Ghost", function (hooks) {
     hooks.beforeEach(function (assert) {
       move(this.bar_el);
-      this.ghost_el = this.target.querySelector('.bbslider-ghost');
+      this.ghost_el = this.target.querySelector('.multirangeslider-ghost');
       this.ghost_rect = this.ghost_el.getBoundingClientRect();
     });
     hooks.afterEach(function (assert) {
       leave(this.bar_el);
-      assert.equal(this.target.querySelectorAll('.bbslider-ghost').length, 0,
+      assert.equal(this.target.querySelectorAll('.multirangeslider-ghost').length, 0,
         'element should be removed from the DOM when mouse leaved the bar');
     });
 
     QUnit.test("exists", function (assert) {
       move(this.bar_el);
-      var el_list = this.target.querySelectorAll('.bbslider-ghost');
+      var el_list = this.target.querySelectorAll('.multirangeslider-ghost');
       assert.equal(el_list.length, 1,
         'Only one element should attach to dom');
     });
 
     QUnit.test("has label", function (assert) {
       move(this.bar_el);
-      var el_list = this.target.querySelectorAll('.bbslider-ghost .bbslider-label');
+      var el_list = this.target.querySelectorAll('.multirangeslider-ghost .multirangeslider-label');
       assert.equal(el_list.length, 1,
         'Only one element should attach to dom');
     });
@@ -418,7 +418,7 @@ QUnit.module("BBSlider", function (hooks) {
   QUnit.module("Range", function (hooks) {
     hooks.beforeEach(function (assert) {
       this.s.addRange(([40, 50]));
-      this.range_el = this.target.querySelector('.bbslider-range');
+      this.range_el = this.target.querySelector('.multirangeslider-range');
       this.range_rect = this.range_el.getBoundingClientRect();
     });
 
@@ -434,16 +434,16 @@ QUnit.module("BBSlider", function (hooks) {
     QUnit.test("click", function (assert) {
       move(this.bar_el, {startX: 0});
       up(this.bar_el);
-      assert.equal(this.target.querySelectorAll('.bbslider-range').length, 2,
+      assert.equal(this.target.querySelectorAll('.multirangeslider-range').length, 2,
         'element should attach to dom');
-      assert.equal(this.target.querySelectorAll('.bbslider-range .bbslider-label').length, 2,
+      assert.equal(this.target.querySelectorAll('.multirangeslider-range .multirangeslider-label').length, 2,
         'label should attach to dom');
     });
 
     QUnit.test("press", function (assert) {
       this.s.addRange([70, 80]);
       down(this.range_el);
-      assert.equal(this.target.querySelectorAll('.bbslider-pressed').length, 1,
+      assert.equal(this.target.querySelectorAll('.multirangeslider-pressed').length, 1,
         'only one range should be pressed');
       up(this.range_el);
     });
@@ -452,7 +452,7 @@ QUnit.module("BBSlider", function (hooks) {
       down(this.range_el);
       move(this.range_el, {moveX: this.step_width});
       var rect = this.range_el.getBoundingClientRect();
-      assert.ok(this.target.querySelector('.bbslider-pressed'),
+      assert.ok(this.target.querySelector('.multirangeslider-pressed'),
         'after mousedown should contain class pressed');
       assert.ok(Math.abs(rect.width - this.range_rect.width) <= 1,
         'after dragging range should not increase its width');
@@ -482,7 +482,7 @@ QUnit.module("BBSlider", function (hooks) {
     });
 
     QUnit.test("drag left handler", function (assert) {
-      var handler = this.range_el.querySelector('.bbslider-left-handler');
+      var handler = this.range_el.querySelector('.multirangeslider-left-handler');
       assert.ok(handler,
         'should contain left handler');
 
@@ -501,7 +501,7 @@ QUnit.module("BBSlider", function (hooks) {
     });
 
     QUnit.test("drag right handler", function (assert) {
-      var handler = this.range_el.querySelector('.bbslider-right-handler');
+      var handler = this.range_el.querySelector('.multirangeslider-right-handler');
       down(handler);
       move(handler, {moveX: +this.step_width});
       up(handler);

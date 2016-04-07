@@ -4,11 +4,11 @@
   } else if (typeof exports === 'object') {
     module.exports = factory();
   } else {
-    root.BBSlider = factory();
+    root.multirangeslider = factory();
   }
 }(this, function () {
   // browserify module start
   <%= contents %>
   // browserify module finish
-  return BBSlider;
+  return multirangeslider;
 }));

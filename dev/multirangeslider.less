@@ -1,0 +1,102 @@
+@multirangeslider-bg: #128dc3;
+@multirangeslider-color: #ffffff;
+
+.multirangeslider-slider {
+  display: block;
+}
+
+.multirangeslider-bar {
+  height: 50px;
+  width: 100%;
+  display: block;
+  background: lighten(@multirangeslider-bg, 48%);
+  position: relative;
+  border: 0 !important;
+  box-sizing: border-box;
+
+  .multirangeslider-label {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    line-height: 50px;
+    display: inline;
+    color: @multirangeslider-color;
+  }
+
+  .multirangeslider-ghost,
+  .multirangeslider-range {
+    position: absolute;
+    height: 100%;
+    top: 0;
+  }
+
+  .multirangeslider-ghost {
+    color: @multirangeslider-color;
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+  .multirangeslider-range {
+    background: lighten(@multirangeslider-bg, 23%);
+    cursor: move;
+    -webkit-user-drag: none;
+    &.multirangeslider-pressed {
+      background: lighten(@multirangeslider-bg, 18%);
+    }
+
+    .multirangeslider-left-handler,
+    .multirangeslider-right-handler {
+      position: absolute;
+      width: 8px;
+      background: lighten(@multirangeslider-bg, 10%);
+      height: 100%;
+      cursor: ew-resize;
+      -webkit-user-drag: none;
+    }
+    .multirangeslider-left-handler {
+      left: 0;
+    }
+    .multirangeslider-right-handler {
+      right: 0;
+    }
+
+    &.multirangeslider-zero-width {
+      &.multirangeslider-pressed-right {
+        .multirangeslider-right-handler {
+          right: -8px;
+        }
+      }
+      &.multirangeslider-pressed-left {
+        .multirangeslider-left-handler {
+          left: -8px;
+        }
+      }
+      .multirangeslider-remove-popup {
+        left: -12px;
+      }
+    }
+
+    .multirangeslider-remove-popup {
+      transition: 0.5s;
+      position: absolute;
+      top: -30px;
+      text-align: center;
+      width: 100%;
+      .multirangeslider-remove-label {
+        width: 20px;
+        height: 20px;
+        background: gray;
+        color: @multirangeslider-color;
+        opacity: 0.5;
+        display: inline-block;
+      }
+    }
+  }
+
+  &.multirangeslider-readonly {
+    .multirangeslider-left-handler,
+    .multirangeslider-right-handler,
+    .multirangeslider-range {
+      cursor: default;
+    }
+  }
+}

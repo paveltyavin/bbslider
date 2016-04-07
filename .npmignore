@@ -1,10 +1,10 @@
-!dist/bbslider.min.js
+!dist/multirangeslider.min.js
 dist/files
 dist/index.html
 
 test/
 dev/
-!dev/bbslider.less
+!dev/multirangeslider.less
 
 .travis
 .idea

@@ -21,9 +21,9 @@ class Bar extends Base {
     }, options);
 
     this.el = document.createElement('div');
-    this.el.className = 'bbslider-bar';
+    this.el.className = 'multirangeslider-bar';
     if (this.options.readOnly === true) {
-      addClass(this.el, 'bbslider-readonly')
+      addClass(this.el, 'multirangeslider-readonly')
     }
     this.el.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.el.addEventListener('mouseleave', (event)=> this.mouseleave(event));

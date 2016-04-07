@@ -13,15 +13,15 @@ var livereload = require('gulp-livereload');
 var wrap = require('gulp-wrap');
 
 gulp.task('less', function () {
-  gulp.src(['dev/bbslider.less'])
+  gulp.src(['dev/multirangeslider.less'])
     .pipe(less())
     .pipe(gulp.dest('dist'))
     .pipe(livereload());
 });
 
 var b = browserify({
-  entries: './dev/bbslider.js',
-  standalone: 'BBSlider'
+  entries: './dev/multirangeslider.js',
+  standalone: 'multirangeslider'
 }).transform(babelify);
 
 var w = watchify(b);
@@ -33,8 +33,8 @@ var watch_bundle = function () {
       gutil.beep();
       this.emit('end');
     })
-    .pipe(source('bbslider-dev.js'))
-    .pipe(wrap({src: './umd-template.js'}))
+    .pipe(source('multirangeslider.js'))
+    .pipe(wrap({src: './dev/umd-template.js'}))
     .pipe(gulp.dest('./dist/'))
     .pipe(livereload())
 };
@@ -47,18 +47,18 @@ w.on('time', function (time) {
 
 gulp.task('build:js', function () {
   var b = browserify({
-    entries: './dev/bbslider.js',
-    standalone: 'BBSlider'
+    entries: './dev/multirangeslider.js',
+    standalone: 'multirangeslider'
   });
 
   return b
     .transform(babelify)
     .bundle()
-    .pipe(source('bbslider-dev.js'))
-    .pipe(wrap({src: './umd-template.js'}))
+    .pipe(source('multirangeslider.js'))
+    .pipe(wrap({src: './dev/umd-template.js'}))
     .pipe(gulp.dest('dist'))
 
-    .pipe(rename('bbslider.min.js'))
+    .pipe(rename('multirangeslider.min.js'))
     .pipe(buffer())
     .pipe(uglify())
     .pipe(gulp.dest('dist'));

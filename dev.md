@@ -14,7 +14,7 @@ To preview the results you can use the test page or documentation page `./dist/i
 # Contributing
 
 Source code, bugtracker and so one are here: 
-https://github.com/paveltyavin/bbslider/ 
+https://github.com/paveltyavin/multirangeslider/ 
 
 
 ## todo 

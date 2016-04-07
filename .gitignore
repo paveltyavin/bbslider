@@ -1,4 +1,4 @@
 *.DS_STORE
 node_modules
 .idea
-dist/bbslider.min.js
+dist/multirangeslider.min.js
