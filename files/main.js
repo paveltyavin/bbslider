@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     min: 0,
     max: 100,
     step: 4,
+    minWidth: 12,
     allowRemove: true
   });
   document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);
