@@ -123,10 +123,7 @@ class multirangeslider {
     for (let range of this._bar.rangeList) {
       let value = range.getValue();
       totalLength += value[1] - value[0];
-      rangeList.push({
-        id: range.id,
-        val: value
-      })
+      rangeList.push(range.data())
     }
     return {
       totalLength: totalLength,
