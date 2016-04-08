@@ -208,16 +208,18 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test('data', function (assert) {
       var s = this.s;
-      s.addRange([20, 30], {id: 10});
-      s.addRange([40, 60], {id: 20});
+      var range_1 = s.addRange([20, 30], {id: 10});
+      var range_2 = s.addRange([40, 60], {id: 20});
       assert.deepEqual(s.data(), {
         totalLength: 30,
         rangeList: [
           {
+            el: range_1.el,
             id: 10,
             val: [20, 30]
           },
           {
+            el: range_2.el,
             id: 20,
             val: [40, 60]
           }
