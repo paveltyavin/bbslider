@@ -68,9 +68,7 @@ class Range {
       addClass(this.el, 'multirangeslider-pressed');
       addClass(this.el, `multirangeslider-pressed-${this.pressedMode}`);
       this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
-      this.emitter.emit('range:click', {
-        id: this.id
-      });
+      this.emitter.emit('range:click', this.data());
     }
   }
 
@@ -225,7 +223,8 @@ class Range {
   data() {
     return {
       id: this.id,
-      val: this.getValue()
+      val: this.getValue(),
+      el: this.el
     }
   }
 }

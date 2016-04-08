@@ -1,16 +1,16 @@
+var babel = require('gulp-babel');
+var babelify = require('babelify');
+var browserify = require('browserify');
+var buffer = require('vinyl-buffer');
+var derequire = require('gulp-derequire');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var less = require('gulp-less');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var babelify = require('babelify');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var babel = require('gulp-babel');
 var livereload = require('gulp-livereload');
-var wrap = require('gulp-wrap');
+var rename = require('gulp-rename');
+var source = require('vinyl-source-stream');
+var uglify = require('gulp-uglify');
+var watchify = require('watchify');
 
 gulp.task('less', function () {
   gulp.src(['dev/multirangeslider.less'])
@@ -34,7 +34,6 @@ var watch_bundle = function () {
       this.emit('end');
     })
     .pipe(source('multirangeslider.js'))
-    .pipe(wrap({src: './dev/umd-template.js'}))
     .pipe(gulp.dest('./dist/'))
     .pipe(livereload())
 };
@@ -55,7 +54,7 @@ gulp.task('build:js', function () {
     .transform(babelify)
     .bundle()
     .pipe(source('multirangeslider.js'))
-    .pipe(wrap({src: './dev/umd-template.js'}))
+    .pipe(derequire())
     .pipe(gulp.dest('dist'))
 
     .pipe(rename('multirangeslider.min.js'))

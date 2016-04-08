@@ -3,10 +3,11 @@ dist/files
 dist/index.html
 
 test/
-dev/
+dev/*
 !dev/multirangeslider.less
 
-.travis
+dev.md
+.travis.yml
 .idea
 umd-template.js
 gulpfile.js
