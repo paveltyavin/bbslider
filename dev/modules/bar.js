@@ -45,6 +45,12 @@ class Bar extends Base {
     return this.rangeIdCount;
   }
 
+  proxyRangeEvent(eventName, range) {
+    range.emitter.addListener(eventName, () => {
+      this.emitter.emit(eventName, Object.assign(this.data(), {range: range.data()}));
+    })
+  }
+
   addRange(value, options) {
     if (this.rangeList.length >= this.options.maxRanges) {
       return false;
@@ -62,57 +68,32 @@ class Bar extends Base {
 
     let rangeId = range.id;
 
-    range.emitter.addListener('range:remove', (options) => {
-      this.removeRange({id: rangeId});
-      this.emitter.emit('range:remove', {
-        rangeId: rangeId,
-        val: this.getValue()
-      });
-      this.emitter.emit('change', {
-        rangeId: rangeId,
-        val: this.getValue()
-      });
+    for (let eventName of [
+      'remove',
+      'changing',
+      'change',
+      'click'
+    ]) {
+      this.proxyRangeEvent(eventName, range);
+    }
+
+    range.emitter.addListener('remove', () => {
+      this.removeRange(rangeId);
     });
 
-    range.emitter.addListener('range:changing', (options) => {
-      this.emitter.emit('changing', {
-        rangeId: rangeId,
-        val: this.getValue()
-      });
-      this.emitter.emit('range:changing', options);
-    });
-
-    range.emitter.addListener('range:change', (options) =>{
-      this.emitter.emit('change', {
-        rangeId: rangeId,
-        val: this.getValue()
-      });
-      this.emitter.emit('range:change', options);
-    });
-
-    range.emitter.addListener('range:click', (options) =>{
-      this.emitter.emit('range:click', options);
-    });
-
-    this.emitter.emit('change', {
-      rangeId: rangeId,
-      val: this.getValue()
-    });
-    this.emitter.emit('changing', {
-      rangeId: rangeId,
-      val: this.getValue()
-    });
+    this.emitter.emit('change', Object.assign(this.data(), {range: range.data()}));
+    this.emitter.emit('add', Object.assign(this.data(), {range: range.data()}));
 
     return range;
 
   }
 
-  removeRange(options) {
-    let range = this.rangeList.find(x => x.id == options.id);
+  removeRange(rangeId) {
+    let range = this.rangeList.find(x => x.id == rangeId);
     if (range) {
       range.removeEvents();
       this.el.removeChild(range.el);
-      this.rangeList = this.rangeList.filter(x => x.id !== options.id);
+      this.rangeList = this.rangeList.filter(x => x.id !== rangeId);
       return true;
     } else {
       return false;
@@ -243,6 +224,10 @@ class Bar extends Base {
       result.push(value);
     }
     return result
+  }
+
+  data() {
+    return this.rangeList.map((x) => {return x.data()});
   }
 }
 

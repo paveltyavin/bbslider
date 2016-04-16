@@ -68,7 +68,7 @@ class Range {
       addClass(this.el, 'multirangeslider-pressed');
       addClass(this.el, `multirangeslider-pressed-${this.pressedMode}`);
       this.pressedPosition = this.bar.roundUserValue(this.bar.getCursor(event));
-      this.emitter.emit('range:click', this.data());
+      this.emitter.emit('click', this.data());
     }
   }
 
@@ -175,10 +175,7 @@ class Range {
       }
 
       this.setValue([newLeft, newRight]);
-      this.emitter.emit('range:changing', {
-        id: this.id,
-        val: this.getValue()
-      });
+      this.emitter.emit('changing', this.data());
     }
   }
 
@@ -186,9 +183,7 @@ class Range {
     this.pressed = false;
     if (this.isRemoving) {
       this.removeRemovingPopup();
-      this.emitter.emit('range:remove', {
-        id: this.id
-      });
+      this.emitter.emit('remove', this.data());
     }
     this.pressedPosition = undefined;
     removeClass(this.el, 'multirangeslider-pressed');
@@ -196,10 +191,7 @@ class Range {
     if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
       return
     }
-    this.emitter.emit('range:change', {
-      id: this.id,
-      val: this.getValue()
-    });
+    this.emitter.emit('change', this.data());
   }
 
   setValue(value) {

@@ -1,7 +1,8 @@
 function getTotalLength(data) {
   var result = 0;
-  for (var i = 0; i < data.val.length; i++) {
-    result += (data.val[i][1] - data.val[i][0]);
+  for (var i = 0; i < data.length; i++) {
+    var range = data[i];
+    result += (range.val[1] - range.val[0]);
   }
   return result;
 }
@@ -36,33 +37,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   slider_events_change.on('change', function (data) {
     result_events_change.innerHTML = getTotalLength(data).toString();
-  });
-
-
-  var slider_events_range_change = new multirangeslider({
-    min: 0,
-    max: 100,
-    step: 10
-  });
-  document.getElementById('el_events_range_change').appendChild(slider_events_range_change.el);
-  slider_events_range_change.addRange([20, 60], {id: 1});
-  slider_events_range_change.addRange([90, 100], {id: 2});
-
-  var result_events_range_changing = document.getElementById('result_events_range_changing');
-  var result_events_range_change = document.getElementById('result_events_range_change');
-  var result_events_range_id = document.getElementById('result_events_range_id');
-
-  slider_events_range_change.on('range:changing', function (data) {
-    if (data.id == 1) {
-      result_events_range_changing.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-  });
-
-  slider_events_range_change.on('range:change', function (data) {
-    if (data.id == 1) {
-      result_events_range_change.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-    result_events_range_id.innerHTML = data.id.toString();
   });
 
 

@@ -81,19 +81,16 @@ class multirangeslider {
     return this._bar.addRange(value, options);
   }
 
-  removeRange(options) {
-    if (typeof options !== 'object') {
+  removeRange(rangeId) {
+    if (!Number.isInteger(rangeId)) {
       throw(new Error('wrong data'));
     }
-    if (options.id === undefined) {
-      throw(new Error('wrong data'));
-    }
-    return this._bar.removeRange(options);
+    return this._bar.removeRange(rangeId);
   }
 
   removeAllRanges() {
     for (let range of this._bar.rangeList) {
-      this._bar.removeRange({id: range.id});
+      this._bar.removeRange(range.id);
     }
   }
 
@@ -118,17 +115,7 @@ class multirangeslider {
   }
 
   data() {
-    let rangeList = [];
-    let totalLength = 0;
-    for (let range of this._bar.rangeList) {
-      let value = range.getValue();
-      totalLength += value[1] - value[0];
-      rangeList.push(range.data())
-    }
-    return {
-      totalLength: totalLength,
-      rangeList: rangeList
-    }
+    return this._bar.data();
   }
 
   on(subject, cb) {

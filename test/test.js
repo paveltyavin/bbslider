@@ -189,9 +189,9 @@ QUnit.module("multirangeslider", function (hooks) {
       assert.throws(function () {
         s.removeRange(null);
       }, "throws an error in case bad data");
-      assert.equal(s.removeRange({id: 20}), false,
+      assert.equal(s.removeRange(20), false,
         'return false if range wasn`t removed');
-      assert.equal(s.removeRange({id: 10}), true,
+      assert.equal(s.removeRange(10), true,
         'return true if range was removed');
       var value = this.s.val();
       assert.equal(value.length, 0,
@@ -210,21 +210,18 @@ QUnit.module("multirangeslider", function (hooks) {
       var s = this.s;
       var range_1 = s.addRange([20, 30], {id: 10});
       var range_2 = s.addRange([40, 60], {id: 20});
-      assert.deepEqual(s.data(), {
-        totalLength: 30,
-        rangeList: [
-          {
-            el: range_1.el,
-            id: 10,
-            val: [20, 30]
-          },
-          {
-            el: range_2.el,
-            id: 20,
-            val: [40, 60]
-          }
-        ]
-      });
+      assert.deepEqual(s.data(), [
+        {
+          el: range_1.el,
+          id: 10,
+          val: [20, 30]
+        },
+        {
+          el: range_2.el,
+          id: 20,
+          val: [40, 60]
+        }
+      ]);
     });
   });
 
@@ -278,7 +275,7 @@ QUnit.module("multirangeslider", function (hooks) {
       assert.expect(1);
     });
 
-    QUnit.test('range:changing', function (assert) {
+    QUnit.test('click', function (assert) {
       var s = this.s;
       s.addRange([0, 10], {id: 100});
       var handler = s.el.querySelector('.multirangeslider-right-handler');
@@ -287,64 +284,14 @@ QUnit.module("multirangeslider", function (hooks) {
         assert.ok(true, 'call en event');
       };
 
-      s.on('range:change', callback);
-
-      down(handler);
-      move(handler, {moveX: this.step_width});
-      move(handler, {moveX: this.step_width});
-      up(handler); // emit
-
-      s.off('range:change', callback);
-
-      down(handler);
-      move(handler, {moveX: this.step_width});
-      up(handler);
-
-      assert.expect(1);
-    });
-
-    QUnit.test('range:change', function (assert) {
-      var s = this.s;
-      s.addRange([0, 10], {id: 100});
-      var handler = s.el.querySelector('.multirangeslider-right-handler');
-      s.addRange([90, 100], {id: 200});
-      var callback = function (value, options) {
-        assert.ok(true, 'call en event');
-      };
-
-      s.on('range:changing', callback);
-
-      down(handler);
-      move(handler, {moveX: this.step_width}); // emit
-      move(handler, {moveX: this.step_width}); // emit
-      up(handler);
-
-      s.off('range:changing', callback);
-
-      down(handler);
-      move(handler, {moveX: this.step_width});
-      up(handler);
-
-      assert.expect(2);
-    });
-
-    QUnit.test('range:click', function (assert) {
-      var s = this.s;
-      s.addRange([0, 10], {id: 100});
-      var handler = s.el.querySelector('.multirangeslider-right-handler');
-      s.addRange([90, 100], {id: 200});
-      var callback = function (value, options) {
-        assert.ok(true, 'call en event');
-      };
-
-      s.on('range:click', callback);
+      s.on('click', callback);
 
       down(handler); //emit
       up(handler);
       down(handler); //emit
       up(handler);
 
-      s.off('range:click', callback);
+      s.off('click', callback);
 
       down(handler);
       up(handler);
@@ -428,7 +375,7 @@ QUnit.module("multirangeslider", function (hooks) {
     QUnit.test("benchmark range create", function (assert) {
       for (var i = 0; i < 100; i++) {
         this.s.addRange([90, 100], {id: 200});
-        this.s.removeRange({id: 200});
+        this.s.removeRange(200);
       }
       assert.ok(true);
     });
