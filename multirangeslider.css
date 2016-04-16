@@ -1,0 +1,84 @@
+.multirangeslider-slider {
+  display: block;
+  user-select: none;
+}
+.multirangeslider-bar {
+  height: 50px;
+  width: 100%;
+  display: block;
+  background: #cfedfb;
+  position: relative;
+  border: 0 !important;
+  box-sizing: border-box;
+}
+.multirangeslider-bar .multirangeslider-label {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  line-height: 50px;
+  display: inline;
+  color: #ffffff;
+}
+.multirangeslider-bar .multirangeslider-ghost,
+.multirangeslider-bar .multirangeslider-range {
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+.multirangeslider-bar .multirangeslider-ghost {
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.multirangeslider-bar .multirangeslider-range {
+  background: #5ac2f0;
+  cursor: move;
+  -webkit-user-drag: none;
+}
+.multirangeslider-bar .multirangeslider-range.multirangeslider-pressed {
+  background: #43baee;
+}
+.multirangeslider-bar .multirangeslider-range .multirangeslider-left-handler,
+.multirangeslider-bar .multirangeslider-range .multirangeslider-right-handler {
+  position: absolute;
+  width: 8px;
+  background: #1eacea;
+  height: 100%;
+  cursor: ew-resize;
+  -webkit-user-drag: none;
+}
+.multirangeslider-bar .multirangeslider-range .multirangeslider-left-handler {
+  left: 0;
+}
+.multirangeslider-bar .multirangeslider-range .multirangeslider-right-handler {
+  right: 0;
+}
+.multirangeslider-bar .multirangeslider-range.multirangeslider-zero-width.multirangeslider-pressed-right .multirangeslider-right-handler {
+  right: -8px;
+}
+.multirangeslider-bar .multirangeslider-range.multirangeslider-zero-width.multirangeslider-pressed-left .multirangeslider-left-handler {
+  left: -8px;
+}
+.multirangeslider-bar .multirangeslider-range.multirangeslider-zero-width .multirangeslider-remove-popup {
+  left: -12px;
+}
+.multirangeslider-bar .multirangeslider-range .multirangeslider-remove-popup {
+  transition: 0.5s;
+  position: absolute;
+  top: -30px;
+  text-align: center;
+  width: 100%;
+}
+.multirangeslider-bar .multirangeslider-range .multirangeslider-remove-popup .multirangeslider-remove-label {
+  width: 20px;
+  height: 20px;
+  background: gray;
+  color: #ffffff;
+  opacity: 0.5;
+  display: inline-block;
+}
+.multirangeslider-bar.multirangeslider-readonly .multirangeslider-left-handler,
+.multirangeslider-bar.multirangeslider-readonly .multirangeslider-right-handler,
+.multirangeslider-bar.multirangeslider-readonly .multirangeslider-range {
+  cursor: default;
+}
