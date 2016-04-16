@@ -30,7 +30,7 @@ QUnit.module('Options', function (hooks) {
     var left = 0;
     var right = options.minWidth;
 
-    s.addRange([left, right], {id: 100});
+    s.add([left, right], {id: 100});
     var handler = s.el.querySelector('.multirangeslider-left-handler');
     down(handler);
     move(handler, {moveX: range_width / 2});
@@ -59,11 +59,11 @@ QUnit.module('Options', function (hooks) {
     var target = document.getElementById('target');
     target.appendChild(s.el);
 
-    s.addRange([20, 40], {id: 100});
-    s.addRange([50, 60], {id: 200});
-    s.addRange([70, 75], {id: 300});
+    s.add([20, 40], {id: 100});
+    s.add([50, 60], {id: 200});
+    s.add([70, 75], {id: 300});
     assert.throws(function () {
-      s.addRange([80, 90], {id: 300});
+      s.add([80, 90], {id: 300});
     }, "there should be no more ranges than maxRanges");
 
     move(s._bar.el);
@@ -86,7 +86,7 @@ QUnit.module('Options', function (hooks) {
     var width = s.el.clientWidth;
     var step_width = parseInt((options.step / (options.max - options.min)) * width);
 
-    var range_1 = s.addRange([20, 40], {id: 100});
+    var range_1 = s.add([20, 40], {id: 100});
 
     var handler = range_1.el.querySelector('.multirangeslider-left-handler');
     down(handler);
@@ -101,22 +101,22 @@ QUnit.module('Options', function (hooks) {
     target.removeChild(s.el);
   });
 
-  QUnit.test('rangeLabel', function (assert) {
+  QUnit.test('label', function (assert) {
     var options = {
       min: 0,
       max: 100,
       step: 5,
-      rangeLabel: function (value) {
+      label: function (value) {
         return value[0] + '::' + value[1]
       }
     };
     var s = new multirangeslider(options);
-    s.addRange([20, 30]);
+    s.add([20, 30]);
     var target = document.getElementById('target');
     target.appendChild(s.el);
     var label = target.querySelector('.multirangeslider-label');
     assert.equal(label.innerText, '20::30',
-      'text in range label should consider the rangeLabel function');
+      'text in range label should consider the label function');
 
     target.removeChild(s.el);
   });
@@ -143,55 +143,55 @@ QUnit.module("multirangeslider", function (hooks) {
   });
 
   QUnit.module('Method', function (hooks) {
-    QUnit.test('removeAllRanges', function (assert) {
+    QUnit.test('removeAll', function (assert) {
       var s = this.s;
-      s.addRange([0, 10]);
-      s.addRange([20, 30]);
-      s.removeAllRanges();
+      s.add([0, 10]);
+      s.add([20, 30]);
+      s.removeAll();
       assert.deepEqual([], s.val(),
         'val should be empty');
     });
 
     QUnit.test('val()', function (assert) {
       var s = this.s;
-      s.addRange([0, 10]);
-      s.addRange([20, 30]);
+      s.add([0, 10]);
+      s.add([20, 30]);
       assert.deepEqual([[0, 10], [20, 30]], s.val(),
         'val should return the same result');
     });
-    QUnit.test('addRange(data, options)', function (assert) {
+    QUnit.test('add(data, options)', function (assert) {
       var s = this.s;
-      s.addRange([0, 10]);
-      s.addRange([20, 30]);
+      s.add([0, 10]);
+      s.add([20, 30]);
       assert.deepEqual([[0, 10], [20, 30]], this.s.val(),
         'should add Range');
 
       assert.throws(function () {
-        s.addRange(null);
+        s.add(null);
       }, "throws an error in case bad data");
 
-      s.addRange([50, 70], {id: 100});
+      s.add([50, 70], {id: 100});
 
       assert.throws(function () {
-        s.addRange([80, 90], {id: 100});
+        s.add([80, 90], {id: 100});
       }, "throws an error in case not unique id");
       assert.throws(function () {
-        s.addRange([60, 80], {id: 200});
+        s.add([60, 80], {id: 200});
       }, "throws an error in case of intersection");
       assert.throws(function () {
-        s.addRange([40, 80], {id: 200});
+        s.add([40, 80], {id: 200});
       }, "throws an error in case of intersection");
 
     });
-    QUnit.test('removeRange(options)', function (assert) {
+    QUnit.test('remove(options)', function (assert) {
       var s = this.s;
-      s.addRange([20, 30], {id: 10});
+      s.add([20, 30], {id: 10});
       assert.throws(function () {
-        s.removeRange(null);
+        s.remove(null);
       }, "throws an error in case bad data");
-      assert.equal(s.removeRange(20), false,
+      assert.equal(s.remove(20), false,
         'return false if range wasn`t removed');
-      assert.equal(s.removeRange(10), true,
+      assert.equal(s.remove(10), true,
         'return true if range was removed');
       var value = this.s.val();
       assert.equal(value.length, 0,
@@ -200,7 +200,7 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test('rangeValue', function (assert) {
       var s = this.s;
-      s.addRange([20, 30], {id: 10});
+      s.add([20, 30], {id: 10});
       assert.deepEqual([20, 30], s.rangeValue(10));
       s.rangeValue(10, [40, 50]);
       assert.deepEqual([[40, 50]], s.val());
@@ -208,8 +208,8 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test('data', function (assert) {
       var s = this.s;
-      var range_1 = s.addRange([20, 30], {id: 10});
-      var range_2 = s.addRange([40, 60], {id: 20});
+      var range_1 = s.add([20, 30], {id: 10});
+      var range_2 = s.add([40, 60], {id: 20});
       assert.deepEqual(s.data(), [
         {
           el: range_1.el,
@@ -229,7 +229,7 @@ QUnit.module("multirangeslider", function (hooks) {
   QUnit.module('Events', function (hooks) {
     QUnit.test('changing', function (assert) {
       var s = this.s;
-      s.addRange(([0, 10]));
+      s.add(([0, 10]));
       var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
@@ -253,7 +253,7 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test('change', function (assert) {
       var s = this.s;
-      s.addRange(([0, 10]));
+      s.add(([0, 10]));
       var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
         assert.ok(true, 'call en event');
@@ -277,9 +277,9 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test('click', function (assert) {
       var s = this.s;
-      s.addRange([0, 10], {id: 100});
+      s.add([0, 10], {id: 100});
       var handler = s.el.querySelector('.multirangeslider-right-handler');
-      s.addRange([90, 100], {id: 200});
+      s.add([90, 100], {id: 200});
       var callback = function (value, options) {
         assert.ok(true, 'call en event');
       };
@@ -366,7 +366,7 @@ QUnit.module("multirangeslider", function (hooks) {
 
   QUnit.module("Range", function (hooks) {
     hooks.beforeEach(function (assert) {
-      this.s.addRange(([40, 50]));
+      this.s.add(([40, 50]));
       this.range_el = this.target.querySelector('.multirangeslider-range');
       this.range_rect = this.range_el.getBoundingClientRect();
     });
@@ -374,8 +374,8 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test("benchmark range create", function (assert) {
       for (var i = 0; i < 100; i++) {
-        this.s.addRange([90, 100], {id: 200});
-        this.s.removeRange(200);
+        this.s.add([90, 100], {id: 200});
+        this.s.remove(200);
       }
       assert.ok(true);
     });
@@ -390,7 +390,7 @@ QUnit.module("multirangeslider", function (hooks) {
     });
 
     QUnit.test("press", function (assert) {
-      this.s.addRange([70, 80]);
+      this.s.add([70, 80]);
       down(this.range_el);
       assert.equal(this.target.querySelectorAll('.multirangeslider-pressed').length, 1,
         'only one range should be pressed');

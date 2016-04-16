@@ -9,5 +9,4 @@ dev/*
 dev.md
 .travis.yml
 .idea
-umd-template.js
 gulpfile.js

@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     step: 10
   });
   document.getElementById('el_events_change').appendChild(slider_events_change.el);
-  slider_events_change.addRange([20, 60], {id: 1});
+  slider_events_change.add([20, 60], {id: 1});
   var result_events_changing = document.getElementById('result_events_changing');
   var result_events_change = document.getElementById('result_events_change');
   slider_events_change.on('changing', function (data) {
@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     allowRemove: true
   });
   document.getElementById('slider_options_allowRemove').appendChild(slider_options_allowRemove.el);
-  slider_options_allowRemove.addRange([40, 60]);
-  slider_options_allowRemove.addRange([80, 100]);
+  slider_options_allowRemove.add([40, 60]);
+  slider_options_allowRemove.add([80, 100]);
 
 
   var slider_options_maxRanges = new multirangeslider({
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     maxRanges: 3
   });
   document.getElementById('slider_options_maxRanges').appendChild(slider_options_maxRanges.el);
-  slider_options_maxRanges.addRange([0, 10]);
-  slider_options_maxRanges.addRange([20, 40]);
+  slider_options_maxRanges.add([0, 10]);
+  slider_options_maxRanges.add([20, 40]);
 
 
   var slider_options_readOnly = new multirangeslider({
@@ -72,23 +72,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
     readOnly: true
   });
   document.getElementById('slider_options_readOnly').appendChild(slider_options_readOnly.el);
-  slider_options_readOnly.addRange([0, 10]);
-  slider_options_readOnly.addRange([20, 40]);
+  slider_options_readOnly.add([0, 10]);
+  slider_options_readOnly.add([20, 40]);
 
 
   // Methods
 
-  var slider_methods_removeAllRanges = new multirangeslider({
+  var slider_methods_removeAll = new multirangeslider({
     min: 0,
     max: 100,
     step: 4
   });
-  document.getElementById('slider_methods_removeAllRanges').appendChild(slider_methods_removeAllRanges.el);
-  slider_methods_removeAllRanges.addRange([40, 60]);
-  slider_methods_removeAllRanges.addRange([80, 100]);
-  document.getElementById('button_methods_removeAllRanges').addEventListener('click', function (event) {
+  document.getElementById('slider_methods_removeAll').appendChild(slider_methods_removeAll.el);
+  slider_methods_removeAll.add([40, 60]);
+  slider_methods_removeAll.add([80, 100]);
+  document.getElementById('button_methods_removeAll').addEventListener('click', function (event) {
     event.preventDefault();
-    slider_methods_removeAllRanges.removeAllRanges();
+    slider_methods_removeAll.removeAll();
   })
 
 });

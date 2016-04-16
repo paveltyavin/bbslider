@@ -204,7 +204,7 @@ class Range {
     if (this.right - this.left < this.bar.options.minWidth) {
       this.label.innerHTML = '';
     } else {
-      this.label.innerHTML = this.bar.options.rangeLabel(value, this.data());
+      this.label.innerHTML = this.bar.options.label(value, this.data());
     }
   }
 

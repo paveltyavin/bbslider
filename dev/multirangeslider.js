@@ -63,7 +63,7 @@ class multirangeslider {
     }
   }
 
-  addRange(value, options) {
+  add(value, options) {
     options = Object.assign({}, options);
     this._validateRangeValue(value, options);
 
@@ -78,19 +78,19 @@ class multirangeslider {
         throw( new Error('intersection'));
       }
     }
-    return this._bar.addRange(value, options);
+    return this._bar.add(value, options);
   }
 
-  removeRange(rangeId) {
+  remove(rangeId) {
     if (!Number.isInteger(rangeId)) {
       throw(new Error('wrong data'));
     }
-    return this._bar.removeRange(rangeId);
+    return this._bar.remove(rangeId);
   }
 
-  removeAllRanges() {
+  removeAll() {
     for (let range of this._bar.rangeList) {
-      this._bar.removeRange(range.id);
+      this._bar.remove(range.id);
     }
   }
 

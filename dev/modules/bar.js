@@ -15,7 +15,7 @@ class Bar extends Base {
       ghostLabel: (value) => {
         return '+';
       },
-      rangeLabel: (value) => {
+      label: (value) => {
         return value[0].toString() + '-' + value[1].toString();
       }
     }, options);
@@ -51,7 +51,7 @@ class Bar extends Base {
     })
   }
 
-  addRange(value, options) {
+  add(value, options) {
     if (this.rangeList.length >= this.options.maxRanges) {
       return false;
     }
@@ -78,17 +78,18 @@ class Bar extends Base {
     }
 
     range.emitter.addListener('remove', () => {
-      this.removeRange(rangeId);
+      this.remove(rangeId);
     });
 
-    this.emitter.emit('change', Object.assign(this.data(), {range: range.data()}));
-    this.emitter.emit('add', Object.assign(this.data(), {range: range.data()}));
+    for (let eventName of ['change', 'add']) {
+      this.emitter.emit(eventName, Object.assign(this.data(), {range: range.data()}));
+    }
 
     return range;
 
   }
 
-  removeRange(rangeId) {
+  remove(rangeId) {
     let range = this.rangeList.find(x => x.id == rangeId);
     if (range) {
       range.removeEvents();
@@ -113,7 +114,7 @@ class Bar extends Base {
 
   mouseup(event) {
     if (this.ghost) {
-      this.addRange([this.ghost.left, this.ghost.right])
+      this.add([this.ghost.left, this.ghost.right])
     }
   }
 
