@@ -107,27 +107,25 @@ slider.rangeValue(1, [10, 20]);</pre>
 
         <h3>.data()</h3>
         <p>
-            returns all data about the slider.
+            returns list with data of all ranges.
         </p>
-        <pre>
-{
-    totalLength: int, // total length of all ranges
-    rangeList: [
-        {
-            id: int // rangeId
-            val: Array // range value
-        },
-        {
-            id: int
-            val: Array
-        }
-    ]
-}</pre>
+        <pre>[
+    {
+        id: 1
+        val: [10, 20]
+        el: dom_node
+    },
+    {
+        id: 2
+        val: [30, 50]
+        el: dom_node
+    }
+]</pre>
 
 
         <h3>.removeAllRanges()</h3>
         <p>
-            <a href="#" id="button_methods_removeAllRanges">remove</a>
+            <a href="#" id="button_methods_removeAllRanges">click to remove all ranges</a>
         </p>
         <div id="slider_methods_removeAllRanges"></div>
 
@@ -145,7 +143,7 @@ slider.rangeValue(1, [10, 20]);</pre>
         <h3>allowRemove</h3>
         <p>
             If sets to <code>true</code>, ranges can be removed with a UI. After removing,
-            the event <code>range:remove</code> is emited.
+            the event <code>remove</code> is emited.
         </p>
         <p>
             To remove a range, just decrease its width to zero by dragging the handlers.
@@ -188,12 +186,53 @@ slider.rangeValue(1, [10, 20]);</pre>
             Any callback function can be subscripted with a <code>.on</code> method
             and can be unsubscripted with a <code>.off</code> method.
         </p>
-        <h3>change, changing</h3>
-        <pre>//Callback argument
+
+        <p>
+        <ul>
+            <li>
+                <b>remove</b> emits when range is removed both by api and by ui.
+            </li>
+            <li>
+                <b>click</b> emits when range is clicked.
+            </li>
+            <li>
+                <b>change</b> emits when range was after range was chaned.
+            </li>
+            <li>
+                <b>changing</b> emits when range is changing.
+            </li>
+        </ul>
+        </p>
+        <p>
+            Every event passes one argument in a callback function which is an object and looks like this
+        </p>
+<pre>
 {
-    val: Array // slider value
-    rangeId: integer // range id that was changed
+    data: [
+        {
+            id:1,
+            val: [10, 20],
+            el: dom_node
+        },
+        {
+            id:2,
+            val: [30, 40],
+            el: dom_node
+        },
+        ...
+    ]
+    range: {
+        {
+            id:2,
+            val: [30, 40],
+            el: dom_node
+        }
+    }
 }</pre>
+        <p>
+            The example above demonstrates <b>changing</b> and <b>change</b> event.
+            Try change ranges length by dragging its edges and watch the numbers.
+        </p>
         <div id="el_events_change"></div>
         <ul>
             <li>
@@ -205,11 +244,12 @@ slider.rangeValue(1, [10, 20]);</pre>
         </ul>
         <pre>
 function getTotalLength(data) {
-    var result = 0;
-    for (var i = 0; i < data.val.length; i++) {
-        result += (data.val[i][1] - data.val[i][0]);
-    }
-    return result;
+  var result = 0;
+  for (var i = 0; i < data.length; i++) {
+    var range = data[i];
+    result += (range.val[1] - range.val[0]);
+  }
+  return result;
 }
 
 var result1 = document.getElementById('result1');
@@ -221,58 +261,6 @@ slider.on('changing', function (data) {
 slider.on('change', function (data) {
     result2.innerHTML = getTotalLength(data).toString();
 });</pre>
-
-        <h3>range:change, range:changing</h3>
-<pre>//Callback argument
-{
-    val: Array // range value
-    id: integer // range id
-}</pre>
-        <div id="el_events_range_change"></div>
-        <ul>
-            <li>
-                First range length: <span id="result_events_range_changing">40</span>.
-            </li>
-            <li>
-                First range length: <span id="result_events_range_change">40</span>.
-            </li>
-            <li>
-                Range id that was changed: <span id="result_events_range_id"></span>.
-            </li>
-        </ul>
-        <pre>
-slider.on('range:changing', function (data) {
-    if (data.id == 1) {
-        result1.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-});
-
-slider.on('range:change', function (data) {
-    if (data.id == 1) {
-        result2.innerHTML = (data.val[1] - data.val[0]).toString();
-    }
-    result3.innerHTML = data.id.toString();
-});</pre>
-
-        <h3>range:remove</h3>
-        Emits when the range was removed by UI or by api.
-
-
-<pre>//Callback argument
-{
-    id: integer // range id
-}</pre>
-
-        <h3>range:click</h3>
-        Emits when the range was clicked.
-
-<pre>//Callback argument
-{
-    id: integer // range id
-    val: Array // value
-    el: el //dom element
-}</pre>
-
 
     </section>
 
