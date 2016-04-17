@@ -32,11 +32,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_events_change.add([20, 60], {id: 1});
   var result_events_changing = document.getElementById('result_events_changing');
   var result_events_change = document.getElementById('result_events_change');
-  slider_events_change.on('changing', function (data) {
-    result_events_changing.innerHTML = getTotalLength(data).toString();
+  slider_events_change.on('changing', function (event) {
+    result_events_changing.innerHTML = getTotalLength(event.data).toString();
   });
-  slider_events_change.on('change', function (data) {
-    result_events_change.innerHTML = getTotalLength(data).toString();
+  slider_events_change.on('change', function (event) {
+    result_events_change.innerHTML = getTotalLength(event.data).toString();
   });
 
 
