@@ -264,11 +264,11 @@ function getTotalLength(data) {
 var result1 = document.getElementById('result1');
 var result2 = document.getElementById('result2');
 
-slider.on('changing', function (data) {
-    result1.innerHTML = getTotalLength(data).toString();
+slider.on('changing', function (event) {
+    result1.innerHTML = getTotalLength(event.data).toString();
 });
 slider.on('change', function (data) {
-    result2.innerHTML = getTotalLength(data).toString();
+    result2.innerHTML = getTotalLength(event.data).toString();
 });</pre>
 
     </section>

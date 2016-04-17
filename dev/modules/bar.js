@@ -47,7 +47,10 @@ class Bar extends Base {
 
   proxyRangeEvent(eventName, range) {
     range.emitter.addListener(eventName, () => {
-      this.emitter.emit(eventName, Object.assign(this.data(), {range: range.data()}));
+      this.emitter.emit(eventName, {
+        data: this.data(),
+        range: range.data()
+      });
     })
   }
 
@@ -82,7 +85,10 @@ class Bar extends Base {
     });
 
     for (let eventName of ['change', 'add']) {
-      this.emitter.emit(eventName, Object.assign(this.data(), {range: range.data()}));
+      this.emitter.emit(eventName, {
+        data: this.data(),
+        range: range.data()
+      });
     }
 
     return range;

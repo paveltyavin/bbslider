@@ -330,7 +330,10 @@ var Bar = (function (_Base) {
       var _this2 = this;
 
       range.emitter.addListener(eventName, function () {
-        _this2.emitter.emit(eventName, Object.assign(_this2.data(), { range: range.data() }));
+        _this2.emitter.emit(eventName, {
+          data: _this2.data(),
+          range: range.data()
+        });
       });
     }
   }, {
@@ -367,7 +370,10 @@ var Bar = (function (_Base) {
       var _arr2 = ['change', 'add'];
       for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
         var eventName = _arr2[_i2];
-        this.emitter.emit(eventName, Object.assign(this.data(), { range: range.data() }));
+        this.emitter.emit(eventName, {
+          data: this.data(),
+          range: range.data()
+        });
       }
 
       return range;
