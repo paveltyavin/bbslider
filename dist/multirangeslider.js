@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.multirangeslider = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.multirangeslider = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11,7 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _modulesBar = _dereq_('./modules/bar');
+var _modulesBar = require('./modules/bar');
 
 var _modulesBar2 = _interopRequireDefault(_modulesBar);
 
@@ -22,6 +22,12 @@ var multirangeslider = (function () {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     _classCallCheck(this, multirangeslider);
+
+    // New function for parsing the values min and max
+    if (options.valueParse) {
+      options.min = options.valueParse(options.min);
+      options.max = options.valueParse(options.max);
+    }
 
     this._validateOptions(options);
     this._bar = new _modulesBar2['default'](options);
@@ -49,9 +55,12 @@ var multirangeslider = (function () {
       if (options.max <= options.min) {
         throw new Error('max should be greater than min');
       }
-      if ((options.max - options.min) % options.step !== 0) {
-        throw new Error('there should be an integer number of steps between min and max');
-      }
+
+      // TODO
+      // New validation for step!
+      // if ((options.max - options.min) % options.step !== 0) {
+      //   throw(new Error('there should be an integer number of steps between min and max'));
+      // }
 
       if (options.minWidth === undefined) {
         options.minWidth = options.step;
@@ -111,6 +120,7 @@ var multirangeslider = (function () {
   }, {
     key: 'add',
     value: function add(value, options) {
+      value = [this._bar.options.valueParse(value[0]), this._bar.options.valueParse(value[1])];
       options = Object.assign({}, options);
       this._validateRangeValue(value, options);
 
@@ -233,7 +243,7 @@ var multirangeslider = (function () {
 exports['default'] = multirangeslider;
 module.exports = exports['default'];
 
-},{"./modules/bar":2}],2:[function(_dereq_,module,exports){
+},{"./modules/bar":2}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -250,23 +260,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _ghost = _dereq_('./ghost');
+var _ghost = require('./ghost');
 
 var _ghost2 = _interopRequireDefault(_ghost);
 
-var _range = _dereq_('./range');
+var _range = require('./range');
 
 var _range2 = _interopRequireDefault(_range);
 
-var _base = _dereq_('./base');
+var _base = require('./base');
 
 var _base2 = _interopRequireDefault(_base);
 
-var _emitter = _dereq_('./emitter');
+var _emitter = require('./emitter');
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
-var _utils = _dereq_('./utils');
+var _utils = require('./utils');
 
 var Bar = (function (_Base) {
   _inherits(Bar, _Base);
@@ -287,6 +297,12 @@ var Bar = (function (_Base) {
       },
       label: function label(value) {
         return value[0].toString() + '-' + value[1].toString();
+      },
+      valueParse: function valueParse(value) {
+        return value;
+      },
+      valueFormat: function valueFormat(value) {
+        return value;
       }
     }, options);
 
@@ -612,7 +628,7 @@ var Bar = (function (_Base) {
 exports['default'] = Bar;
 module.exports = exports['default'];
 
-},{"./base":3,"./emitter":4,"./ghost":5,"./range":6,"./utils":7}],3:[function(_dereq_,module,exports){
+},{"./base":3,"./emitter":4,"./ghost":5,"./range":6,"./utils":7}],3:[function(require,module,exports){
 //http://stackoverflow.com/a/850995/752397
 'use strict';
 
@@ -695,7 +711,7 @@ var Base = (function () {
 exports['default'] = Base;
 module.exports = exports['default'];
 
-},{}],4:[function(_dereq_,module,exports){
+},{}],4:[function(require,module,exports){
 //https://gist.github.com/datchley/37353d6a2cb629687eb9
 
 'use strict';
@@ -769,7 +785,7 @@ var Emitter = (function () {
 exports['default'] = Emitter;
 module.exports = exports['default'];
 
-},{}],5:[function(_dereq_,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -782,7 +798,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _emitter = _dereq_('./emitter');
+var _emitter = require('./emitter');
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
@@ -913,7 +929,7 @@ var Ghost = (function () {
 exports['default'] = Ghost;
 module.exports = exports['default'];
 
-},{"./emitter":4}],6:[function(_dereq_,module,exports){
+},{"./emitter":4}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -926,9 +942,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _utils = _dereq_('./utils');
+var _utils = require('./utils');
 
-var _emitter = _dereq_('./emitter');
+var _emitter = require('./emitter');
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
@@ -1176,7 +1192,7 @@ var Range = (function () {
   }, {
     key: 'getValue',
     value: function getValue() {
-      return [this.left, this.right];
+      return [this.bar.options.valueFormat(this.left), this.bar.options.valueFormat(this.right)];
     }
   }, {
     key: 'data',
@@ -1195,7 +1211,7 @@ var Range = (function () {
 exports['default'] = Range;
 module.exports = exports['default'];
 
-},{"./emitter":4,"./utils":7}],7:[function(_dereq_,module,exports){
+},{"./emitter":4,"./utils":7}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

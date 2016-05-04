@@ -17,7 +17,13 @@ class Bar extends Base {
       },
       label: (value) => {
         return value[0].toString() + '-' + value[1].toString();
-      }
+      },
+      valueParse: (value) => {
+        return value;
+      },
+      valueFormat: (value) => {
+        return value;
+      },
     }, options);
 
     this.el = document.createElement('div');

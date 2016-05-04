@@ -209,7 +209,7 @@ class Range {
   }
 
   getValue() {
-    return [this.left, this.right];
+    return [this.bar.options.valueFormat(this.left), this.bar.options.valueFormat(this.right)];
   }
 
   data() {
