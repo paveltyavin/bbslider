@@ -117,7 +117,12 @@ var multirangeslider = (function () {
   }, {
     key: 'add',
     value: function add(value, options) {
-      value = [this._bar.options.valueParse(value[0]), this._bar.options.valueParse(value[1])];
+      if (this._bar.options.valueParse) {
+        value = [this._bar.options.valueParse(value[0]), this._bar.options.valueParse(value[1])];
+      } else {
+        value = [value[0], value[1]];
+      }
+
       options = Object.assign({}, options);
       this._validateRangeValue(value, options);
 
