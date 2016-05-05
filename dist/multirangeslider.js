@@ -23,7 +23,6 @@ var multirangeslider = (function () {
 
     _classCallCheck(this, multirangeslider);
 
-    // New function for parsing the values min and max
     if (options.valueParse) {
       options.min = options.valueParse(options.min);
       options.max = options.valueParse(options.max);
@@ -56,11 +55,9 @@ var multirangeslider = (function () {
         throw new Error('max should be greater than min');
       }
 
-      // TODO
-      // New validation for step!
-      // if ((options.max - options.min) % options.step !== 0) {
-      //   throw(new Error('there should be an integer number of steps between min and max'));
-      // }
+      if ((options.max - options.min) % options.step !== 0 && !options.valueParse) {
+        throw new Error('there should be an integer number of steps between min and max');
+      }
 
       if (options.minWidth === undefined) {
         options.minWidth = options.step;

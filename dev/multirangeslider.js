@@ -31,11 +31,9 @@ class multirangeslider {
       throw(new Error('max should be greater than min'));
     }
 
-    // TODO
-    // New validation for step!
-    // if ((options.max - options.min) % options.step !== 0) {
-    //   throw(new Error('there should be an integer number of steps between min and max'));
-    // }
+    if ((options.max - options.min) % options.step !== 0 && !options.valueParse) {
+      throw(new Error('there should be an integer number of steps between min and max'));
+    }
 
     if (options.minWidth === undefined) {
       options.minWidth = options.step;
