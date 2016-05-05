@@ -4,12 +4,22 @@ class multirangeslider {
   // This class handles all public api.
 
   constructor(options={}) {
+    options = this._transformOptions(options);
     this._validateOptions(options);
     this._bar = new Bar(options);
 
     this.el = document.createElement('div');
     this.el.className = 'multirangeslider-slider';
     this.el.appendChild(this._bar.el);
+  }
+
+  _transformOptions(options) {
+    if (options.valueParse) {
+      for (let key of ['min', 'max', 'step', 'minWidth']) {
+        options[key] = options.valueParse(options[key]);
+      }
+    }
+    return options
   }
 
   _validateOptions(options) {
@@ -48,24 +58,23 @@ class multirangeslider {
 
   }
 
-  _validateRangeValue(value, options) {
+  _transformValue(value) {
+    if (this._bar.options.valueParse) {
+      value = value.map(this._bar.options.valueParse)
+    }
+    return value
+  }
+
+  _validateValue(value) {
     if (!Array.isArray(value) || value.length != 2) {
       throw Error;
     }
   }
 
-  _validateValue(value, options) {
-    if (!Array.isArray(value)) {
-      throw Error;
-    }
-    for (let range_value of value) {
-      this._validateRangeValue(range_value);
-    }
-  }
-
   add(value, options) {
     options = Object.assign({}, options);
-    this._validateRangeValue(value, options);
+    value = this._transformValue(value);
+    this._validateValue(value);
 
     if (options.id !== undefined && this._bar.rangeList.find(x => x.id === options.id)) {
       throw( new Error('range with this id already exists'));

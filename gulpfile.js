@@ -34,6 +34,7 @@ var watch_bundle = function () {
       this.emit('end');
     })
     .pipe(source('multirangeslider.js'))
+    .pipe(derequire())
     .pipe(gulp.dest('./dist/'))
     .pipe(livereload())
 };
@@ -66,7 +67,6 @@ gulp.task('build:js', function () {
 gulp.task('watch', function () {
   livereload.listen({start: true});
   gulp.watch(['dev/*.less'], ['less']);
-  gulp.watch(['gh-pages/**'], ['gh-pages:copy']);
   gulp.watch(['test/test.js'], function () {
     livereload.reload();
   });

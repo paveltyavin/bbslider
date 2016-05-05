@@ -1,6 +1,6 @@
 function down(el, options) {
-  if (options == undefined) {
-    options = {}
+  if (options === undefined) {
+    options = {};
   }
   var x = options.x || 0;
   var y = options.y || 0;
@@ -11,9 +11,10 @@ function down(el, options) {
     clientY: rect.top + y
   });
 }
+
 function leave(el, options) {
-  if (options == undefined) {
-    options = {}
+  if (options === undefined) {
+    options = {};
   }
   var x = options.x || 0;
   var y = options.y || 0;
@@ -26,8 +27,8 @@ function leave(el, options) {
 }
 
 function up(el, options) {
-  if (options == undefined) {
-    options = {}
+  if (options === undefined) {
+    options = {};
   }
   var x = options.x || 0;
   var y = options.y || 0;
@@ -39,15 +40,14 @@ function up(el, options) {
   });
 }
 
-
 function move(el, options, count) {
-  if (options == undefined) {
-    options = {}
+  if (options === undefined) {
+    options = {};
   }
-  if (count == undefined) {
+  if (count === undefined) {
     count = 100000;
   }
-  if (count == 0) {
+  if (count === 0) {
     throw new Error('maximum recursion exhausted')
   }
 
@@ -55,12 +55,12 @@ function move(el, options, count) {
   var moveY;
 
   if (options.endX !== undefined) {
-    moveX = options.endX - options.startX
+    moveX = options.endX - options.startX;
   } else {
     moveX = options.moveX || 0;
   }
   if (options.endY !== undefined) {
-    moveY = options.endY - options.startY
+    moveY = options.endY - options.startY;
   } else {
     moveY = options.moveY || 0;
   }
@@ -71,21 +71,21 @@ function move(el, options, count) {
   var stepX = options.stepX || 1;
   var stepY = options.stepY || 1;
 
-  var stopX = moveX == 0 || false;
-  var stopY = moveY == 0 || false;
+  var stopX = moveX === 0 || false;
+  var stopY = moveY === 0 || false;
 
   var rect = el.getBoundingClientRect();
 
   var clientX = 0;
   var clientY = 0;
 
-  if (options.clientX == undefined) {
+  if (options.clientX === undefined) {
     clientX = rect.left;
   } else {
     clientX = options.clientX;
   }
 
-  if (options.clientY == undefined) {
+  if (options.clientY === undefined) {
     clientY = rect.top;
   } else {
     clientY = options.clientY;

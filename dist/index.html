@@ -106,9 +106,10 @@ slider.rangeValue(1); // => [40, 60] </pre>
 slider.rangeValue(1, [10, 20]);</pre>
 
 
-        <h3>.add(value, rangeId)</h3>
+        <h3>.add(value, options)</h3>
         <p>
             Adds a new range to the slider. If slider can't add the range, an error is thrown.
+            <code>options</code> is optional and by the time respects only the <code>id</code> key.
         </p>
         <pre>
 slider.add([40, 50]);</pre>
@@ -185,6 +186,48 @@ slider.add([40, 50]);</pre>
         <p>
             Minimum width of range. By default equals <code>options.step</code>.
         </p>
+
+        <h3>valueParse, valueFormat</h3>
+
+        <p>
+            In order to operate with a non-integer values, use valueParse and valueFormat functions.
+        </p>
+
+        <div id="slider_options_valueParse"></div>
+            <pre>
+var slider = new multirangeslider({
+    min: 0,
+    max: 24, //every option is written here in hours
+    step: 0.5, // but slider stores minutes inside
+    minWidth: 2,
+
+    valueParse: function (value) {
+      return parseInt(value * 60)
+    },
+    valueFormat: function (value) {
+      return value / 60
+    },
+    label: function (value) {
+      var minutes = value[1] - value[0];
+      var hours = minutes / 60;
+      if (hours == 1) {
+        return 'one hour';
+      }
+      if (hours < 1) {
+        return 'less than an hour';
+      }
+      if (hours > 1) {
+        var result = parseInt(hours) + " hours";
+        if ((hours % 1).toFixed(2) == "0.50") {
+          result += " and a half";
+        }
+        return result;
+      }
+    }
+});
+
+slider.add([0, 7.5]);
+slider.add([12.5, 23]);</pre>
 
         <!-- EVENTS -->
 

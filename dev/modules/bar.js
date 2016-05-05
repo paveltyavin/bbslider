@@ -17,6 +17,12 @@ class Bar extends Base {
       },
       label: (value) => {
         return value[0].toString() + '-' + value[1].toString();
+      },
+      valueParse: (value) => {
+        return value;
+      },
+      valueFormat: (value) => {
+        return value;
       }
     }, options);
 
@@ -60,8 +66,9 @@ class Bar extends Base {
     }
     options = Object.assign({
       id: this.getRangeId()
-    }, options);
-    options.bar = this;
+    }, options, {
+      bar: this
+    });
     let range = new Range(options);
     this.el.appendChild(range.el);
 

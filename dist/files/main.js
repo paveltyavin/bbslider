@@ -76,6 +76,41 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_readOnly.add([20, 40]);
 
 
+  var slider_options_valueParse = new multirangeslider({
+    min: 0,
+    max: 24,
+    step: 0.5,
+    minWidth: 2,
+
+    label: function (value) {
+      var minutes = value[1] - value[0];
+      var hours = minutes / 60;
+      if (hours == 1) {
+        return 'one hour';
+      }
+      if (hours < 1) {
+        return 'less than an hour';
+      }
+      if (hours > 1) {
+        var result = parseInt(hours) + " hours";
+        if ((hours % 1).toFixed(2) == "0.50") {
+          result += " and a half";
+        }
+        return result;
+      }
+    },
+    valueParse: function (value) {
+      return value * 60
+    },
+    valueFormat: function (value) {
+      return value / 60
+    }
+  });
+
+  document.getElementById('slider_options_valueParse').appendChild(slider_options_valueParse.el);
+  slider_options_valueParse.add([0, 7.5]);
+  slider_options_valueParse.add([12.5, 23]);
+
   // Methods
 
   var slider_methods_removeAll = new multirangeslider({
@@ -89,6 +124,5 @@ document.addEventListener("DOMContentLoaded", function (event) {
   document.getElementById('button_methods_removeAll').addEventListener('click', function (event) {
     event.preventDefault();
     slider_methods_removeAll.removeAll();
-  })
-
+  });
 });
