@@ -23,6 +23,7 @@ var multirangeslider = (function () {
 
     _classCallCheck(this, multirangeslider);
 
+    options = this._transformOptions(options);
     this._validateOptions(options);
     this._bar = new _modulesBar2['default'](options);
 
@@ -32,12 +33,25 @@ var multirangeslider = (function () {
   }
 
   _createClass(multirangeslider, [{
+    key: '_transformOptions',
+    value: function _transformOptions(options) {
+      if (options.valueParse) {
+        var _arr = ['min', 'max', 'step', 'minWidth'];
+
+        for (var _i = 0; _i < _arr.length; _i++) {
+          var key = _arr[_i];
+          options[key] = options.valueParse(options[key]);
+        }
+      }
+      return options;
+    }
+  }, {
     key: '_validateOptions',
     value: function _validateOptions(options) {
-      var _arr = ['min', 'max', 'step'];
+      var _arr2 = ['min', 'max', 'step'];
 
-      for (var _i = 0; _i < _arr.length; _i++) {
-        var key = _arr[_i];
+      for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+        var key = _arr2[_i2];
         var value = options[key];
         if (value === undefined) {
           throw new Error(key + ' option is mandatory');
@@ -71,27 +85,46 @@ var multirangeslider = (function () {
       }
     }
   }, {
-    key: '_validateRangeValue',
-    value: function _validateRangeValue(value, options) {
+    key: '_transformValue',
+    value: function _transformValue(value) {
+      if (this._bar.options.valueParse) {
+        value = value.map(this._bar.options.valueParse);
+      }
+      return value;
+    }
+  }, {
+    key: '_validateValue',
+    value: function _validateValue(value) {
       if (!Array.isArray(value) || value.length != 2) {
         throw Error;
       }
     }
   }, {
-    key: '_validateValue',
-    value: function _validateValue(value, options) {
-      if (!Array.isArray(value)) {
-        throw Error;
+    key: 'add',
+    value: function add(value, options) {
+      options = Object.assign({}, options);
+      value = this._transformValue(value);
+      this._validateValue(value);
+
+      if (options.id !== undefined && this._bar.rangeList.find(function (x) {
+        return x.id === options.id;
+      })) {
+        throw new Error('range with this id already exists');
+      }
+      if (this._bar.getInsideRange(value[0]) || this._bar.getInsideRange(value[1])) {
+        throw new Error('intersection');
       }
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = value[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var range_value = _step.value;
+        for (var _iterator = this._bar.rangeList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var range = _step.value;
 
-          this._validateRangeValue(range_value);
+          if (value[0] <= range.left && range.right <= value[1]) {
+            throw new Error('intersection');
+          }
         }
       } catch (err) {
         _didIteratorError = true;
@@ -104,47 +137,6 @@ var multirangeslider = (function () {
         } finally {
           if (_didIteratorError) {
             throw _iteratorError;
-          }
-        }
-      }
-    }
-  }, {
-    key: 'add',
-    value: function add(value, options) {
-      options = Object.assign({}, options);
-      this._validateRangeValue(value, options);
-
-      if (options.id !== undefined && this._bar.rangeList.find(function (x) {
-        return x.id === options.id;
-      })) {
-        throw new Error('range with this id already exists');
-      }
-      if (this._bar.getInsideRange(value[0]) || this._bar.getInsideRange(value[1])) {
-        throw new Error('intersection');
-      }
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this._bar.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var range = _step2.value;
-
-          if (value[0] <= range.left && range.right <= value[1]) {
-            throw new Error('intersection');
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-            _iterator2['return']();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
           }
         }
       }
@@ -162,27 +154,27 @@ var multirangeslider = (function () {
   }, {
     key: 'removeAll',
     value: function removeAll() {
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator3 = this._bar.rangeList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var range = _step3.value;
+        for (var _iterator2 = this._bar.rangeList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var range = _step2.value;
 
           this._bar.remove(range.id);
         }
       } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion3 && _iterator3['return']) {
-            _iterator3['return']();
+          if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
           }
         } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
@@ -287,6 +279,12 @@ var Bar = (function (_Base) {
       },
       label: function label(value) {
         return value[0].toString() + '-' + value[1].toString();
+      },
+      valueParse: function valueParse(value) {
+        return value;
+      },
+      valueFormat: function valueFormat(value) {
+        return value;
       }
     }, options);
 
@@ -346,8 +344,9 @@ var Bar = (function (_Base) {
       }
       options = Object.assign({
         id: this.getRangeId()
-      }, options);
-      options.bar = this;
+      }, options, {
+        bar: this
+      });
       var range = new _range2['default'](options);
       this.el.appendChild(range.el);
 
@@ -1176,7 +1175,7 @@ var Range = (function () {
   }, {
     key: 'getValue',
     value: function getValue() {
-      return [this.left, this.right];
+      return [this.left, this.right].map(this.bar.options.valueFormat);
     }
   }, {
     key: 'data',
