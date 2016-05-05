@@ -4,6 +4,11 @@ class multirangeslider {
   // This class handles all public api.
 
   constructor(options={}) {
+    if (options.valueParse) {
+      options.min = options.valueParse(options.min);
+      options.max = options.valueParse(options.max);
+    }
+
     this._validateOptions(options);
     this._bar = new Bar(options);
 
@@ -25,7 +30,8 @@ class multirangeslider {
     if (options.max <= options.min) {
       throw(new Error('max should be greater than min'));
     }
-    if ((options.max - options.min) % options.step !== 0) {
+
+    if ((options.max - options.min) % options.step !== 0 && !options.valueParse) {
       throw(new Error('there should be an integer number of steps between min and max'));
     }
 
@@ -64,6 +70,12 @@ class multirangeslider {
   }
 
   add(value, options) {
+    if (this._bar.options.valueParse) {
+      value = [this._bar.options.valueParse(value[0]), this._bar.options.valueParse(value[1])];
+    } else {
+      value = [value[0], value[1]];
+    }
+    
     options = Object.assign({}, options);
     this._validateRangeValue(value, options);
 

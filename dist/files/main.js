@@ -89,6 +89,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
   document.getElementById('button_methods_removeAll').addEventListener('click', function (event) {
     event.preventDefault();
     slider_methods_removeAll.removeAll();
-  })
+  });
 
+  var slider_with_moment = new multirangeslider({
+    min: moment().startOf('day').format('LLLL'),
+    max: moment().endOf('day').format('LLLL'),
+    step: 1000 * 60 * 15,
+    valueParse: (value) => {
+      return moment(value).valueOf();
+    },
+    label: (value) => {
+      return moment(value[1]).from(value[0], true);
+    },
+    valueFormat: (value) => {
+      return moment(value).format('LLLL');
+    }
+  });
+  document.getElementById('slider_momentjs').appendChild(slider_with_moment.el);
+  slider_with_moment.add([moment().startOf('day').add(4, 'hours').format('LLLL'), moment().startOf('day').add(8, 'hours').format('LLLL')]);
+  slider_with_moment.add([moment().startOf('day').add(10, 'hours').format('LLLL'), moment().startOf('day').add(19, 'hours').format('LLLL')]);
 });

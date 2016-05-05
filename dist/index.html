@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -9,65 +10,70 @@
     <link rel="stylesheet" href="files/main.css">
     <link rel="stylesheet" href="multirangeslider.css">
     <link rel="stylesheet" href="files/highlight.css">
+    <script src="files/moment.js"></script>
     <script src="multirangeslider.js"></script>
     <script src="files/highlight.min.js"></script>
     <script src="files/main.js"></script>
     <meta name="viewport" content="width=device-width">
 </head>
+
 <body>
-<div class="wrapper">
-    <header>
-        <h1>multirangeslider</h1>
-        <p class="view"><a href="https://github.com/paveltyavin/multirangeslider">View the Project on GitHub
+    <div class="wrapper">
+        <header>
+            <h1>multirangeslider</h1>
+            <p class="view"><a href="https://github.com/paveltyavin/multirangeslider">View the Project on GitHub
             <small>paveltyavin/multirangeslider</small>
         </a></p>
-        <p>
-            Slider for timetable and more
-        </p>
+            <p>
+                Slider for timetable and more
+            </p>
 
 
-        <ul class="links">
-            <li><a href="https://github.com/paveltyavin/multirangeslider/zipball/master">Download <strong>ZIP File</strong></a>
-            </li>
-            <li><a href="https://github.com/paveltyavin/multirangeslider/tarball/master">Download <strong>TAR Ball</strong></a>
-            </li>
-            <li><a href="https://github.com/paveltyavin/multirangeslider">View On <strong>GitHub</strong></a></li>
-        </ul>
+            <ul class="links">
+                <li><a href="https://github.com/paveltyavin/multirangeslider/zipball/master">Download <strong>ZIP File</strong></a>
+                </li>
+                <li><a href="https://github.com/paveltyavin/multirangeslider/tarball/master">Download <strong>TAR Ball</strong></a>
+                </li>
+                <li><a href="https://github.com/paveltyavin/multirangeslider">View On <strong>GitHub</strong></a></li>
+            </ul>
 
-        <ul class="nav">
-            <li>
-                <a href="#overview">Overview</a>
-            </li>
-            <li>
-                <a href="#methods">Methods</a>
-            </li>
-            <li>
-                <a href="#options">Options</a>
-            </li>
-            <li>
-                <a href="#events">Events</a>
-            </li>
-        </ul>
-    </header>
-    <section>
-        <h1>
+            <ul class="nav">
+                <li>
+                    <a href="#overview">Overview</a>
+                </li>
+                <li>
+                    <a href="#methods">Methods</a>
+                </li>
+                <li>
+                    <a href="#options">Options</a>
+                </li>
+                <li>
+                    <a href="#events">Events</a>
+                </li>
+                <li>
+                    <a href="#momentjs">Momentjs</a>
+                </li>
+            </ul>
+        </header>
+        <section>
+            <h1>
             <a id="overview" class="anchor" href="#overview" aria-hidden="true">
                 <span aria-hidden="true" class="octicon octicon-link"></span>
             </a>
             multirangeslider
         </h1>
 
-        <div id="el"></div>
-        <p>
-            <b>multirangeslider</b> is a slider for multiple ranges. Try to click on the bar above.
-        </p>
-        <p>
-            Slider has no dependencies and can be used as AMD module, CommonJS, or a standalone &ltscript&gt.
-        </p>
-        <p>
-            Usage is simple as this:
-        </p>
-        <pre>
+            <div id="el"></div>
+            <p>
+                <b>multirangeslider</b> is a slider for multiple ranges. Try to click on the bar above.
+            </p>
+            <p>
+                Slider has no dependencies and can be used as AMD module, CommonJS, or a standalone &ltscript&gt.
+            </p>
+            <p>
+                Usage is simple as this:
+            </p>
+            <pre>
 var slider = new multirangeslider({
     min: 0,
     max: 100,
@@ -76,49 +82,48 @@ var slider = new multirangeslider({
 });
 document.getElementById('el').appendChild(slider.el);</pre>
 
-        <p>
-            You can download slider via npm
-        </p>
-<pre>
+            <p>
+                You can download slider via npm
+            </p>
+            <pre>
 npm install multirangeslider
 </pre>
 
 
-        <h2 id="methods">Methods</h2>
-        <h3>.val()</h3>
-        <pre>
+            <h2 id="methods">Methods</h2>
+            <h3>.val()</h3>
+            <pre>
 slider.val(); // => [[40, 60], [80, 100]]</pre>
 
-        <h3>.rangeValue(rangeId)</h3>
-        <p>
-            returns a value of range specified by <code>rangeId</code>. If range doesn't exists returns
-            <code>false</code>.
-        </p>
-        <pre>
+            <h3>.rangeValue(rangeId)</h3>
+            <p>
+                returns a value of range specified by <code>rangeId</code>. If range doesn't exists returns
+                <code>false</code>.
+            </p>
+            <pre>
 slider.rangeValue(1); // => [40, 60] </pre>
 
-        <h3>.rangeValue(rangeId, value)</h3>
-        <p>
-            sets a value of range specified by <code>rangeId</code>. Returns <code>true</code> if range exists,
-            otherwise <code>false</code>.
-        </p>
-        <pre>
+            <h3>.rangeValue(rangeId, value)</h3>
+            <p>
+                sets a value of range specified by <code>rangeId</code>. Returns <code>true</code> if range exists, otherwise <code>false</code>.
+            </p>
+            <pre>
 slider.rangeValue(1, [10, 20]);</pre>
 
 
-        <h3>.add(value, rangeId)</h3>
-        <p>
-            Adds a new range to the slider. If slider can't add the range, an error is thrown.
-        </p>
-        <pre>
+            <h3>.add(value, rangeId)</h3>
+            <p>
+                Adds a new range to the slider. If slider can't add the range, an error is thrown.
+            </p>
+            <pre>
 slider.add([40, 50]);</pre>
 
 
-        <h3>.data()</h3>
-        <p>
-            returns list with data of all ranges.
-        </p>
-        <pre>[
+            <h3>.data()</h3>
+            <p>
+                returns list with data of all ranges.
+            </p>
+            <pre>[
     {
         id: 1
         val: [10, 20]
@@ -132,90 +137,87 @@ slider.add([40, 50]);</pre>
 ]</pre>
 
 
-        <h3>.removeAll()</h3>
-        <p>
-            <a href="#" id="button_methods_removeAll">click to remove all ranges</a>
-        </p>
-        <div id="slider_methods_removeAll"></div>
+            <h3>.removeAll()</h3>
+            <p>
+                <a href="#" id="button_methods_removeAll">click to remove all ranges</a>
+            </p>
+            <div id="slider_methods_removeAll"></div>
 
 
 
 
-        <h2 id="options">Options</h2>
-        <h3>min, max, step</h3>
-        <ul>
-            <li>All three options are mandatory.</li>
-            <li>All should be integers.</li>
-            <li>max > min.</li>
-            <li>there should be an integer number of steps between max and min.</li>
-        </ul>
-        <h3>allowRemove</h3>
-        <p>
-            If sets to <code>true</code>, ranges can be removed with a UI. After removing,
-            the event <code>remove</code> is emited.
-        </p>
-        <p>
-            To remove a range, just decrease its width to zero by dragging the handlers.
-        </p>
-        <div id="slider_options_allowRemove"></div>
+            <h2 id="options">Options</h2>
+            <h3>min, max, step</h3>
+            <ul>
+                <li>All three options are mandatory.</li>
+                <li>All should be integers.</li>
+                <li>max > min.</li>
+                <li>there should be an integer number of steps between max and min.</li>
+            </ul>
+            <h3>allowRemove</h3>
+            <p>
+                If sets to <code>true</code>, ranges can be removed with a UI. After removing, the event <code>remove</code> is emited.
+            </p>
+            <p>
+                To remove a range, just decrease its width to zero by dragging the handlers.
+            </p>
+            <div id="slider_options_allowRemove"></div>
 
 
-        <h3>maxRanges</h3>
-        <p>
-            Sets maximum of ranges in the slider.
-        </p>
-        <p>
-            On the example below maxRanges equals 3.
-        </p>
-        <div id="slider_options_maxRanges"></div>
+            <h3>maxRanges</h3>
+            <p>
+                Sets maximum of ranges in the slider.
+            </p>
+            <p>
+                On the example below maxRanges equals 3.
+            </p>
+            <div id="slider_options_maxRanges"></div>
 
-        <h3>readOnly</h3>
-        <p>
-            If readonly option is set to <code>true</code>, slider <em>can't</em> be changed with the UI,
-            but <em>can</em> be changed with the api.
-        </p>
-        <div id="slider_options_readOnly"></div>
+            <h3>readOnly</h3>
+            <p>
+                If readonly option is set to <code>true</code>, slider <em>can't</em> be changed with the UI, but <em>can</em> be changed with the api.
+            </p>
+            <div id="slider_options_readOnly"></div>
 
-        <h3>rangeLabel</h3>
-        <p>
-            function that transforms range value to text written inside the label.
-        </p>
+            <h3>rangeLabel</h3>
+            <p>
+                function that transforms range value to text written inside the label.
+            </p>
 
-        <h3>minWidth</h3>
-        <p>
-            Minimum width of range. By default equals <code>options.step</code>.
-        </p>
+            <h3>minWidth</h3>
+            <p>
+                Minimum width of range. By default equals <code>options.step</code>.
+            </p>
 
-        <!-- EVENTS -->
+            <!-- EVENTS -->
 
 
 
-        <h2 id="events">Events</h2>
-        <p>
-            Any callback function can be subscripted with a <code>.on</code> method
-            and can be unsubscripted with a <code>.off</code> method.
-        </p>
+            <h2 id="events">Events</h2>
+            <p>
+                Any callback function can be subscripted with a <code>.on</code> method and can be unsubscripted with a <code>.off</code> method.
+            </p>
 
-        <p>
-        <ul>
-            <li>
-                <b>remove</b> emits when range is removed both by api and by ui.
-            </li>
-            <li>
-                <b>click</b> emits when range is clicked.
-            </li>
-            <li>
-                <b>change</b> emits when range was after range was chaned.
-            </li>
-            <li>
-                <b>changing</b> emits when range is changing.
-            </li>
-        </ul>
-        </p>
-        <p>
-            Every event passes one argument in a callback function which is an object and looks like this
-        </p>
-<pre>
+            <p>
+                <ul>
+                    <li>
+                        <b>remove</b> emits when range is removed both by api and by ui.
+                    </li>
+                    <li>
+                        <b>click</b> emits when range is clicked.
+                    </li>
+                    <li>
+                        <b>change</b> emits when range was after range was chaned.
+                    </li>
+                    <li>
+                        <b>changing</b> emits when range is changing.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Every event passes one argument in a callback function which is an object and looks like this
+            </p>
+            <pre>
 {
     data: [
         {
@@ -238,20 +240,19 @@ slider.add([40, 50]);</pre>
         }
     }
 }</pre>
-        <p>
-            The example above demonstrates <b>changing</b> and <b>change</b> event.
-            Try change ranges length by dragging its edges and watch the numbers.
-        </p>
-        <div id="el_events_change"></div>
-        <ul>
-            <li>
-                Total length while changing: <span id="result_events_changing">40</span>.
-            </li>
-            <li>
-                Total length after change: <span id="result_events_change">40</span>.
-            </li>
-        </ul>
-        <pre>
+            <p>
+                The example above demonstrates <b>changing</b> and <b>change</b> event. Try change ranges length by dragging its edges and watch the numbers.
+            </p>
+            <div id="el_events_change"></div>
+            <ul>
+                <li>
+                    Total length while changing: <span id="result_events_changing">40</span>.
+                </li>
+                <li>
+                    Total length after change: <span id="result_events_change">40</span>.
+                </li>
+            </ul>
+            <pre>
 function getTotalLength(data) {
   var result = 0;
   for (var i = 0; i < data.length; i++) {
@@ -270,39 +271,64 @@ slider.on('changing', function (event) {
 slider.on('change', function (data) {
     result2.innerHTML = getTotalLength(event.data).toString();
 });</pre>
+            <h2 id="momentjs">Use Slider with Momentjs</h2>
 
-    </section>
+            <div id="slider_momentjs"></div>
+            <p>
+                Usage is simple as this:
+            </p>
+            <pre>
+var slider = new multirangeslider({
+  min: moment().startOf('day').format('LLLL'),
+  max: moment().endOf('day').format('LLLL'),
+  step: 1000 * 60 * 15,
+  valueParse: (value) => {
+    return moment(value).valueOf();
+  },
+  label: (value) => {
+    return moment(value[1]).from(value[0], true);
+  },
+  valueFormat: (value) => {
+    return moment(value).format('LLLL');
+  }
+});
+document.getElementById('el').appendChild(slider.el);</pre>
 
-    <!--Thank you, orderedlist-->
-</div>
-<script>
-    var metas = document.getElementsByTagName('meta');
-    var i;
-    if (navigator.userAgent.match(/iPhone/i)) {
-        for (i = 0; i < metas.length; i++) {
-            if (metas[i].name == "viewport") {
-                metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+
+        </section>
+
+        <!--Thank you, orderedlist-->
+    </div>
+    <script>
+        var metas = document.getElementsByTagName('meta');
+        var i;
+        if (navigator.userAgent.match(/iPhone/i)) {
+            for (i = 0; i < metas.length; i++) {
+                if (metas[i].name == "viewport") {
+                    metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                }
+            }
+            document.addEventListener("gesturestart", gestureStart, false);
+        }
+
+        function gestureStart() {
+            for (i = 0; i < metas.length; i++) {
+                if (metas[i].name == "viewport") {
+                    metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+                }
             }
         }
-        document.addEventListener("gesturestart", gestureStart, false);
-    }
-    function gestureStart() {
-        for (i = 0; i < metas.length; i++) {
-            if (metas[i].name == "viewport") {
-                metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var node_list = document.querySelectorAll('pre');
+            for (var i = 0; i < node_list.length; i++) {
+                var el = node_list[i];
+                el.className = 'javascript';
+                hljs.highlightBlock(el);
             }
-        }
-    }
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var node_list = document.querySelectorAll('pre');
-        for (var i = 0; i < node_list.length; i++) {
-            var el = node_list[i];
-            el.className = 'javascript';
-            hljs.highlightBlock(el);
-        }
-    });
-</script>
+        });
+    </script>
 </body>
+
 </html>
