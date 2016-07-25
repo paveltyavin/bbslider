@@ -343,14 +343,14 @@ var Bar = (function (_Base) {
         return false;
       }
       options = Object.assign({
-        id: this.getRangeId()
+        id: this.getRangeId(),
+        value: value
       }, options, {
         bar: this
       });
       var range = new _range2['default'](options);
       this.el.appendChild(range.el);
 
-      range.setValue(value);
       this.rangeList.push(range);
       this.removeGhost();
 
@@ -957,6 +957,7 @@ var Range = (function () {
 
     this.pressed = false;
     this.isRemoving = false;
+    this._value = options.value;
 
     this._mousemove = function (event) {
       return _this.mousemove(event);
@@ -976,6 +977,7 @@ var Range = (function () {
     };
 
     this.emitter = new _emitter2['default']();
+    this.setValue(options.value);
   }
 
   _createClass(Range, [{
@@ -1155,7 +1157,12 @@ var Range = (function () {
       if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
         return;
       }
-      this.emitter.emit('change', this.data());
+      var old_value = this._value;
+      var new_value = this.data().val;
+      if (new_value[0] != old_value[0] || new_value[1] != old_value[1]) {
+        this.emitter.emit('change', this.data());
+        this._value = [new_value[0], new_value[1]];
+      }
     }
   }, {
     key: 'setValue',
