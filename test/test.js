@@ -232,7 +232,7 @@ QUnit.module("multirangeslider", function (hooks) {
       s.add(([0, 10]));
       var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
-        assert.ok(true, 'call en event');
+        assert.ok(true, 'call an event');
       };
 
       s.on('changing', callback);
@@ -256,7 +256,7 @@ QUnit.module("multirangeslider", function (hooks) {
       s.add(([0, 10]));
       var handler = s.el.querySelector('.multirangeslider-right-handler');
       var callback = function () {
-        assert.ok(true, 'call en event');
+        assert.ok(true, 'call an event');
       };
 
       s.on('change', callback);
@@ -281,10 +281,14 @@ QUnit.module("multirangeslider", function (hooks) {
       var handler = s.el.querySelector('.multirangeslider-right-handler');
       s.add([90, 100], {id: 200});
       var callback = function (value, options) {
-        assert.ok(true, 'call en event');
+        assert.ok(true, 'call a click event');
+      };
+      var changeCallback = function (value, options) {
+        assert.ok(true, 'call a change event');
       };
 
       s.on('click', callback);
+      s.on('change', changeCallback);
 
       down(handler); //emit
       up(handler);
@@ -292,6 +296,7 @@ QUnit.module("multirangeslider", function (hooks) {
       up(handler);
 
       s.off('click', callback);
+      s.off('click', changeCallback);
 
       down(handler);
       up(handler);

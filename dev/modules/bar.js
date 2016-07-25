@@ -65,14 +65,14 @@ class Bar extends Base {
       return false;
     }
     options = Object.assign({
-      id: this.getRangeId()
+      id: this.getRangeId(),
+      value: value
     }, options, {
       bar: this
     });
     let range = new Range(options);
     this.el.appendChild(range.el);
 
-    range.setValue(value);
     this.rangeList.push(range);
     this.removeGhost();
 

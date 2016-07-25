@@ -26,6 +26,7 @@ class Range {
 
     this.pressed = false;
     this.isRemoving = false;
+    this._value = options.value;
 
     this._mousemove = (event)=> this.mousemove(event);
     this._mouseup = (event)=> this.mouseup(event);
@@ -39,6 +40,7 @@ class Range {
     };
 
     this.emitter = new Emitter();
+    this.setValue(options.value);
   }
 
   removeEvents() {
@@ -191,7 +193,12 @@ class Range {
     if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
       return
     }
-    this.emitter.emit('change', this.data());
+    let old_value = this._value;
+    let new_value = this.data().val;
+    if ((new_value[0] != old_value[0]) || (new_value[1] != old_value[1])) {
+      this.emitter.emit('change', this.data());
+      this._value = [new_value[0], new_value[1]];
+    }
   }
 
   setValue(value) {
