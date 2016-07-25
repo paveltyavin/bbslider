@@ -125,4 +125,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
     event.preventDefault();
     slider_methods_removeAll.removeAll();
   });
+
+  var slider_methods_remove = new multirangeslider({
+    min: 0,
+    max: 100,
+    step: 4
+  });
+  document.getElementById('slider_methods_remove').appendChild(slider_methods_remove.el);
+  slider_methods_remove.add([40, 60], {id: 1});
+  slider_methods_remove.add([80, 100], {id: 2});
+  document.getElementById('button_methods_remove').addEventListener('click', function (event) {
+    event.preventDefault();
+    slider_methods_remove.remove(1);
+  });
 });
