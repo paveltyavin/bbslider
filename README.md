@@ -4,6 +4,8 @@
 (https://travis-ci.org/paveltyavin/multirangeslider)
 
 Slider for multiple ranges.
+
+![slider](slider.gif "slider")
  
 The idea comes from [Elessar](https://github.com/quarterto/Elessar)
  project. Thank you, [Matt](https://github.com/quarterto/)!
