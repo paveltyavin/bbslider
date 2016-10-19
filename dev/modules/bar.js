@@ -10,7 +10,9 @@ class Bar extends Base {
   constructor(options = {}) {
     super();
     this.options = Object.assign({
-      allowRemove: false,
+      allowRemove: true,
+      allowAdd: true,
+      allowChange: true,
       maxRanges: Infinity,
       ghostLabel: (value) => {
         return '+';
@@ -28,8 +30,8 @@ class Bar extends Base {
 
     this.el = document.createElement('div');
     this.el.className = 'multirangeslider-bar';
-    if (this.options.readOnly === true) {
-      addClass(this.el, 'multirangeslider-readonly')
+    if (this.options.allowChange === false) {
+      addClass(this.el, 'multirangeslider-allowChangeFalse')
     }
     this.el.addEventListener('mousemove', (event)=> this.mousemove(event));
     this.el.addEventListener('mouseleave', (event)=> this.mouseleave(event));
@@ -66,7 +68,8 @@ class Bar extends Base {
     }
     options = Object.assign({
       id: this.getRangeId(),
-      value: value
+      value: value,
+      allowChange: this.options.allowChange
     }, options, {
       bar: this
     });
@@ -210,7 +213,7 @@ class Bar extends Base {
     if (this.ghost) {
       return
     }
-    if (this.options.readOnly) {
+    if (this.options.allowAdd == false) {
       return
     }
     if (this.rangeList.length >= this.options.maxRanges) {

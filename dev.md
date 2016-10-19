@@ -23,16 +23,3 @@ https://github.com/paveltyavin/multirangeslider/
     * allowSwap - swap left and right position by dragging beyond the element
     * marks - write some labels on the bar's background.
     
-* methods
-    * ?
-    
-* events
-    * ?
-    
-* tests
-    * ?
-    
-* styles
-    * ?
-    
-* gif

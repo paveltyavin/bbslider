@@ -3,7 +3,7 @@ import Bar from './modules/bar'
 class multirangeslider {
   // This class handles all public api.
 
-  constructor(options={}) {
+  constructor(options = {}) {
     options = this._transformOptions(options);
     this._validateOptions(options);
     this._bar = new Bar(options);
@@ -46,14 +46,17 @@ class multirangeslider {
       throw(new Error('there should be an integer number of steps in minWidth'));
     }
 
-    if(options.maxRanges !== undefined ){
+    if (options.maxRanges !== undefined) {
       if (!Number.isInteger(options.maxRanges)) {
         throw(new Error('maxRanges should be integer'));
       }
     }
 
-    if ([true, false, undefined].indexOf(options.readOnly) === -1) {
-      throw(new Error('readOnly option should be true, false or undefined'));
+    for (let key of ['allowChange', 'allowAdd', 'allowRemove']) {
+      let value = options[key];
+      if ([true, false, undefined].indexOf(value) === -1) {
+        throw(new Error(`${key} option should be true, false or undefined`));
+      }
     }
 
   }
@@ -118,6 +121,17 @@ class multirangeslider {
     }
   }
 
+  rangeData(rangeId, data) {
+    if (!Number.isInteger(rangeId)) {
+      throw('rangeId should be integer');
+    }
+    let range = this._bar.rangeList.find(x => x.id === rangeId);
+    if (!range) {
+      return false;
+    }
+    return range.data(data);
+  }
+
 
   val() {
     return this._bar.getValue();
@@ -130,6 +144,7 @@ class multirangeslider {
   on(subject, cb) {
     this._bar.emitter.addListener(subject, cb);
   }
+
   off(subject, cb) {
     this._bar.emitter.removeListener(subject, cb);
   }

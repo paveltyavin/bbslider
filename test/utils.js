@@ -50,6 +50,9 @@ function move(el, options, count) {
   if (count === 0) {
     throw new Error('maximum recursion exhausted')
   }
+  if (el === undefined){
+    throw new Error('element is undefined')
+  }
 
   var moveX;
   var moveY;

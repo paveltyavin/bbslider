@@ -80,8 +80,13 @@ var multirangeslider = (function () {
         }
       }
 
-      if ([true, false, undefined].indexOf(options.readOnly) === -1) {
-        throw new Error('readOnly option should be true, false or undefined');
+      var _arr3 = ['allowChange', 'allowAdd', 'allowRemove'];
+      for (var _i3 = 0; _i3 < _arr3.length; _i3++) {
+        var key = _arr3[_i3];
+        var value = options[key];
+        if ([true, false, undefined].indexOf(value) === -1) {
+          throw new Error(key + ' option should be true, false or undefined');
+        }
       }
     }
   }, {
@@ -198,6 +203,20 @@ var multirangeslider = (function () {
       }
     }
   }, {
+    key: 'rangeData',
+    value: function rangeData(rangeId, data) {
+      if (!Number.isInteger(rangeId)) {
+        throw 'rangeId should be integer';
+      }
+      var range = this._bar.rangeList.find(function (x) {
+        return x.id === rangeId;
+      });
+      if (!range) {
+        return false;
+      }
+      return range.data(data);
+    }
+  }, {
     key: 'val',
     value: function val() {
       return this._bar.getValue();
@@ -272,7 +291,9 @@ var Bar = (function (_Base) {
 
     _get(Object.getPrototypeOf(Bar.prototype), 'constructor', this).call(this);
     this.options = Object.assign({
-      allowRemove: false,
+      allowRemove: true,
+      allowAdd: true,
+      allowChange: true,
       maxRanges: Infinity,
       ghostLabel: function ghostLabel(value) {
         return '+';
@@ -290,8 +311,8 @@ var Bar = (function (_Base) {
 
     this.el = document.createElement('div');
     this.el.className = 'multirangeslider-bar';
-    if (this.options.readOnly === true) {
-      (0, _utils.addClass)(this.el, 'multirangeslider-readonly');
+    if (this.options.allowChange === false) {
+      (0, _utils.addClass)(this.el, 'multirangeslider-allowChangeFalse');
     }
     this.el.addEventListener('mousemove', function (event) {
       return _this.mousemove(event);
@@ -344,7 +365,8 @@ var Bar = (function (_Base) {
       }
       options = Object.assign({
         id: this.getRangeId(),
-        value: value
+        value: value,
+        allowChange: this.options.allowChange
       }, options, {
         bar: this
       });
@@ -542,7 +564,7 @@ var Bar = (function (_Base) {
       if (this.ghost) {
         return;
       }
-      if (this.options.readOnly) {
+      if (this.options.allowAdd == false) {
         return;
       }
       if (this.rangeList.length >= this.options.maxRanges) {
@@ -939,6 +961,7 @@ var Range = (function () {
 
     this.bar = options.bar;
     this.id = options.id;
+    this.allowChange = options.allowChange;
 
     this.el = document.createElement('div');
     this.el.className = 'multirangeslider-range';
@@ -990,7 +1013,7 @@ var Range = (function () {
   }, {
     key: 'mousedown',
     value: function mousedown(event) {
-      if (this.bar.options.readOnly) {
+      if (this.allowChange === false) {
         return;
       }
       if ([this.el, this.label].indexOf(event.target) !== -1) {
@@ -1186,11 +1209,20 @@ var Range = (function () {
     }
   }, {
     key: 'data',
-    value: function data() {
+    value: function data(_data) {
+      if (_data !== undefined) {
+        if (_data.val !== undefined) {
+          this.setValue(_data.val);
+        }
+        if (_data.allowChange !== undefined) {
+          this.allowChange = _data.allowChange;
+        }
+      }
       return {
         id: this.id,
         val: this.getValue(),
-        el: this.el
+        el: this.el,
+        allowChange: this.allowChange
       };
     }
   }]);

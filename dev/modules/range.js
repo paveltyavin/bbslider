@@ -8,6 +8,7 @@ class Range {
   constructor(options) {
     this.bar = options.bar;
     this.id = options.id;
+    this.allowChange = options.allowChange;
 
     this.el = document.createElement('div');
     this.el.className = 'multirangeslider-range';
@@ -50,7 +51,7 @@ class Range {
   }
 
   mousedown(event) {
-    if (this.bar.options.readOnly) {
+    if (this.allowChange === false) {
       return;
     }
     if ([this.el, this.label].indexOf(event.target) !== -1) {
@@ -219,11 +220,20 @@ class Range {
     return [this.left, this.right].map(this.bar.options.valueFormat);
   }
 
-  data() {
+  data(data) {
+    if (data !== undefined) {
+      if (data.val !== undefined) {
+        this.setValue(data.val)
+      }
+      if (data.allowChange !== undefined) {
+        this.allowChange = data.allowChange
+      }
+    }
     return {
       id: this.id,
       val: this.getValue(),
-      el: this.el
+      el: this.el,
+      allowChange: this.allowChange
     }
   }
 }

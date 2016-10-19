@@ -47,6 +47,23 @@ QUnit.module('Options', function (hooks) {
     target.removeChild(s.el);
   });
 
+  QUnit.test('allowAdd', function (assert) {
+    var options = {
+      min: 0,
+      max: 100,
+      step: 10,
+      allowAdd: false
+    };
+    var s = new multirangeslider(options);
+    var target = document.getElementById('target');
+    target.appendChild(s.el);
+
+    move(s._bar.el);
+    target.querySelector('.multirangeslider-ghost');
+    assert.equal(s.el.querySelectorAll('.multirangeslider-ghost').length, 0,
+      'with allowAdd disabled there should be no ghost elements');
+    target.removeChild(s.el);
+  });
 
   QUnit.test('maxRanges', function (assert) {
     var options = {
@@ -72,12 +89,12 @@ QUnit.module('Options', function (hooks) {
     target.removeChild(s.el);
   });
 
-  QUnit.test('readOnly', function (assert) {
+  QUnit.test('allowChange', function (assert) {
     var options = {
       min: 0,
       max: 100,
       step: 5,
-      readOnly: true
+      allowChange: false
     };
     var s = new multirangeslider(options);
     var target = document.getElementById('target');
@@ -212,16 +229,41 @@ QUnit.module("multirangeslider", function (hooks) {
       var range_2 = s.add([40, 60], {id: 20});
       assert.deepEqual(s.data(), [
         {
+          allowChange: true,
           el: range_1.el,
           id: 10,
           val: [20, 30]
         },
         {
+          allowChange: true,
           el: range_2.el,
           id: 20,
           val: [40, 60]
         }
       ]);
+    });
+
+    QUnit.test('rangeData', function (assert) {
+      var s = this.s;
+      var range_1 = s.add([20, 30], {
+        id: 10,
+        allowChange:false
+      });
+      assert.deepEqual(s.rangeData(10), {
+        allowChange: false,
+        el: range_1.el,
+        id: 10,
+        val: [20, 30]
+      });
+
+      assert.deepEqual(s.rangeData(10, {
+        allowChange: true
+      }), {
+        allowChange: true,
+        el: range_1.el,
+        id: 10,
+        val: [20, 30]
+      });
     });
   });
 

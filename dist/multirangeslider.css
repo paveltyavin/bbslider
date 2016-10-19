@@ -81,8 +81,8 @@
   opacity: 0.5;
   display: inline-block;
 }
-.multirangeslider-bar.multirangeslider-readonly .multirangeslider-left-handler,
-.multirangeslider-bar.multirangeslider-readonly .multirangeslider-right-handler,
-.multirangeslider-bar.multirangeslider-readonly .multirangeslider-range {
+.multirangeslider-bar.multirangeslider-allowChangeFalse .multirangeslider-left-handler,
+.multirangeslider-bar.multirangeslider-allowChangeFalse .multirangeslider-right-handler,
+.multirangeslider-bar.multirangeslider-allowChangeFalse .multirangeslider-range {
   cursor: default;
 }
