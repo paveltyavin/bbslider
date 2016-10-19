@@ -53,6 +53,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_allowRemove.add([40, 60]);
   slider_options_allowRemove.add([80, 100]);
 
+  var slider_options_allowAdd = new multirangeslider({
+    min: 0,
+    max: 100,
+    step: 4,
+    minWidth: 12,
+    allowAdd: false
+  });
+  document.getElementById('slider_options_allowAdd').appendChild(slider_options_allowAdd.el);
+  slider_options_allowAdd.add([40, 60]);
+  slider_options_allowAdd.add([80, 100]);
+
 
   var slider_options_maxRanges = new multirangeslider({
     min: 0,
@@ -65,15 +76,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
   slider_options_maxRanges.add([20, 40]);
 
 
-  var slider_options_readOnly = new multirangeslider({
+  var slider_options_allowChange = new multirangeslider({
     min: 0,
     max: 100,
     step: 10,
-    readOnly: true
+    allowChange: false
   });
-  document.getElementById('slider_options_readOnly').appendChild(slider_options_readOnly.el);
-  slider_options_readOnly.add([0, 10]);
-  slider_options_readOnly.add([20, 40]);
+  document.getElementById('slider_options_allowChange').appendChild(slider_options_allowChange.el);
+  slider_options_allowChange.add([0, 10]);
+  slider_options_allowChange.add([20, 40]);
 
 
   var slider_options_valueParse = new multirangeslider({
