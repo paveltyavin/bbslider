@@ -132,6 +132,9 @@ class multirangeslider {
     return range.data(data);
   }
 
+  render() {
+    this._bar.render();
+  }
 
   val() {
     return this._bar.getValue();

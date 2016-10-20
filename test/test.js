@@ -215,6 +215,20 @@ QUnit.module("multirangeslider", function (hooks) {
         'value should be empty');
     });
 
+    QUnit.test('render', function (assert) {
+      var s = this.s;
+      s.el.style.display = 'none';
+      s.add([0, 10]);
+      s.el.style.display = 'block';
+      s.render();
+
+      var range_el = this.target.querySelector('.multirangeslider-range');
+      var range_rect = range_el.getBoundingClientRect();
+
+      assert.ok(range_rect.width > 0,
+        'width should be greater than zero');
+    });
+
     QUnit.test('rangeValue', function (assert) {
       var s = this.s;
       s.add([20, 30], {id: 10});

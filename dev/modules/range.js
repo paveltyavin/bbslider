@@ -202,9 +202,7 @@ class Range {
     }
   }
 
-  setValue(value) {
-    this.left = value[0];
-    this.right = value[1];
+  render() {
     var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
     var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
     this.el.style.left = `${pixelLeft}px`;
@@ -212,8 +210,14 @@ class Range {
     if (this.right - this.left < this.bar.options.minWidth) {
       this.label.innerHTML = '';
     } else {
-      this.label.innerHTML = this.bar.options.label(value, this.data());
+      this.label.innerHTML = this.bar.options.label([this.left, this.right], this.data());
     }
+  }
+
+  setValue(value) {
+    this.left = value[0];
+    this.right = value[1];
+    this.render();
   }
 
   getValue() {

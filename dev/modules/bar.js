@@ -246,6 +246,12 @@ class Bar extends Base {
   data() {
     return this.rangeList.map((x) => {return x.data()});
   }
+
+  render() {
+    for (let range of this.rangeList) {
+      range.render()
+    }
+  }
 }
 
 export default Bar;
