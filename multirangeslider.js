@@ -217,6 +217,11 @@ var multirangeslider = (function () {
       return range.data(data);
     }
   }, {
+    key: 'render',
+    value: function render() {
+      this._bar.render();
+    }
+  }, {
     key: 'val',
     value: function val() {
       return this._bar.getValue();
@@ -624,6 +629,34 @@ var Bar = (function (_Base) {
       return this.rangeList.map(function (x) {
         return x.data();
       });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this.rangeList[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var range = _step4.value;
+
+          range.render();
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4['return']) {
+            _iterator4['return']();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
     }
   }]);
 
@@ -1188,10 +1221,8 @@ var Range = (function () {
       }
     }
   }, {
-    key: 'setValue',
-    value: function setValue(value) {
-      this.left = value[0];
-      this.right = value[1];
+    key: 'render',
+    value: function render() {
       var pixelLeft = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.left)));
       var pixelRight = parseInt(this.bar.unitToPixel(this.bar.userToUnit(this.right)));
       this.el.style.left = pixelLeft + 'px';
@@ -1199,8 +1230,15 @@ var Range = (function () {
       if (this.right - this.left < this.bar.options.minWidth) {
         this.label.innerHTML = '';
       } else {
-        this.label.innerHTML = this.bar.options.label(value, this.data());
+        this.label.innerHTML = this.bar.options.label([this.left, this.right], this.data());
       }
+    }
+  }, {
+    key: 'setValue',
+    value: function setValue(value) {
+      this.left = value[0];
+      this.right = value[1];
+      this.render();
     }
   }, {
     key: 'getValue',
