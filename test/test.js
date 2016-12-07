@@ -152,6 +152,7 @@ QUnit.module("multirangeslider", function (hooks) {
     this.target = document.getElementById('target');
     this.target.appendChild(this.s.el);
     this.width = this.s.el.clientWidth;
+    this.height = this.s.el.clientHeight;
     this.step_width = (options.step / (options.max - options.min)) * this.width;
   });
 
@@ -322,13 +323,18 @@ QUnit.module("multirangeslider", function (hooks) {
       move(handler, {moveX: this.step_width});
       up(handler); // emit
 
+      down(handler);
+      move(handler, {moveY: this.height * 10});
+      move(handler, {moveX: this.step_width});
+      up(handler); // emit
+
       s.off('change', callback);
 
       down(handler);
       move(handler, {moveX: this.step_width});
       up(handler);
 
-      assert.expect(1);
+      assert.expect(2);
     });
 
     QUnit.test('click', function (assert) {

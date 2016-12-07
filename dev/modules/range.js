@@ -183,17 +183,19 @@ class Range {
   }
 
   mouseup(event) {
-    this.pressed = false;
     if (this.isRemoving) {
       this.removeRemovingPopup();
       this.emitter.emit('remove', this.data());
     }
-    this.pressedPosition = undefined;
     removeClass(this.el, 'multirangeslider-pressed');
     removeClass(this.el, `multirangeslider-pressed-${this.pressedMode}`);
-    if ([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) {
+    if (([this.el, this.left_handler, this.right_handler, this.label].indexOf(event.target) === -1) && (!this.pressed)) {
       return
     }
+
+    this.pressed = false;
+    this.pressedPosition = undefined;
+
     let old_value = this._value;
     let new_value = this.data().val;
     if ((new_value[0] != old_value[0]) || (new_value[1] != old_value[1])) {
