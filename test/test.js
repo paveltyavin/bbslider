@@ -449,6 +449,7 @@ QUnit.module("multirangeslider", function (hooks) {
 
     QUnit.test("click", function (assert) {
       move(this.bar_el, {startX: 0});
+      down(this.bar_el);
       up(this.bar_el);
       assert.equal(this.target.querySelectorAll('.multirangeslider-range').length, 2,
         'element should attach to dom');
