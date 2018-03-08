@@ -337,6 +337,7 @@ var Bar = (function (_Base) {
 
     this.rangeIdCount = 0;
     this.rangeList = [];
+    this.clicked = false;
 
     this.emitter = new _emitter2['default']();
   }
@@ -432,18 +433,22 @@ var Bar = (function (_Base) {
     }
   }, {
     key: 'mousedown',
-    value: function mousedown(event) {}
+    value: function mousedown(event) {
+      this.clicked = true;
+    }
   }, {
     key: 'mouseup',
     value: function mouseup(event) {
-      if (this.ghost) {
+      if (this.ghost && this.clicked) {
         this.add([this.ghost.left, this.ghost.right]);
+        this.clicked = false;
       }
     }
   }, {
     key: 'mouseleave',
     value: function mouseleave(event) {
       this.removeGhost();
+      this.clicked = false;
     }
   }, {
     key: 'getInsideRange',
@@ -557,6 +562,7 @@ var Bar = (function (_Base) {
       if (left < this.options.min) {
         return null;
       }
+
       if (this.options.max < right) {
         return null;
       }
