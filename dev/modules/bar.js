@@ -43,7 +43,7 @@ class Bar extends Base {
 
     this.rangeIdCount = 0;
     this.rangeList = [];
-    this.clicked=false;
+    this.pressed=false;
 
     this.emitter = new Emitter;
   }
@@ -127,19 +127,19 @@ class Bar extends Base {
   }
 
   mousedown(event) {
-    this.clicked=true;
+    this.pressed = true;
   }
 
   mouseup(event) {
-    if (this.ghost && this.clicked) {
+    if (this.ghost && this.pressed) {
       this.add([this.ghost.left, this.ghost.right]);
-      this.clicked=false
+      this.pressed = false
     }
   }
 
   mouseleave(event) {
     this.removeGhost();
-    this.clicked=false;
+    this.pressed = false;
   }
 
   getInsideRange(cursor) {

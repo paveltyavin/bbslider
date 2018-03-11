@@ -1,14 +1,17 @@
-QUnit.test("Common", function (assert) {
-  var s = new multirangeslider({
-    min: 0,
-    max: 100,
-    step: 10
-  });
-  var target = document.getElementById('common');
-  target.appendChild(s.el);
-  assert.equal(target.querySelectorAll('.multirangeslider-bar').length, 1, 'Main element should attach to dom');
+QUnit.module('Common', function (hooks) {
+  QUnit.test("Common", function (assert) {
+    var s = new multirangeslider({
+      min: 0,
+      max: 100,
+      step: 10
+    });
+    var target = document.getElementById('common_1');
+    target.appendChild(s.el);
+    assert.equal(target.querySelectorAll('.multirangeslider-bar').length, 1, 'Main element should attach to dom');
 
-  target.removeChild(s.el);
+    target.removeChild(s.el);
+  });
+
 });
 
 
@@ -22,7 +25,7 @@ QUnit.module('Options', function (hooks) {
       allowRemove: true
     };
     var s = new multirangeslider(options);
-    var target = document.getElementById('target');
+    var target = document.getElementById('target_1');
     target.appendChild(s.el);
     var width = s.el.clientWidth;
     var range_width = Math.floor(options.minWidth / (options.max - options.min) * width) + 1;
@@ -55,7 +58,7 @@ QUnit.module('Options', function (hooks) {
       allowAdd: false
     };
     var s = new multirangeslider(options);
-    var target = document.getElementById('target');
+    var target = document.getElementById('target_1');
     target.appendChild(s.el);
 
     move(s._bar.el);
@@ -73,7 +76,7 @@ QUnit.module('Options', function (hooks) {
       maxRanges: 3
     };
     var s = new multirangeslider(options);
-    var target = document.getElementById('target');
+    var target = document.getElementById('target_1');
     target.appendChild(s.el);
 
     s.add([20, 40], {id: 100});
@@ -97,7 +100,7 @@ QUnit.module('Options', function (hooks) {
       allowChange: false
     };
     var s = new multirangeslider(options);
-    var target = document.getElementById('target');
+    var target = document.getElementById('target_1');
     target.appendChild(s.el);
 
     var width = s.el.clientWidth;
@@ -129,10 +132,10 @@ QUnit.module('Options', function (hooks) {
     };
     var s = new multirangeslider(options);
     s.add([20, 30]);
-    var target = document.getElementById('target');
+    var target = document.getElementById('target_1');
     target.appendChild(s.el);
     var label = target.querySelector('.multirangeslider-label');
-    assert.equal(label.innerText, '20::30',
+    assert.equal(label.innerHTML, '20::30',
       'text in range label should consider the label function');
 
     target.removeChild(s.el);
@@ -149,15 +152,21 @@ QUnit.module("multirangeslider", function (hooks) {
     };
     this.s = new multirangeslider(options);
     this.bar_el = this.s.el.querySelector('.multirangeslider-bar');
-    this.target = document.getElementById('target');
+    this.target = document.getElementById('target_1');
     this.target.appendChild(this.s.el);
     this.width = this.s.el.clientWidth;
     this.height = this.s.el.clientHeight;
     this.step_width = (options.step / (options.max - options.min)) * this.width;
+
+    this.s_2 = new multirangeslider(options);
+    this.bar_el_2 = this.s_2.el.querySelector('.multirangeslider-bar');
+    this.target_2 = document.getElementById('target_2');
+    this.target_2.appendChild(this.s_2.el);
   });
 
   hooks.afterEach(function () {
     this.target.removeChild(this.s.el);
+    this.target_2.removeChild(this.s_2.el);
   });
 
   QUnit.module('Method', function (hooks) {
@@ -448,8 +457,8 @@ QUnit.module("multirangeslider", function (hooks) {
     });
 
     QUnit.test("click", function (assert) {
-      move(this.bar_el, {startX: 0});
       down(this.bar_el);
+      move(this.bar_el, {startX: 0});
       up(this.bar_el);
       assert.equal(this.target.querySelectorAll('.multirangeslider-range').length, 2,
         'element should attach to dom');
@@ -463,6 +472,29 @@ QUnit.module("multirangeslider", function (hooks) {
       assert.equal(this.target.querySelectorAll('.multirangeslider-pressed').length, 1,
         'only one range should be pressed');
       up(this.range_el);
+    });
+
+    QUnit.test("press and move to another slider", function (assert) {
+
+      assert.deepEqual([[40, 50]], this.s.val());
+
+      down(this.range_el);
+      move(this.range_el, {moveX: 0.5*this.step_width});
+      move(this.range_el, {moveY: this.height});
+
+      assert.deepEqual([[42, 52]], this.s.val());
+      
+      move(this.bar_el_2, {moveX: this.step_width});
+      up(this.bar_el_2);
+
+      var v_1 = this.s.val();
+
+      down(this.bar_el_2);
+      move(this.bar_el_2, {moveX: this.step_width});
+      up(this.bar_el_2);
+
+      assert.deepEqual(v_1, this.s.val());
+
     });
 
     QUnit.test("move right", function (assert) {
